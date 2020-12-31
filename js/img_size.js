@@ -106,6 +106,19 @@ function decide(){
             firstItemX = itemsLeft;
             firstItemY = 833;
             break;
+        case "vivo1935":
+            itemRow = 7;
+            itemMarginX = 11;
+            itemMarginY = 10;
+            itemsLeft = 9;
+            itemsRight = 10;
+            avatorX = 65;
+            avatorY = 5;
+            avatorW = 750;
+            avatorH = 588;
+            firstItemX = itemsLeft;
+            firstItemY = 831;
+            break;
         default:
             break;
     }
@@ -208,6 +221,22 @@ function hide(){
 // canvasを画像化
 function chgImg()
 {
-  var png = canvas.toDataURL();
-  document.getElementById("result").src = png;
+    canvas.style.display ="none";
+    var png = canvas.toDataURL();
+    document.getElementById("result").src = png;
 }
+
+// カラーピッカー
+jQuery(function($){
+    $(".picker").spectrum({
+  color: "#CF85A1", //初期色
+  showPalette: true, // パレット表示あり
+  palette: [ // パレットで使う色を指定
+    ["#CF85A1", "#CCD58D", "#94DAC0", "#A49CDF", "#ACA4E4"]
+  ],
+        change: function(color) {
+            $(this).val(color.toHexString());
+            $("#disp").html($(this).val());
+        }
+    });
+});
