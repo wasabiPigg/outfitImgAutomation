@@ -6,6 +6,8 @@ var screenshot = document.getElementById('screenshot');
 var canvas = document.getElementById('canvas');
 var canvasWidth = 900;
 var canvasHeight = 900;
+var avatorImgSrc;
+var screenshotImgSrc;
 var uploadImgSrc;
 
 // Canvasの準備
@@ -29,6 +31,7 @@ function loadLocalImage(e) {
   reader.onload = function() {
     // Canvas上に表示する
     uploadImgSrc = reader.result;
+    document.write(uploadImgSrc);
     canvasDraw();
   }
   // ファイル読み込みを実行
@@ -39,28 +42,28 @@ function loadLocalImage(e) {
 avator.addEventListener('change', loadLocalImage, false);
 screenshot.addEventListener('change', loadLocalImage, false);
 
-// Canvas上に画像を表示する
-function canvasDraw() {
-  // canvas内の要素をクリアする
-  // ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+// // Canvas上に画像を表示する
+// function canvasDraw() {
+//   // canvas内の要素をクリアする
+//   // ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  // Canvas上に画像を表示
-  var img = new Image();
-  img.src = uploadImgSrc;
-  img.onload = function() {
-    ctx.drawImage(img, 0, 0, this.width, this.height);
-    // ctx.drawImage(img, 0, 0, canvasWidth, this.height * (canvasWidth / this.width));
-  }
-}
+//   // Canvas上に画像を表示
+//   var img = new Image();
+//   img.src = uploadImgSrc;
+//   img.onload = function() {
+//     ctx.drawImage(img, 0, 0, this.width, this.height);
+//     // ctx.drawImage(img, 0, 0, canvasWidth, this.height * (canvasWidth / this.width));
+//   }
+// }
+// window.onload = ()=>{
+//   // canvas準備
+// var canvas = document.getElementById('canvas');
+//   const ctx = canvas.getContext("2d");
 
-// Canvas上にテキストを表示する
-function addText() {
-  ctx.fillStyle = '#fdd000';
-  ctx.fillRect(10, 10, 140, 30);
-
-  ctx.font = "bold 20px 'MS Pゴシック'";
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#002B69';
-  ctx.fillText('株式会社TAM', 80, 25);
-}
+//   // 画像読み込み
+//   const chara = new Image();
+//   chara.src = avator;  // 画像のURLを指定
+//   chara.onload = () => {
+//     ctx.drawImage(chara, 0, 0);
+//   };
+// };
