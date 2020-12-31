@@ -22,7 +22,10 @@
 </head>
 <body>
     <form action="" method="POST" id="target-form"></form>
-    <img src="http://via.placeholder.com/100x100" id="target" />
+
+    <!-- 画像の加工プレビュー -->
+    <div class="upload"><input type="file" name="file" id="file"></div>
+    <canvas id="canvas"></canvas>
 
     <!-- デバイスの選択 -->
     <form name="modeEdit">
