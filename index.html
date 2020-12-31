@@ -54,12 +54,12 @@
     </form>
     <p>選択したデバイス: <span id="span1"></span></p>
     <p>コーデに使用した個数: <span id="span2"></span></p>
+    <!-- カラーピッカー -->
+    <p>背景色(選択しない場合透明になります):<input class="picker" type="text"> </p>
+    <div id="color"></div> 
     <!-- 画像の加工プレビュー -->
     <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot" onchange="showScreenshotImg(this.files)"></div>
     <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator" onchange="showAvatorImg(this.files)"></div>
-    <!-- カラーピッカー -->
-    <!-- <input class="picker" type="text">
-    <span id="disp"></span> -->
     <form action="">
         <input type="button" value="画像に変換" onclick="chgImg()">
     </form>

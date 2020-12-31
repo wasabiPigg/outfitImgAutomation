@@ -221,22 +221,19 @@ function hide(){
 // canvasを画像化
 function chgImg()
 {
-    canvas.style.display ="none";
+    canvas.style.display ="none"; // canvasは非表示にする
     var png = canvas.toDataURL();
     document.getElementById("result").src = png;
 }
 
-// カラーピッカー
 jQuery(function($){
     $(".picker").spectrum({
-  color: "#CF85A1", //初期色
-  showPalette: true, // パレット表示あり
-  palette: [ // パレットで使う色を指定
-    ["#CF85A1", "#CCD58D", "#94DAC0", "#A49CDF", "#ACA4E4"]
-  ],
-        change: function(color) {
-            $(this).val(color.toHexString());
-            $("#disp").html($(this).val());
-        }
+
+        change: function(color){
+            iro=color.toHexString();
+            ctx.fillStyle = iro;
+            ctx.fillRect(0,0,900,900);
+      $('#canvas').css('background',iro);},
     });
+  
 });
