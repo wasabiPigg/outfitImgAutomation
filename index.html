@@ -28,6 +28,7 @@
         <p>お使いのデバイスは何ですか？</p>
         <select name="device">
             <option value="iPhone11Pro" selected>iPhone 11 Pro</option>
+            <option value="iPhone8">iPhone 8</option>
             <option value="iPadPro11inch">iPad Pro 11インチ</option>
         </select>
         <p>コーデにいくつのアイテムを使用しましたか？</p>
@@ -50,7 +51,13 @@
     <!-- 画像の加工プレビュー -->
     <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot" onchange="showScreenshotImg(this.files)"></div>
     <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator" onchange="showAvatorImg(this.files)"></div>
+    <form action="">
+        <input type="button" value="画像に変換" onclick="chgImg()">
+    </form>
+    <div><img id="result"></div>
+    <!-- <canvas id="canvas" style="background-color:yellow;"></canvas> -->
     <canvas id="canvas"></canvas>
+
     <script src="js/img_size.js"></script>
 </body>
 </html>
