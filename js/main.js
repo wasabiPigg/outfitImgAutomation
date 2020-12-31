@@ -10,7 +10,7 @@ let itemsRight = 9;    // 右端の余白はいくつ？
 let firstItemX = itemsLeft;
 let firstItemY = 1121; // 最初のアイテムのY座標は？
 let avatorX = 30;
-let avatorY = 0;
+let avatorY = 30;
 let avatorW = 750;
 let avatorH = 588;
 var itemX = []; // 各アイテムのx座標を格納する配列
@@ -35,7 +35,7 @@ function decide(){
             itemsLeft = 11;
             itemsRight = 9;
             avatorX = 30;
-            avatorY = 0;
+            avatorY = 30;
             avatorW = 750;
             avatorH = 588;
             firstItemX = itemsLeft;
@@ -113,7 +113,7 @@ function decide(){
             itemsLeft = 9;
             itemsRight = 10;
             avatorX = 65;
-            avatorY = 5;
+            avatorY = 25;
             avatorW = 750;
             avatorH = 588;
             firstItemX = itemsLeft;
@@ -160,6 +160,13 @@ function showAvatorImg(files) {
     reader.onload = function(event) {           // ローカルファイルを読込後処理
         var avator = new Image();           // avatorファイルの処理
         avator.onload = function() {        // avatorファイル読込後の処理
+            // 背景
+            ctx.drawImage(avator, 0, 0, 7, 6);
+            var backgroundColor = ctx.getImageData(4, 4, 1, 1);
+            var colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
+            console.log("backgroundColor: ", backgroundColor.data);
+            ctx.fillStyle = colorCode;
+            ctx.fillRect(0,0,900,900);
             ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90,0, avatorW, avatorH);
         }
         avator.src = event.target.result;   // avatorを読み込む　
@@ -209,18 +216,17 @@ function itemShow(image){
     }
 }
 
-// アイテムの所持数を隠す
-function hide(){
-    ctx.beginPath();
-    //左から20上から20の位置に幅50高さ50の輪郭の四角形を作成する
-    ctx.rect(20,20,50,50);
-    //現在のパスを輪郭表示する
-    ctx.stroke();
+function rgb2colorCode(r, g, b) {
+    var r2 = r.toString(16);
+    var g2 = g.toString(16);
+    var b2 = b.toString(16);
+    var colorCode = `#${r2}${g2}${b2}`;
+    console.log(colorCode);
+    return colorCode;
 }
 
 // canvasを画像化
-function chgImg()
-{
+function chgImg() {
     canvas.style.display ="none"; // canvasは非表示にする
     var png = canvas.toDataURL();
     document.getElementById("result").src = png;
@@ -231,6 +237,7 @@ jQuery(function($){
 
         change: function(color){
             iro=color.toHexString();
+            // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
             ctx.fillStyle = iro;
             ctx.fillRect(0,0,900,900);
       $('#canvas').css('background',iro);},
