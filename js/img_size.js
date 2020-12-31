@@ -3,7 +3,8 @@ let itemNum = 10;      // このコーデにいくつのアイテムを使った
 
 // 変数の定義(iPhone11Proをデフォとする)
 let itemRow = 6;       // 1列にいくつアイテムが並んでいるか？
-let itemMargin = 14;   // アイテム同士の余白はいくつ？
+let itemMarginX = 14;   // アイテム同士の左右の余白はいくつ？
+let itemMarginY = 14;   // アイテム同士の上下の余白はいくつ？
 let itemsLeft = 11;    // 左端の余白はいくつ？
 let itemsRight = 9;    // 右端の余白はいくつ？
 let firstItemX = itemsLeft;
@@ -29,7 +30,8 @@ function decide(){
     switch (mode) {
         case "iPhone11Pro":
             itemRow = 6;
-            itemMargin = 14;
+            itemMarginX = 14;
+            itemMarginY = itemMarginX;
             itemsLeft = 11;
             itemsRight = 9;
             avatorX = 0;
@@ -41,7 +43,8 @@ function decide(){
             break;
         case "iPhone8":
             itemRow = 6;
-            itemMargin = 10;
+            itemMarginX = 10;
+            itemMarginY = itemMarginX;
             itemsLeft = 6;
             itemsRight = 6;
             avatorX = 0;
@@ -51,9 +54,23 @@ function decide(){
             firstItemX = itemsLeft;
             firstItemY = 600;
             break;
+        case "iPhoneXR":
+            itemRow = 6;
+            itemMarginX = 20;
+            itemMarginY = 9;
+            itemsLeft = 17;
+            itemsRight = 17;
+            avatorX = 0;
+            avatorY = 20;
+            avatorW = 750;
+            avatorH = 588;
+            firstItemX = itemsLeft;
+            firstItemY = 762;
+            break;
         case "iPadPro11inch":
             itemRow = 10;
-            itemMargin = 23;
+            itemMarginX = 23;
+            itemMarginY = itemMarginX;
             itemsLeft = 23;
             itemsRight = 295;
             avatorX = 459;
@@ -113,20 +130,20 @@ function showAvatorImg(files) {
 
 // アイテムの箱の大きさを計算する
 function itemBoxCalc(){
-    itemBoxLength = (screenshotWidth - itemsLeft - itemsRight - itemMargin * (itemRow - 1)) / itemRow;
+    itemBoxLength = (screenshotWidth - itemsLeft - itemsRight - itemMarginX * (itemRow - 1)) / itemRow;
     console.log("アイテムの箱の大きさ",itemBoxLength);
-    console.log("(",screenshotWidth," - ",itemsLeft," - ",itemsRight," - ",itemMargin," * (",itemRow," - 1)) / ", itemRow);
+    console.log("(",screenshotWidth," - ",itemsLeft," - ",itemsRight," - ",itemMarginX," * (",itemRow," - 1)) / ", itemRow);
 }
 
 // アイテムを切り出すための計算をする
 function itemXY(){
     for (let i=0; i<itemNum; i++){
         if (i< itemRow) {
-            itemX[i] = firstItemX + (itemMargin + itemBoxLength) * i;
+            itemX[i] = firstItemX + (itemMarginX + itemBoxLength) * i;
             itemY[i] = firstItemY;
           } else {
-            itemX[i] = firstItemX + (itemMargin + itemBoxLength) * (i-itemRow);
-            itemY[i] = firstItemY + itemMargin + itemBoxLength;
+            itemX[i] = firstItemX + (itemMarginX + itemBoxLength) * (i-itemRow);
+            itemY[i] = firstItemY + itemMarginY + itemBoxLength;
           }
     }
     console.log(itemX,itemY);
