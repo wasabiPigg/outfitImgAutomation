@@ -1,4 +1,8 @@
-var file = document.getElementById('file');
+// 画像の設定
+var avator = document.getElementById('avator');
+var screenshot = document.getElementById('screenshot');
+
+// canvasの設定
 var canvas = document.getElementById('canvas');
 var canvasWidth = 900;
 var canvasHeight = 900;
@@ -32,21 +36,20 @@ function loadLocalImage(e) {
 }
 
 // ファイルが指定された時にloadLocalImage()を実行
-file.addEventListener('change', loadLocalImage, false);
+avator.addEventListener('change', loadLocalImage, false);
+screenshot.addEventListener('change', loadLocalImage, false);
 
 // Canvas上に画像を表示する
 function canvasDraw() {
   // canvas内の要素をクリアする
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  // ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   // Canvas上に画像を表示
   var img = new Image();
   img.src = uploadImgSrc;
   img.onload = function() {
-    ctx.drawImage(img, 0, 0, canvasWidth, this.height * (canvasWidth / this.width));
-
-    // Canvas上にテキストを表示
-    addText();
+    ctx.drawImage(img, 0, 0, this.width, this.height);
+    // ctx.drawImage(img, 0, 0, canvasWidth, this.height * (canvasWidth / this.width));
   }
 }
 

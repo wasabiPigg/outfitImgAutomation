@@ -5,12 +5,6 @@ function decide(){
 	// 値(数値)から値(value値)を取得
 	const mode = document.modeEdit.device.options[num].value;
     document.getElementById("span1").textContent = mode; 
-
-    // 画像の取得
-    var avatorImgURL = document.getElementById("avatorImgURL").value;
-    var screenshotImgURL = document.getElementById("screenshotImgURL").value;
-    document.getElementById("avatorImg").src = avatorImgURL;
-    document.getElementById("screenshotImg").src = screenshotImgURL;
 }
 
 // 変数の定義
