@@ -9,7 +9,7 @@ let itemsLeft = 11;    // 左端の余白はいくつ？
 let itemsRight = 9;    // 右端の余白はいくつ？
 let firstItemX = itemsLeft;
 let firstItemY = 1121; // 最初のアイテムのY座標は？
-let avatorX = 90;
+let avatorX = 30;
 let avatorY = 0;
 let avatorW = 750;
 let avatorH = 588;
@@ -34,7 +34,7 @@ function decide(){
             itemMarginY = itemMarginX;
             itemsLeft = 11;
             itemsRight = 9;
-            avatorX = 0;
+            avatorX = 30;
             avatorY = 0;
             avatorW = 750;
             avatorH = 588;
@@ -60,7 +60,7 @@ function decide(){
             itemMarginY = 9;
             itemsLeft = 17;
             itemsRight = 17;
-            avatorX = 0;
+            avatorX = 65;
             avatorY = 20;
             avatorW = 750;
             avatorH = 588;
