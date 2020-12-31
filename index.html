@@ -2,6 +2,7 @@
 <html lang="ja_JP">
 <head>
     <meta charset="UTF-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <meta property="og:title" content="ピグパーティコーデ加工ツール">
     <meta property="og:type" content="website">
     <meta property="og:description" content="ピグパーティのコーデ加工を自動化したツールです。">
@@ -20,6 +21,19 @@
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-    hoge
+    <form action="" method="POST" id="target-form"></form>
+    <img src="http://via.placeholder.com/100x100" id="target" />
+
+    <!-- デバイスの選択 -->
+    <form name="modeEdit">
+        <select name="device">
+            <option value="iPhone11Pro">iPhone 11 Pro</option>
+            <option value="iPadPro11inch">iPad Pro 11インチ</option>
+        </select>
+    </form>
+    <p>選択したデバイス <span id="span1"></span></p>
+    <input type="button" value="端末の設定" onclick="decideMode()"/>
+    <script src="js/img_edit.js"></script>
+    <script src="js/img_size.js"></script>
 </body>
 </html>
