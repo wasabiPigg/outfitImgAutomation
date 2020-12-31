@@ -23,26 +23,20 @@
 <body>
     <form action="" method="POST" id="target-form"></form>
 
-    <!-- 画像の加工プレビュー -->
-    <div class="upload"><input type="file" name="file" id="file"></div>
-    <canvas id="canvas"></canvas>
-
     <!-- デバイスの選択 -->
+    <input type="button" value="この設定で作成" onclick="decide(); preview();"/>
     <form name="modeEdit">
         <p>お使いのデバイスは何ですか？</p>
         <select name="device">
             <option value="iPhone11Pro">iPhone 11 Pro</option>
-            <option value="iPadPro11inch">iPad Pro 11インチ</option>
+            <option value="iPadPro11inch" selected>iPad Pro 11インチ</option>
         </select>
-        <p>アバターの透過画像の直リンク</p>
-        <input type="text" id="avatorImgURL"><br>
-        <img src="" alt="アバターの画像のURLを入力すると表示されます" id="avatorImg">
-        <p>着せ替え画面のスクショの直リンク</p>
-        <input type="text" id="screenshotImgURL"><br>      
-        <img src="" alt="スクショの画像のURLを入力すると表示されます" id="screenshotImg">
+        <!-- 画像の加工プレビュー -->
+        <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator"></div>
+        <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot"></div>
+        <canvas id="canvas"></canvas>
     </form>
     <p>選択したデバイス <span id="span1"></span></p>
-    <input type="button" value="この設定で作成" onclick="decide()"/>
     <script src="js/img_edit.js"></script>
     <script src="js/img_size.js"></script>
 </body>
