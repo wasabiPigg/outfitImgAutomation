@@ -67,6 +67,19 @@ function decide(){
             firstItemX = itemsLeft;
             firstItemY = 762;
             break;
+        case "iPhoneXSMax":
+            itemRow = 6;
+            itemMarginX = 30;
+            itemMarginY = 13;
+            itemsLeft = 27;
+            itemsRight = 26;
+            avatorX = 65;
+            avatorY = 20;
+            avatorW = 750;
+            avatorH = 588;
+            firstItemX = itemsLeft;
+            firstItemY = 1145;
+            break;
         case "iPadPro11inch":
             itemRow = 10;
             itemMarginX = 23;
