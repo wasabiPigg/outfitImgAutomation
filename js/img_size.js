@@ -39,6 +39,18 @@ function decide(){
             firstItemX = itemsLeft;
             firstItemY = 1121;
             break;
+        case "iPhone8":
+            itemRow = 6;
+            itemMargin = 10;
+            itemsLeft = 6;
+            itemsRight = 6;
+            avatorX = 0;
+            avatorY = 60;
+            avatorW = 750;
+            avatorH = 588;
+            firstItemX = itemsLeft;
+            firstItemY = 600;
+            break;
         case "iPadPro11inch":
             itemRow = 10;
             itemMargin = 23;
@@ -148,4 +160,11 @@ function hide(){
     ctx.rect(20,20,50,50);
     //現在のパスを輪郭表示する
     ctx.stroke();
+}
+
+// canvasを画像化
+function chgImg()
+{
+  var png = canvas.toDataURL();
+  document.getElementById("result").src = png;
 }
