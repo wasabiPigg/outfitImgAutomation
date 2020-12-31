@@ -2,7 +2,9 @@
 <html lang="ja_JP">
 <head>
     <meta charset="UTF-8">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/i18n/jquery.spectrum-ja.min.js"></script>
     <meta property="og:title" content="ピグパーティコーデ加工ツール">
     <meta property="og:type" content="website">
     <meta property="og:description" content="ピグパーティのコーデ加工を自動化したツールです。">
@@ -33,6 +35,7 @@
             <option value="iPhoneXSMax">iPhone XS Max</option>
             <option value="iPadPro11inch">iPad Pro 11インチ</option>
             <option value="ARROWSF-52A">ARROWS F-52A</option>
+            <option value="vivo1935">vivo 1935</option>
         </select>
         <p>コーデにいくつのアイテムを使用しましたか？</p>
         <select name="itemNum">
@@ -54,13 +57,16 @@
     <!-- 画像の加工プレビュー -->
     <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot" onchange="showScreenshotImg(this.files)"></div>
     <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator" onchange="showAvatorImg(this.files)"></div>
+    <!-- カラーピッカー -->
+    <input class="picker" type="text">
+    <span id="disp"></span>
     <form action="">
         <input type="button" value="画像に変換" onclick="chgImg()">
     </form>
     <div><img id="result"></div>
     <!-- <canvas id="canvas" style="background-color:yellow;"></canvas> -->
     <canvas id="canvas"></canvas>
-
+    <!-- JS読み込み -->
     <script src="js/img_size.js"></script>
 </body>
 </html>
