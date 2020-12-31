@@ -93,6 +93,19 @@ function decide(){
             firstItemX = itemsLeft;
             firstItemY = 1014;
             break;
+        case "ARROWSF-52A":
+            itemRow = 7;
+            itemMarginX = 10;
+            itemMarginY = 10;
+            itemsLeft = 9;
+            itemsRight = 8;
+            avatorX = 65;
+            avatorY = 5;
+            avatorW = 750;
+            avatorH = 588;
+            firstItemX = itemsLeft;
+            firstItemY = 833;
+            break;
         default:
             break;
     }
