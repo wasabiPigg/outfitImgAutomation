@@ -6,7 +6,7 @@
     <meta property="og:title" content="ピグパーティコーデ加工ツール">
     <meta property="og:type" content="website">
     <meta property="og:description" content="ピグパーティのコーデ加工を自動化したツールです。">
-    <meta property="og:url" content="https://wasabipigg.github.io/5th/" />
+    <meta property="og:url" content="https://wasabipigg.github.io/outfitImgAutomation/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/wasabiPigg/5th/master/img/OGP_new.png">
     <meta property="og:site_name" content="ピグパーティコーデ加工ツール">
     <meta property="og:locale" content="ja_JP" />
@@ -24,20 +24,33 @@
     <form action="" method="POST" id="target-form"></form>
 
     <!-- デバイスの選択 -->
-    <input type="button" value="この設定で作成" onclick="decide(); preview();"/>
     <form name="modeEdit">
         <p>お使いのデバイスは何ですか？</p>
         <select name="device">
-            <option value="iPhone11Pro">iPhone 11 Pro</option>
-            <option value="iPadPro11inch" selected>iPad Pro 11インチ</option>
+            <option value="iPhone11Pro" selected>iPhone 11 Pro</option>
+            <option value="iPadPro11inch">iPad Pro 11インチ</option>
         </select>
-        <!-- 画像の加工プレビュー -->
-        <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator"></div>
-        <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot"></div>
-        <canvas id="canvas"></canvas>
+        <p>コーデにいくつのアイテムを使用しましたか？</p>
+        <select name="itemNum">
+            <option value="1">1こ</option>
+            <option value="2">2こ</option>
+            <option value="3">3こ</option>
+            <option value="4">4こ</option>
+            <option value="5">5こ</option>
+            <option value="6">6こ</option>
+            <option value="7">7こ</option>
+            <option value="8">8こ</option>
+            <option value="9">9こ</option>
+            <option value="10" selected>10こ</option>
+        </select>
+        <input type="button" value="この設定で作成" onclick="decide();"/>
     </form>
-    <p>選択したデバイス <span id="span1"></span></p>
-    <script src="js/img_edit.js"></script>
+    <p>選択したデバイス: <span id="span1"></span></p>
+    <p>コーデに使用した個数: <span id="span2"></span></p>
+    <!-- 画像の加工プレビュー -->
+    <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot" onchange="showScreenshotImg(this.files)"></div>
+    <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator" onchange="showAvatorImg(this.files)"></div>
+    <canvas id="canvas"></canvas>
     <script src="js/img_size.js"></script>
 </body>
 </html>
