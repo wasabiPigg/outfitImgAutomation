@@ -2,6 +2,9 @@ body {
     width: 100%;
 }
 
+label {
+    margin-bottom: 0 !important;
+}
 
 .item {
     margin-bottom: 1rem;
