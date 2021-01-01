@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja_JP">
+
 <head>
     <meta charset="UTF-8">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -9,7 +10,8 @@
     <meta property="og:type" content="website">
     <meta property="og:description" content="ピグパーティのコーデ加工を自動化したツールです。">
     <meta property="og:url" content="https://wasabipigg.github.io/outfitImgAutomation/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/master/img/OGP.png">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/master/img/OGP.png">
     <meta property="og:site_name" content="ピグパーティコーデ加工ツール">
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -21,52 +23,84 @@
     <title>ピグパーティコーデ加工ツール</title>
     <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap" rel="stylesheet">
+    <!-- bootstrap -->
+    <meta charset="utf-8">
+    <!-- BootstrapのCSS読み込み -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- BootstrapのJS読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </head>
-<body>
-    <form action="" method="POST" id="target-form"></form>
 
+<body>
     <!-- デバイスの選択 -->
-    <form name="modeEdit">
-        <p>お使いのデバイスは何ですか？</p>
-        <select name="device">
-            <option value="iPhone11Pro" selected>iPhone 11 Pro</option>
-            <option value="iPhone8">iPhone 8</option>
-            <option value="iPhoneXR">iPhone XR</option>
-            <option value="iPhoneXSMax">iPhone XS Max</option>
-            <option value="iPadPro11inch">iPad Pro 11インチ</option>
-            <option value="ARROWSF-52A">ARROWS F-52A</option>
-            <option value="vivo1935">vivo 1935</option>
-        </select>
-        <p>コーデにいくつのアイテムを使用しましたか？</p>
-        <select name="itemNum">
-            <option value="1">1こ</option>
-            <option value="2">2こ</option>
-            <option value="3">3こ</option>
-            <option value="4">4こ</option>
-            <option value="5">5こ</option>
-            <option value="6">6こ</option>
-            <option value="7">7こ</option>
-            <option value="8">8こ</option>
-            <option value="9">9こ</option>
-            <option value="10" selected>10こ</option>
-        </select>
-        <input type="button" value="この設定で作成" onclick="decide();"/>
-    </form>
-    <p>選択したデバイス: <span id="span1"></span></p>
-    <p>コーデに使用した個数: <span id="span2"></span></p>
-    <!-- カラーピッカー -->
-    <!-- <p>背景色(PCのみ):<input class="picker" type="text"> </p> -->
-    <div id="color"></div> 
-    <!-- 画像の加工プレビュー -->
-    <div class="upload">アバターの透過画像→ <input type="file" name="avator" id="avator" onchange="showAvatorImg(this.files)"></div>
-    <div class="upload">着せ替えのスクショ画像→ <input type="file" name="screenshot" id="screenshot" onchange="showScreenshotImg(this.files)"></div>
-    <form action="">
-        <input type="button" value="画像に変換" onclick="chgImg()">
-    </form>
-    <div><img id="result"></div>
-    <!-- <canvas id="canvas" style="background-color:yellow;"></canvas> -->
-    <canvas id="canvas"></canvas>
+    <section class="toolForm">
+        <h3>コーデを加工するよ！</h3>
+        <hr>
+        <form name="modeEdit">
+            <div class="item">
+            <label for="custom-select-1b">デバイスの種類</label>
+            <select id="custom-select-1b" class="custom-select" name="device" onchange="decide();">
+                <option value="iPhone11Pro" selected>iPhone 11 Pro</option>
+                <option value="iPhone8">iPhone 8</option>
+                <option value="iPhoneXR">iPhone XR</option>
+                <option value="iPhoneXSMax">iPhone XS Max</option>
+                <option value="iPadPro11inch">iPad Pro 11インチ</option>
+                <option value="ARROWSF-52A">ARROWS F-52A</option>
+                <option value="vivo1935">vivo 1935</option>
+            </select>
+            </div>
+
+            <div class="item">
+            <label for="custom-select-1b">コーデに使用したアイテムの数</label>
+            <select id="custom-select-1b" class="custom-select" name="itemNum" onchange="decide();">
+                <option value="1">1こ</option>
+                <option value="2">2こ</option>
+                <option value="3">3こ</option>
+                <option value="4">4こ</option>
+                <option value="5">5こ</option>
+                <option value="6">6こ</option>
+                <option value="7">7こ</option>
+                <option value="8">8こ</option>
+                <option value="9">9こ</option>
+                <option value="10" selected>10こ</option>
+            </select>
+            </div>
+
+            <!-- 画像の設定と読み込み -->
+            <div class="item">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
+                    onchange="showAvatorImg(this.files)">
+                <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
+            </div>
+            </div>
+            <div class="item">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="custom-file-1" name="screenshot" id="screenshot"
+                    onchange="showScreenshotImg(this.files);">
+                <label class="custom-file-label" for="custom-file-1">着用画面のスクショ</label>
+            </div>
+            </div>
+            <div class="text-center">
+                <p id="imgStatus">↓ここにプレビューが表示されます</p>
+                <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900">
+                <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
+                <div><img id="result" class="rounded" style="display: none;"></div>
+                <span id="saveHint"></span>
+            </div>
+        </form>
+        <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
+            画像に変換
+        </button>
+    </section>
     <!-- JS読み込み -->
     <script src="js/main.js"></script>
 </body>
+
 </html>
