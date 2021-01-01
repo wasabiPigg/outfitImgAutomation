@@ -16,16 +16,14 @@ let avatorH = 588;
 var itemX = []; // 各アイテムのx座標を格納する配列
 var itemY = []; // 各アイテムのy座標を格納する配列
 
-function decide(){
+function decide() {
     // デバイスの種類(プルダウンで選択)
-	// 値(数値)を取得
+    // 値(数値)を取得
     const num = document.modeEdit.device.selectedIndex;
     const num2 = document.modeEdit.itemNum.selectedIndex;
-	// 値(数値)から値(value値)を取得
+    // 値(数値)から値(value値)を取得
     var mode = document.modeEdit.device.options[num].value;
-    document.getElementById("span1").textContent = mode;
     itemNum = document.modeEdit.itemNum.options[num2].value;
-    document.getElementById("span2").textContent = itemNum;
     // デバイスごとにサイズ調整
     switch (mode) {
         case "iPhone11Pro":
@@ -139,9 +137,9 @@ var itemBoxLength = 172.5 // iPhone11Proのアイテムの箱の大きさ（デ�
 // すくしょを読み込み
 function showScreenshotImg(files) {
     var reader = new FileReader();              // ローカルファイルの処理
-    reader.onload = function(event) {           // ローカルファイルを読込後処理
+    reader.onload = function (event) {           // ローカルファイルを読込後処理
         var screenshot = new Image();           // screenshotファイルの処理
-        screenshot.onload = function() {        // screenshotファイル読込後の処理
+        screenshot.onload = function () {        // screenshotファイル読込後の処理
             // ctx.drawImage(screenshot, 0, 0);     // screenshotをcanvasに表示
             screenshotWidth = this.width;
             console.log("width: ", this.width);
@@ -150,69 +148,76 @@ function showScreenshotImg(files) {
             itemShow(this);
         }
         screenshot.src = event.target.result;   // screenshotを読み込む　
+        document.getElementById("imgStatus").textContent = "プレビュー";
+
     }
     reader.readAsDataURL(files[0]);             // ローカルファイルを読み込む
+    chgImgBtn.style.display = "block"; // canvasは非表示にする
 }
 
 // 透過アバ画像を読み込み
 function showAvatorImg(files) {
     var reader = new FileReader();              // ローカルファイルの処理
-    reader.onload = function(event) {           // ローカルファイルを読込後処理
+    reader.onload = function (event) {           // ローカルファイルを読込後処理
         var avator = new Image();           // avatorファイルの処理
-        avator.onload = function() {        // avatorファイル読込後の処理
+        avator.onload = function () {        // avatorファイル読込後の処理
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
             var colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
             console.log("backgroundColor: ", backgroundColor.data);
             ctx.fillStyle = colorCode;
-            ctx.fillRect(0,0,900,900);
-            ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90,0, avatorW, avatorH);
+            ctx.fillRect(0, 0, 900, 900);
+            ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
         }
         avator.src = event.target.result;   // avatorを読み込む　
+        document.getElementById("imgStatus").textContent = "プレビュー";
+        previewArea.style.display = "none"; // 画像に変更ボタンも非表示
+        canvas.style.display = "block"; // canvas表示
+
     }
-    reader.readAsDataURL(files[0]);  
+    reader.readAsDataURL(files[0]);
 }
 
 // アイテムの箱の大きさを計算する
-function itemBoxCalc(){
+function itemBoxCalc() {
     itemBoxLength = (screenshotWidth - itemsLeft - itemsRight - itemMarginX * (itemRow - 1)) / itemRow;
-    console.log("アイテムの箱の大きさ",itemBoxLength);
-    console.log("(",screenshotWidth," - ",itemsLeft," - ",itemsRight," - ",itemMarginX," * (",itemRow," - 1)) / ", itemRow);
+    console.log("アイテムの箱の大きさ", itemBoxLength);
+    console.log("(", screenshotWidth, " - ", itemsLeft, " - ", itemsRight, " - ", itemMarginX, " * (", itemRow, " - 1)) / ", itemRow);
 }
 
 // アイテムを切り出すための計算をする
-function itemXY(){
-    for (let i=0; i<itemNum; i++){
-        if (i< itemRow) {
+function itemXY() {
+    for (let i = 0; i < itemNum; i++) {
+        if (i < itemRow) {
             itemX[i] = firstItemX + (itemMarginX + itemBoxLength) * i;
             itemY[i] = firstItemY;
-          } else {
-            itemX[i] = firstItemX + (itemMarginX + itemBoxLength) * (i-itemRow);
+        } else {
+            itemX[i] = firstItemX + (itemMarginX + itemBoxLength) * (i - itemRow);
             itemY[i] = firstItemY + itemMarginY + itemBoxLength;
-          }
+        }
     }
-    console.log(itemX,itemY);
+    console.log(itemX, itemY);
 }
 // アイテムを個別に表示する
-function itemShow(image){
-    for (let i=0; i<itemNum; i++){
-        if (i<5) {
-            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180*i+3, 530, 172, 172);
+function itemShow(image) {
+    for (let i = 0; i < itemNum; i++) {
+        if (i < 5) {
+            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * i + 3, 530, 172, 172);
 
             // 所持数隠し
             ctx.beginPath();
             ctx.fillStyle = "white";
-            ctx.fillRect(180*i+108,665,59,30);
+            ctx.fillRect(180 * i + 108, 665, 59, 30);
 
-          } else {
-            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180*(i-5)+3, 720, 172, 172);
-            
+        } else {
+            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * (i - 5) + 3, 720, 172, 172);
+
             // 所持数隠し
             ctx.beginPath();
             ctx.fillStyle = "white";
-            ctx.fillRect(180*(i-5)+108,855,59,30);
-          }
+            ctx.fillRect(180 * (i - 5) + 108, 855, 59, 30);
+        }
     }
 }
 
@@ -227,20 +232,25 @@ function rgb2colorCode(r, g, b) {
 
 // canvasを画像化
 function chgImg() {
-    canvas.style.display ="none"; // canvasは非表示にする
+    result.style.display = "block"; // resultを表示
+    canvas.style.display = "none"; // canvasは非表示にする
+    chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
+    document.getElementById("imgStatus").textContent = "完成！";
+    document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
     var png = canvas.toDataURL();
     document.getElementById("result").src = png;
 }
 
-jQuery(function($){
+jQuery(function ($) {
     $(".picker").spectrum({
 
-        change: function(color){
-            iro=color.toHexString();
+        change: function (color) {
+            iro = color.toHexString();
             // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
             ctx.fillStyle = iro;
-            ctx.fillRect(0,0,900,900);
-      $('#canvas').css('background',iro);},
+            ctx.fillRect(0, 0, 900, 900);
+            $('#canvas').css('background', iro);
+        },
     });
-  
+
 });

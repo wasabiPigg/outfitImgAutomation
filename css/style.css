@@ -1,10 +1,33 @@
-#canvas {
-    margin-left: 20%;
-    width: 60%;
+body {
+    width: 100%;
 }
-#result {
-    margin-left: 20%;
-    width: 60%;
+
+
+.item {
+    margin-bottom: 1rem;
+}
+
+#canvas, #result, #previewArea{
+    margin: auto;
+    width: 50%;
+    max-width: 450px;
+    max-height: 450px;
+    min-width: 300px;
+    min-height: 300px;
+}
+
+.toolForm {
+    width: 80%;
+    margin: auto;
+    max-width: 800px;
+}
+
+#chgImgBtn {
+    margin: auto;
+    width: 100%;
+    max-width: 800px;
+    min-width: 300px;
+    margin-top: 1rem;
 }
 
 /***
