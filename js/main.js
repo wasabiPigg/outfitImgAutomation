@@ -1,3 +1,14 @@
+// canvasの初期設定
+var canvas = document.getElementById('canvas');
+var canvasWidth = 900;
+var canvasHeight = 900;
+// Canvasの準備
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
+var ctx = canvas.getContext('2d');
+var screenshotWidth = 1125; // iPhone11Proのスクショの幅(デフォ)
+var itemBoxLength = 172.5 // iPhone11Proのアイテムの箱の大きさ（デフォ）
+
 var mode = "iPhone11Pro"; // デフォはiPhone11Pro
 let itemNum = 10;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
 
@@ -15,6 +26,21 @@ let avatorW = 750;
 let avatorH = 588;
 var itemX = []; // 各アイテムのx座標を格納する配列
 var itemY = []; // 各アイテムのy座標を格納する配列
+
+// アバ画像の移動に必要な変数の定義
+// ボタンたち
+let buttonSize = 50;   // ボタンのサイズ
+let buttonMargin = 10; // ボタン同士の間隔
+let buttonWeight = 10;  // ボタンのふちの太さ
+let btnCenter = { x: canvasWidth - buttonMargin * 3 - buttonWeight * 3 - buttonSize * 1.5, y: buttonMargin * 3 + buttonWeight * 3 + buttonSize * 1.5 };
+let upButton = { dx1: btnCenter["x"], dy1: btnCenter["y"] - (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dx2: btnCenter["x"] - buttonSize / 2, dy2: btnCenter["y"] - 49, dx3: btnCenter["x"] + buttonSize / 2, dy3: btnCenter["y"] - 49 };
+let leftButton = { dx1: btnCenter["x"] - (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dy1: btnCenter["y"], dx2: btnCenter["x"] - 49, dy2: btnCenter["y"] - buttonSize / 2, dx3: btnCenter["x"] - 49, dy3: btnCenter["y"] + buttonSize / 2 };
+let rightButton = { dx1: btnCenter["x"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dy1: btnCenter["y"], dx2: btnCenter["x"] + 49, dy2: btnCenter["y"] - buttonSize / 2, dx3: btnCenter["x"] + 49, dy3: btnCenter["y"] + buttonSize / 2 };
+let downButton = { dx1: btnCenter["x"], dy1: btnCenter["y"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dx2: btnCenter["x"] - buttonSize / 2, dy2: btnCenter["y"] + 49, dx3: btnCenter["x"] + buttonSize / 2, dy3: btnCenter["y"] + 49 };
+// アバの位置とか
+let avator;
+let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
+let colorCode;
 
 function decide() {
     // デバイスの種類(プルダウンで選択)
@@ -72,7 +98,7 @@ function decide() {
             itemsLeft = 27;
             itemsRight = 26;
             avatorX = 65;
-            avatorY = 20;
+            avatorY = 25;
             avatorW = 750;
             avatorH = 588;
             firstItemX = itemsLeft;
@@ -98,7 +124,7 @@ function decide() {
             itemsLeft = 9;
             itemsRight = 8;
             avatorX = 65;
-            avatorY = 5;
+            avatorY = 15;
             avatorW = 750;
             avatorH = 588;
             firstItemX = itemsLeft;
@@ -123,24 +149,12 @@ function decide() {
     console.log(mode, itemRow);
 }
 
-// canvasの初期設定
-var canvas = document.getElementById('canvas');
-var canvasWidth = 900;
-var canvasHeight = 900;
-// Canvasの準備
-canvas.width = canvasWidth;
-canvas.height = canvasHeight;
-var ctx = canvas.getContext('2d');
-var screenshotWidth = 1125; // iPhone11Proのスクショの幅(デフォ)
-var itemBoxLength = 172.5 // iPhone11Proのアイテムの箱の大きさ（デフォ）
-
 // すくしょを読み込み
 function showScreenshotImg(files) {
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         var screenshot = new Image();           // screenshotファイルの処理
         screenshot.onload = function () {        // screenshotファイル読込後の処理
-            // ctx.drawImage(screenshot, 0, 0);     // screenshotをcanvasに表示
             screenshotWidth = this.width;
             console.log("width: ", this.width);
             itemBoxCalc();
@@ -159,15 +173,15 @@ function showScreenshotImg(files) {
 function showAvatorImg(files) {
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
-        var avator = new Image();           // avatorファイルの処理
+        avator = new Image();           // avatorファイルの処理
         avator.onload = function () {        // avatorファイル読込後の処理
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
-            var colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
+            colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
             console.log("backgroundColor: ", backgroundColor.data);
             ctx.fillStyle = colorCode;
-            ctx.fillRect(0, 0, 900, 900);
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
             ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
         }
         avator.src = event.target.result;   // avatorを読み込む　
@@ -226,6 +240,7 @@ function itemShow(image) {
             ctx.fillRect(180 * (i - 5) + 108, 855, 59, 30);
         }
     }
+    showTool()
 }
 
 // 角丸の四角形を描画する(クリッピングのため)
@@ -245,36 +260,167 @@ function drawsq(x, y, w, h, r) {
     ctx.fill();  //←⑧
 }
 
-    function rgb2colorCode(r, g, b) {
-        var r2 = r.toString(16);
-        var g2 = g.toString(16);
-        var b2 = b.toString(16);
-        var colorCode = `#${r2}${g2}${b2}`;
-        console.log(colorCode);
-        return colorCode;
+// アバターの画像をうごうごするためのツール描画
+function showTool() {
+    ctx.save();
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = buttonWeight;
+    ctx.fillStyle = "#333";
+    drawTriangle(upButton);
+    drawTriangle(leftButton);
+    drawTriangle(rightButton);
+    drawTriangle(downButton);
+    ctx.beginPath();
+    ctx.arc(btnCenter["x"], btnCenter["y"], buttonSize / 2, 0, Math.PI * 2);
+    ctx.closePath();	//三角形の最後の線 closeさせる
+    ctx.stroke();  // 線ひく
+    ctx.fill();  // 中を塗る
+    ctx.restore();
+}
+
+/**
+ * ツールのクリック判定
+ */
+canvas.addEventListener("click", e => {
+    // マウスの座標をCanvas内の座標とあわせるため
+    const rect = canvas.getBoundingClientRect();
+    const point = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+
+    //ボタンの座標を設定
+    // キャンバスの表示サイズを取るよ
+    let canvasCurrentSize = document.getElementById('canvas').clientWidth;
+    // let client_h = document.getElementById('canvas').clientHeight; // 正方形なのでｈはまあいっか
+    // 比率を計算するよ
+    let ratio = (canvasCurrentSize / canvasWidth);
+
+    // ↑ボタン
+    const upsquare = {
+        x: upButton["dx2"] * ratio, y: upButton["dy1"] * ratio,  // 座標
+        w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
+    };
+    const upPressed =
+        (upsquare.x <= point.x && point.x <= upsquare.x + upsquare.w)  // 横方向の判定
+        && (upsquare.y <= point.y && point.y <= upsquare.y + upsquare.h)  // 縦方向の判定
+
+    // ↓ボタン
+    const downsquare = {
+        x: downButton["dx2"] * ratio, y: downButton["dy2"] * ratio,  // 座標
+        w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
+    };
+    const downPressed =
+        (downsquare.x <= point.x && point.x <= downsquare.x + downsquare.w)  // 横方向の判定
+        && (downsquare.y <= point.y && point.y <= downsquare.y + downsquare.h)  // 縦方向の判定
+
+    // →ボタン
+    const rightsquare = {
+        x: rightButton["dx2"] * ratio, y: rightButton["dy2"] * ratio,  // 座標
+        w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
+    };
+    const rightPressed =
+        (rightsquare.x <= point.x && point.x <= rightsquare.x + rightsquare.w)  // 横方向の判定
+        && (rightsquare.y <= point.y && point.y <= rightsquare.y + rightsquare.h)  // 縦方向の判定
+
+    // ←ボタン
+    const leftsquare = {
+        x: leftButton["dx1"] * ratio, y: leftButton["dy2"] * ratio,  // 座標
+        w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
+    };
+    const leftPressed =
+        (leftsquare.x <= point.x && point.x <= leftsquare.x + leftsquare.w)  // 横方向の判定
+        && (leftsquare.y <= point.y && point.y <= leftsquare.y + leftsquare.h)  // 縦方向の判定
+
+    // 〇ボタン
+    const resetsquare = {
+        x: (btnCenter["x"]-buttonSize/2-buttonWeight) * ratio, y:(btnCenter["y"]-buttonSize/2-buttonWeight) * ratio,  // 座標
+        w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
+    };
+    const resetPressed =
+        (resetsquare.x <= point.x && point.x <= resetsquare.x + resetsquare.w)  // 横方向の判定
+        && (resetsquare.y <= point.y && point.y <= resetsquare.y + resetsquare.h)  // 縦方向の判定
+    
+    if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
+    if (downPressed) { avatorRewrite("down"); showTool(); console.log("down");}
+    if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right");}
+    if (leftPressed) { avatorRewrite("left"); showTool(); console.log("left");}
+    if (resetPressed) { avatorRewrite("reset"); showTool(); console.log("reset");}
+
+});
+
+function drawTriangle({ dx1, dy1, dx2, dy2, dx3, dy3 }) {
+    ctx.beginPath();
+    ctx.moveTo(dx1, dy1); //最初の点の場所
+    ctx.lineTo(dx2, dy2); //2番目の点の場所
+    ctx.lineTo(dx3, dy3); //3番目の点の場所
+    ctx.closePath();	//三角形の最後の線 closeさせる
+    ctx.stroke();  // 線ひく
+    ctx.fill();  // 中を塗る
+}
+
+function rgb2colorCode(r, g, b) {
+    var r2 = r.toString(16);
+    var g2 = g.toString(16);
+    var b2 = b.toString(16);
+    var colorCode = `#${r2}${g2}${b2}`;
+    console.log(colorCode);
+    return colorCode;
+}
+
+function avatorRewrite(direction) {
+    ctx.fillStyle = colorCode;
+    ctx.fillRect(0, 0, canvasWidth, 530);
+    let moveSize = 10;
+    switch (direction) {
+        case "up":
+            avatorCurrent["dy"] -= moveSize;
+            break;
+        case "down":
+            avatorCurrent["dy"] += moveSize;
+            break;
+        case "right":
+            avatorCurrent["dx"] += moveSize;
+            break;
+        case "left":
+            avatorCurrent["dx"] -= moveSize;
+            break;
+        case "reset":
+            avatorCurrent["dx"] = 90;
+            avatorCurrent["dy"] = 0;
+            break;
+        default:
+            break;
     }
+    ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
 
-    // canvasを画像化
-    function chgImg() {
-        result.style.display = "block"; // resultを表示
-        canvas.style.display = "none"; // canvasは非表示にする
-        chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
-        document.getElementById("imgStatus").textContent = "完成！";
-        document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
-        var png = canvas.toDataURL();
-        document.getElementById("result").src = png;
-    }
+}
 
-    jQuery(function ($) {
-        $(".picker").spectrum({
+// canvasを画像化
+function chgImg() {
+    result.style.display = "block"; // resultを表示
+    canvas.style.display = "none"; // canvasは非表示にする
+    chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
 
-            change: function (color) {
-                iro = color.toHexString();
-                // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
-                ctx.fillStyle = iro;
-                ctx.fillRect(0, 0, 900, 900);
-                $('#canvas').css('background', iro);
-            },
-        });
+    //ツールを消すためにアバターを再描画
+    avatorRewrite("none");
 
+    document.getElementById("imgStatus").textContent = "完成！";
+    document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
+    var png = canvas.toDataURL();
+    document.getElementById("result").src = png;
+}
+
+jQuery(function ($) {
+    $(".picker").spectrum({
+
+        change: function (color) {
+            iro = color.toHexString();
+            // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
+            ctx.fillStyle = iro;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            $('#canvas').css('background', iro);
+        },
     });
+
+});
