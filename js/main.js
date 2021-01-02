@@ -44,7 +44,7 @@ let colorCode;
 
 function deviceSuggest(w, h){
     if (w==750 && h ==588) {
-        if (window.screen.height == 2435){mode="iPhone11Pro";}
+        if (window.screen.height == 2436){mode="iPhone11Pro";}
         mode="iPhone8";
     }
     if (w==828 && h ==588) {
