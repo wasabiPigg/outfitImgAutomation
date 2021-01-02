@@ -42,14 +42,30 @@ let avator;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
-function decide() {
-    // デバイスの種類(プルダウンで選択)
-    // 値(数値)を取得
-    const num = document.modeEdit.device.selectedIndex;
-    const num2 = document.modeEdit.itemNum.selectedIndex;
-    // 値(数値)から値(value値)を取得
-    var mode = document.modeEdit.device.options[num].value;
-    itemNum = document.modeEdit.itemNum.options[num2].value;
+function deviceSuggest(w, h){
+    if (w==750 && h ==588) {
+        if (window.parent.screen.height == 2435){mode="iPhone11Pro";}
+        mode="iPhone8";
+    }
+    if (w==828 && h ==588) {
+        if (window.parent.screen.height == 2688){mode="iPhoneXSMax";}
+        mode="iPhoneXR";
+    }
+    if (w==1668 && h ==1002) {mode="iPadPro11inch";}
+    if (w==872 && h ==588) {mode="ARROWSF-52A";}
+    if (w==884 && h ==588) {mode="vivo1935";}
+    console.log(w,h);
+    decide(mode);
+}
+function decide(mode) {
+    // // デバイスの種類(プルダウンで選択)
+    // // 値(数値)を取得
+    // const num = document.modeEdit.device.selectedIndex;
+    // const num2 = document.modeEdit.itemNum.selectedIndex;
+    // // 値(数値)から値(value値)を取得
+    // var mode = document.modeEdit.device.options[num].value;
+    // itemNum = document.modeEdit.itemNum.options[num2].value;
+
     // デバイスごとにサイズ調整
     switch (mode) {
         case "iPhone11Pro":
@@ -166,15 +182,19 @@ function showScreenshotImg(files) {
 
     }
     reader.readAsDataURL(files[0]);             // ローカルファイルを読み込む
-    chgImgBtn.style.display = "block"; // canvasは非表示にする
+    chgImgBtn.style.display = "block"; // canvasは表示にする
 }
 
 // 透過アバ画像を読み込み
 function showAvatorImg(files) {
+    result.style.display = "none";
+    document.getElementById("imgStatus").textContent = "プレビュー";
+    document.getElementById("saveHint").textContent = "";
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         avator = new Image();           // avatorファイルの処理
         avator.onload = function () {        // avatorファイル読込後の処理
+            deviceSuggest(avator.naturalWidth, avator.naturalHeight);
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
