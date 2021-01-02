@@ -44,11 +44,11 @@ let colorCode;
 
 function deviceSuggest(w, h){
     if (w==750 && h ==588) {
-        if (window.screen.height == 2436){mode="iPhone11Pro";}
+        if (window.screen.height == 812){mode="iPhone11Pro";}
         mode="iPhone8";
     }
     if (w==828 && h ==588) {
-        if (window.screen.height == 2688){mode="iPhoneXSMax";}
+        if (window.screen.height == 896){mode="iPhoneXSMax";}
         mode="iPhoneXR";
     }
     if (w==1668 && h ==1002) {mode="iPadPro11inch";}
