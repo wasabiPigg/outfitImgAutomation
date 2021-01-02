@@ -174,7 +174,6 @@ function showAvatorImg(files) {
         document.getElementById("imgStatus").textContent = "プレビュー";
         previewArea.style.display = "none"; // 画像に変更ボタンも非表示
         canvas.style.display = "block"; // canvas表示
-
     }
     reader.readAsDataURL(files[0]);
 }
@@ -203,7 +202,11 @@ function itemXY() {
 function itemShow(image) {
     for (let i = 0; i < itemNum; i++) {
         if (i < 5) {
+            ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
+            drawsq(180 * i + 3, 530, 172, 172, 10); // 角丸の矩形を描画（クリッピング用）
+            ctx.clip();  // (角丸矩形でクリッピング)
             ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * i + 3, 530, 172, 172);
+            ctx.restore(); // クリッピング領域の設定を破棄
 
             // 所持数隠し
             ctx.beginPath();
@@ -211,7 +214,11 @@ function itemShow(image) {
             ctx.fillRect(180 * i + 108, 665, 59, 30);
 
         } else {
+            ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
+            drawsq(180 * (i - 5) + 3, 720, 172, 172, 10); // 角丸の矩形を描画（クリッピング用）
+            ctx.clip();  // (角丸矩形でクリッピング)
             ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * (i - 5) + 3, 720, 172, 172);
+            ctx.restore(); // クリッピング領域の設定を破棄
 
             // 所持数隠し
             ctx.beginPath();
@@ -221,36 +228,53 @@ function itemShow(image) {
     }
 }
 
-function rgb2colorCode(r, g, b) {
-    var r2 = r.toString(16);
-    var g2 = g.toString(16);
-    var b2 = b.toString(16);
-    var colorCode = `#${r2}${g2}${b2}`;
-    console.log(colorCode);
-    return colorCode;
+// 角丸の四角形を描画する(クリッピングのため)
+function drawsq(x, y, w, h, r) {
+    var color = "white";
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.moveTo(x, y + r);  //←①
+    ctx.arc(x + r, y + h - r, r, Math.PI, Math.PI * 0.5, true);  //←②
+    ctx.arc(x + w - r, y + h - r, r, Math.PI * 0.5, 0, 1);  //←③
+    ctx.arc(x + w - r, y + r, r, 0, Math.PI * 1.5, 1);  //←④
+    ctx.arc(x + r, y + r, r, Math.PI * 1.5, Math.PI, 1);  //←⑤
+    ctx.closePath();  //←⑥
+    ctx.stroke();  //←⑦
+    ctx.fill();  //←⑧
 }
 
-// canvasを画像化
-function chgImg() {
-    result.style.display = "block"; // resultを表示
-    canvas.style.display = "none"; // canvasは非表示にする
-    chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
-    document.getElementById("imgStatus").textContent = "完成！";
-    document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
-    var png = canvas.toDataURL();
-    document.getElementById("result").src = png;
-}
+    function rgb2colorCode(r, g, b) {
+        var r2 = r.toString(16);
+        var g2 = g.toString(16);
+        var b2 = b.toString(16);
+        var colorCode = `#${r2}${g2}${b2}`;
+        console.log(colorCode);
+        return colorCode;
+    }
 
-jQuery(function ($) {
-    $(".picker").spectrum({
+    // canvasを画像化
+    function chgImg() {
+        result.style.display = "block"; // resultを表示
+        canvas.style.display = "none"; // canvasは非表示にする
+        chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
+        document.getElementById("imgStatus").textContent = "完成！";
+        document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
+        var png = canvas.toDataURL();
+        document.getElementById("result").src = png;
+    }
 
-        change: function (color) {
-            iro = color.toHexString();
-            // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
-            ctx.fillStyle = iro;
-            ctx.fillRect(0, 0, 900, 900);
-            $('#canvas').css('background', iro);
-        },
+    jQuery(function ($) {
+        $(".picker").spectrum({
+
+            change: function (color) {
+                iro = color.toHexString();
+                // 指定座標から幅1,高さ1のImageDataオブジェクトの取得。
+                ctx.fillStyle = iro;
+                ctx.fillRect(0, 0, 900, 900);
+                $('#canvas').css('background', iro);
+            },
+        });
+
     });
-
-});
