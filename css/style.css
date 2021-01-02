@@ -4,6 +4,7 @@ body {
 
 label {
     margin-bottom: 0 !important;
+    color: #888;
 }
 
 .item {
