@@ -14,9 +14,9 @@ let itemNum = 10;      // このコーデにいくつのアイテムを使った
 
 // 変数の定義(iPhone11Proをデフォとする)
 let itemRow = 6;       // 1列にいくつアイテムが並んでいるか？
-let itemMarginX = 14;   // アイテム同士の左右の余白はいくつ？
-let itemMarginY = 14;   // アイテム同士の上下の余白はいくつ？
-let itemsLeft = 11;    // 左端の余白はいくつ？
+let itemMarginX = 13;   // アイテム同士の左右の余白はいくつ？
+let itemMarginY = 13;   // アイテム同士の上下の余白はいくつ？
+let itemsLeft = 10;    // 左端の余白はいくつ？
 let itemsRight = 9;    // 右端の余白はいくつ？
 let firstItemX = itemsLeft;
 let firstItemY = 1121; // 最初のアイテムのY座標は？
@@ -71,9 +71,9 @@ function decide(mode) {
     switch (mode) {
         case "iPhone11Pro":
             itemRow = 6;
-            itemMarginX = 14;
-            itemMarginY = itemMarginX;
-            itemsLeft = 11;
+            itemMarginX = 13;
+            itemMarginY = 13;
+            itemsLeft = 10;
             itemsRight = 9;
             avatorX = 30;
             avatorY = 30;
