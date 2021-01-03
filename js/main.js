@@ -55,11 +55,11 @@ let colorCode;
 // 背景色の選択
 let suggestColors = []; // 3つくらい候補をつっこむ
 let colorBoxMargin = 10;
-let colorBoxCriteria = {x:60, y:60};
+let colorBoxCriteria = { x: 100, y: 100 };
 let colorBox = {
-    x1:colorBoxCriteria.x, y1:colorBoxCriteria.y,
-    x2:colorBoxCriteria.x, y2:colorBoxCriteria.y+colorBoxMargin,
-    x3:colorBoxCriteria.x, y3:colorBoxCriteria.y+colorBoxMargin,
+    x1: colorBoxCriteria.x, y1: colorBoxCriteria.y,
+    x2: colorBoxCriteria.x, y2: colorBoxCriteria.y + colorBoxMargin * 2 + buttonSize * 2,
+    x3: colorBoxCriteria.x, y3: colorBoxCriteria.y + colorBoxMargin * 4 + buttonSize * 4
 };
 
 function deviceSuggest(w, h) {
@@ -188,7 +188,6 @@ function decide(mode) {
 
 // すくしょを読み込み
 function showScreenshotImg(files) {
-    screenshotsrc = files;
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         var screenshot = new Image();           // screenshotファイルの処理
@@ -198,6 +197,8 @@ function showScreenshotImg(files) {
             itemBoxCalc();
             itemXY();
             itemShow(this);
+            showTool();
+            screenshotsrc = this;
         }
         screenshot.src = event.target.result;   // screenshotを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
@@ -219,10 +220,18 @@ function showAvatorImg(files) {
             deviceSuggest(avator.naturalWidth, avator.naturalHeight);
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
-
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
             colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
-            console.log("backgroundColor: ", backgroundColor.data);
+            suggestColors.length = 0; // 初期化
+            suggestColors.push(colorCode);
+
+            // 背景色をもう２つ余分にとっておく
+            var tmpColor = ctx.getImageData(3, 2, 1, 1);
+            suggestColors.push(rgb2colorCode(tmpColor.data[0], tmpColor.data[1], tmpColor.data[2]));
+            tmpColor = ctx.getImageData(3, 5, 1, 1);
+            suggestColors.push(rgb2colorCode(tmpColor.data[0], tmpColor.data[1], tmpColor.data[2]));
+
+            console.log("backgroundColor: ", suggestColors);
             ctx.fillStyle = colorCode;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -277,10 +286,10 @@ function itemShow(image) {
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
-            if (r==233 && g==234 && b==236) {
+            if (r == 233 && g == 234 && b == 236) {
                 ctx.fillStyle = colorCode;
                 ctx.fillRect(180 * i, 720 - 3, 530 + 5, 172 + 5);
-                itemNum = i+1;
+                itemNum = i + 1;
             }
         } else {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
@@ -293,20 +302,19 @@ function itemShow(image) {
             ctx.beginPath();
             ctx.fillStyle = "white";
             ctx.fillRect(180 * (i - 5) + 108, 855, 59, 30);
-            
+
             // アイテムがなければ背景色でぬりつぶし
             itemColor = ctx.getImageData(180 * (i - 5) + 3 + 30, 720 + 30, 1, 1)
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
-            if (r==233 && g==234 && b==236) {
+            if (r == 233 && g == 234 && b == 236) {
                 ctx.fillStyle = colorCode;
-                ctx.fillRect(180 * (i - 5), 720 - 3 , 172 + 5, 172 + 5);
-                itemNum = i+1;
+                ctx.fillRect(180 * (i - 5), 720 - 3, 172 + 5, 172 + 5);
+                itemNum = i + 1;
             }
         }
     }
-    showTool()
 }
 
 // 角丸の四角形を描画する(クリッピングのため)
@@ -342,11 +350,27 @@ function showTool() {
     ctx.stroke();  // 線ひく
     ctx.fill();  // 中を塗る
     ctx.restore();
+    showColorBox();
 }
 
 function showColorBox() {
     ctx.save();
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = buttonWeight;
+    drawCircle(colorBox.x1, colorBox.y1, buttonSize, suggestColors[0]);
+    drawCircle(colorBox.x2, colorBox.y2, buttonSize, suggestColors[1]);
+    drawCircle(colorBox.x3, colorBox.y3, buttonSize, suggestColors[2]);
+    ctx.restore();
+}
 
+function drawCircle(dx, dy, r, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(dx, dy, r, 0, Math.PI * 2);
+    ctx.closePath();	// closeさせる
+    ctx.stroke();  // 線ひく
+    ctx.fill();  // 中を塗る
     ctx.restore();
 }
 
@@ -404,7 +428,7 @@ canvas.addEventListener("click", e => {
         (leftsquare.x <= point.x && point.x <= leftsquare.x + leftsquare.w)  // 横方向の判定
         && (leftsquare.y <= point.y && point.y <= leftsquare.y + leftsquare.h)  // 縦方向の判定
 
-    // 〇ボタン
+    // 位置リセットボタン
     const resetsquare = {
         x: (btnCenter["x"] - buttonSize / 2 - buttonWeight) * ratio, y: (btnCenter["y"] - buttonSize / 2 - buttonWeight) * ratio,  // 座標
         w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
@@ -413,11 +437,41 @@ canvas.addEventListener("click", e => {
         (resetsquare.x <= point.x && point.x <= resetsquare.x + resetsquare.w)  // 横方向の判定
         && (resetsquare.y <= point.y && point.y <= resetsquare.y + resetsquare.h)  // 縦方向の判定
 
+    // 色1
+    const c1square = {
+        x: (colorBox.x1 - buttonSize - buttonWeight) * ratio, y: (colorBox.y1 - buttonSize - buttonWeight) * ratio,  // 座標
+        w: (buttonSize * 2 + buttonWeight * 2) * ratio, h: (buttonSize * 2 + buttonWeight * 2) * ratio   // サイズ
+    };
+    const c1Pressed =
+        (c1square.x <= point.x && point.x <= c1square.x + c1square.w)  // 横方向の判定
+        && (c1square.y <= point.y && point.y <= c1square.y + c1square.h)  // 縦方向の判定
+
+    // 色2
+    const c2square = {
+        x: (colorBox.x2 - buttonSize - buttonWeight) * ratio, y: (colorBox.y2 - buttonSize - buttonWeight) * ratio,  // 座標
+        w: (buttonSize * 2 + buttonWeight * 2) * ratio, h: (buttonSize * 2 + buttonWeight * 2) * ratio   // サイズ
+    };
+    const c2Pressed =
+        (c2square.x <= point.x && point.x <= c2square.x + c2square.w)  // 横方向の判定
+        && (c2square.y <= point.y && point.y <= c2square.y + c2square.h)  // 縦方向の判定
+
+    // 色3
+    const c3square = {
+        x: (colorBox.x3 - buttonSize - buttonWeight) * ratio, y: (colorBox.y3 - buttonSize - buttonWeight) * ratio,  // 座標
+        w: (buttonSize * 2 + buttonWeight * 2) * ratio, h: (buttonSize * 2 + buttonWeight * 2) * ratio   // サイズ
+    };
+    const c3Pressed =
+        (c3square.x <= point.x && point.x <= c3square.x + c3square.w)  // 横方向の判定
+        && (c3square.y <= point.y && point.y <= c3square.y + c3square.h)  // 縦方向の判定
+
     if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
     if (downPressed) { avatorRewrite("down"); showTool(); console.log("down"); }
     if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right"); }
     if (leftPressed) { avatorRewrite("left"); showTool(); console.log("left"); }
     if (resetPressed) { avatorRewrite("reset"); showTool(); console.log("reset"); }
+    if (c1Pressed) { avatorRewrite("c1"); showTool(); console.log("c1"); }
+    if (c2Pressed) { avatorRewrite("c2"); showTool(); console.log("c2"); }
+    if (c3Pressed) { avatorRewrite("c3"); showTool(); console.log("c3"); }
 
 });
 
@@ -440,11 +494,9 @@ function rgb2colorCode(r, g, b) {
     return colorCode;
 }
 
-function avatorRewrite(direction) {
-    ctx.fillStyle = colorCode;
-    ctx.fillRect(0, 0, canvasWidth, 530);
+function avatorRewrite(how) {
     let moveSize = 10;
-    switch (direction) {
+    switch (how) {
         case "up":
             avatorCurrent["dy"] -= moveSize;
             break;
@@ -461,23 +513,38 @@ function avatorRewrite(direction) {
             avatorCurrent["dx"] = 90;
             avatorCurrent["dy"] = 0;
             break;
+        case "c1":
+            colorCode = suggestColors[0];
+            break;
+        case "c2":
+            colorCode = suggestColors[1];
+            break;
+        case "c3":
+            colorCode = suggestColors[2];
+            break;
         default:
             break;
     }
+    ctx.fillStyle = colorCode;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
-    showScreenshotImg(screenshotsrc);
+    itemShow(screenshotsrc);
 }
 
 // canvasを画像化
 function chgImg() {
+    //ツールを消すためにアバターを再描画
+    ctx.fillStyle = colorCode;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
+    // avatorRewrite("none");
+    ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
+    itemShow(screenshotsrc);
+
+
+
     result.style.display = "block"; // resultを表示
     canvas.style.display = "none"; // canvasは非表示にする
     chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
-
-    //ツールを消すためにアバターを再描画
-    avatorRewrite("none");
-    showScreenshotImg(screenshotsrc);
-
 
     document.getElementById("imgStatus").textContent = "完成！";
     document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
