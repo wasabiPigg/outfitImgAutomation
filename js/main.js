@@ -42,21 +42,20 @@ let avator;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
-function deviceSuggest(w, h){
-    document.getElementById("height").textContent = window.screen.height;
-    
+function deviceSuggest(w, h){    
     if (w==750 && h ==588) {
         if (window.screen.height == 812){mode="iPhone11Pro";}
         else {mode="iPhone8";}
-    }
-    if (w==828 && h ==588) {
+    } else if (w==828 && h ==588) {
         if (window.screen.height == 896){mode="iPhoneXSMax";}
         else {mode="iPhoneXR"};
-    }
-    if (w==1668 && h ==1002) {mode="iPadPro11inch";}
-    if (w==872 && h ==588) {mode="ARROWSF-52A";}
-    if (w==884 && h ==588) {mode="vivo1935";}
+    } else if (w==1668 && h ==1002) {mode="iPadPro11inch";}
+    else if (w==872 && h ==588) {mode="ARROWSF-52A";}
+    else if (w==884 && h ==588) {mode="vivo1935";}
+    else {mode="お使いの端末は対象外です";}
     console.log(w,h);
+    document.getElementById("modeName").textContent = mode;
+
     decide(mode);
 }
 function decide(mode) {
