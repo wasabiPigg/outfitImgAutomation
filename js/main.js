@@ -125,7 +125,7 @@ function decide(mode) {
             itemRow = 10;
             itemMarginX = 23;
             itemMarginY = itemMarginX;
-            itemsLeft = 23;
+            itemsLeft = 20;
             itemsRight = 295;
             avatorX = 459;
             avatorY = 380;
@@ -238,7 +238,7 @@ function itemShow(image) {
     for (let i = 0; i < itemNum; i++) {
         if (i < 5) {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
-            drawsq(180 * i + 3, 530, 172, 172, 10); // 角丸の矩形を描画（クリッピング用）
+            drawsq(180 * i + 3, 530, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
             ctx.clip();  // (角丸矩形でクリッピング)
             ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * i + 3, 530, 172, 172);
             ctx.restore(); // クリッピング領域の設定を破棄
@@ -260,7 +260,7 @@ function itemShow(image) {
             }
         } else {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
-            drawsq(180 * (i - 5) + 3, 720, 172, 172, 10); // 角丸の矩形を描画（クリッピング用）
+            drawsq(180 * (i - 5) + 3, 720, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
             ctx.clip();  // (角丸矩形でクリッピング)
             ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * (i - 5) + 3, 720, 172, 172);
             ctx.restore(); // クリッピング領域の設定を破棄
@@ -287,7 +287,7 @@ function itemShow(image) {
 
 // 角丸の四角形を描画する(クリッピングのため)
 function drawsq(x, y, w, h, r) {
-    var color = "white";
+    var color = "rgb(214,215,218)";
     ctx.beginPath();
     ctx.lineWidth = 1;
     ctx.strokeStyle = color;
