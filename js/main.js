@@ -254,7 +254,7 @@ function itemShow(image) {
             var b = itemColor.data[2]
             if (r==233 && g==234 && b==236) {
                 ctx.fillStyle = colorCode;
-                ctx.fillRect(180 * i + 3, 720, 532, 172);
+                ctx.fillRect(180 * i + 3 - 1, 720 - 1, 530 + 2, 172 + 2);
                 itemNum = i+1;
             }
         } else {
@@ -276,7 +276,7 @@ function itemShow(image) {
             var b = itemColor.data[2]
             if (r==233 && g==234 && b==236) {
                 ctx.fillStyle = colorCode;
-                ctx.fillRect(180 * (i - 5) + 3, 720, 172, 172);
+                ctx.fillRect(180 * (i - 5) + 3 - 1, 720 - 1 , 172 + 2, 172 + 2);
                 itemNum = i+1;
             }
         }
