@@ -43,15 +43,15 @@ let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
 function deviceSuggest(w, h){
-    document.getElementById("height").textContent = window.screen.width;
+    document.getElementById("height").textContent = window.screen.height;
     
     if (w==750 && h ==588) {
         if (window.screen.height == 812){mode="iPhone11Pro";}
-        mode="iPhone8";
+        else {mode="iPhone8";}
     }
     if (w==828 && h ==588) {
         if (window.screen.height == 896){mode="iPhoneXSMax";}
-        mode="iPhoneXR";
+        else {mode="iPhoneXR"};
     }
     if (w==1668 && h ==1002) {mode="iPadPro11inch";}
     if (w==872 && h ==588) {mode="ARROWSF-52A";}
@@ -59,14 +59,14 @@ function deviceSuggest(w, h){
     console.log(w,h);
     decide(mode);
 }
-function decide() {
-    // デバイスの種類(プルダウンで選択)
-    // 値(数値)を取得
-    const num = document.modeEdit.device.selectedIndex;
-    const num2 = document.modeEdit.itemNum.selectedIndex;
-    // 値(数値)から値(value値)を取得
-    var mode = document.modeEdit.device.options[num].value;
-    itemNum = document.modeEdit.itemNum.options[num2].value;
+function decide(mode) {
+    // // デバイスの種類(プルダウンで選択)
+    // // 値(数値)を取得
+    // const num = document.modeEdit.device.selectedIndex;
+    // const num2 = document.modeEdit.itemNum.selectedIndex;
+    // // 値(数値)から値(value値)を取得
+    // var mode = document.modeEdit.device.options[num].value;
+    // itemNum = document.modeEdit.itemNum.options[num2].value;
 
     // デバイスごとにサイズ調整
     switch (mode) {
@@ -196,7 +196,7 @@ function showAvatorImg(files) {
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         avator = new Image();           // avatorファイルの処理
         avator.onload = function () {        // avatorファイル読込後の処理
-            // deviceSuggest(avator.naturalWidth, avator.naturalHeight);
+            deviceSuggest(avator.naturalWidth, avator.naturalHeight);
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
