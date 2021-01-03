@@ -42,18 +42,18 @@ let avator;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
-function deviceSuggest(w, h){    
-    if (w==750 && h ==588) {
-        if (window.screen.height == 812){mode="iPhone11Pro";}
-        else {mode="iPhone8";}
-    } else if (w==828 && h ==588) {
-        if (window.screen.height == 896){mode="iPhoneXSMax";}
-        else {mode="iPhoneXR"};
-    } else if (w==1668 && h ==1002) {mode="iPadPro11inch";}
-    else if (w==872 && h ==588) {mode="ARROWSF-52A";}
-    else if (w==884 && h ==588) {mode="vivo1935";}
-    else {mode="お使いの端末は対象外です";}
-    console.log(w,h);
+function deviceSuggest(w, h) {
+    if (w == 750 && h == 588) {
+        if (window.screen.height == 812) { mode = "iPhone11Pro"; }
+        else { mode = "iPhone8"; }
+    } else if (w == 828 && h == 588) {
+        if (window.screen.height == 896) { mode = "iPhoneXSMax"; }
+        else { mode = "iPhoneXR" };
+    } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
+    else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
+    else if (w == 884 && h == 588) { mode = "vivo1935"; }
+    else { mode = "お使いの端末は対象外です"; }
+    console.log(w, h);
     document.getElementById("modeName").textContent = mode;
 
     decide(mode);
@@ -248,6 +248,15 @@ function itemShow(image) {
             ctx.fillStyle = "white";
             ctx.fillRect(180 * i + 108, 665, 59, 30);
 
+            itemColor = ctx.getImageData(180 * i + 3 + 30, 530 + 30, 1, 1)
+            var r = itemColor.data[0]
+            var g = itemColor.data[1]
+            var b = itemColor.data[2]
+            if (r==233 && g==234 && b==236) {
+                ctx.fillStyle = colorCode;
+                ctx.fillRect(180 * i + 3, 720, 532, 172);
+                itemNum = i+1;
+            }
         } else {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
             drawsq(180 * (i - 5) + 3, 720, 172, 172, 10); // 角丸の矩形を描画（クリッピング用）
@@ -259,6 +268,17 @@ function itemShow(image) {
             ctx.beginPath();
             ctx.fillStyle = "white";
             ctx.fillRect(180 * (i - 5) + 108, 855, 59, 30);
+            
+            // アイテムがなければ背景色でぬりつぶし
+            itemColor = ctx.getImageData(180 * (i - 5) + 3 + 30, 720 + 30, 1, 1)
+            var r = itemColor.data[0]
+            var g = itemColor.data[1]
+            var b = itemColor.data[2]
+            if (r==233 && g==234 && b==236) {
+                ctx.fillStyle = colorCode;
+                ctx.fillRect(180 * (i - 5) + 3, 720, 172, 172);
+                itemNum = i+1;
+            }
         }
     }
     showTool()
@@ -355,18 +375,18 @@ canvas.addEventListener("click", e => {
 
     // 〇ボタン
     const resetsquare = {
-        x: (btnCenter["x"]-buttonSize/2-buttonWeight) * ratio, y:(btnCenter["y"]-buttonSize/2-buttonWeight) * ratio,  // 座標
+        x: (btnCenter["x"] - buttonSize / 2 - buttonWeight) * ratio, y: (btnCenter["y"] - buttonSize / 2 - buttonWeight) * ratio,  // 座標
         w: (buttonSize + buttonWeight * 2) * ratio, h: (buttonSize + buttonWeight * 2) * ratio   // サイズ
     };
     const resetPressed =
         (resetsquare.x <= point.x && point.x <= resetsquare.x + resetsquare.w)  // 横方向の判定
         && (resetsquare.y <= point.y && point.y <= resetsquare.y + resetsquare.h)  // 縦方向の判定
-    
+
     if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
-    if (downPressed) { avatorRewrite("down"); showTool(); console.log("down");}
-    if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right");}
-    if (leftPressed) { avatorRewrite("left"); showTool(); console.log("left");}
-    if (resetPressed) { avatorRewrite("reset"); showTool(); console.log("reset");}
+    if (downPressed) { avatorRewrite("down"); showTool(); console.log("down"); }
+    if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right"); }
+    if (leftPressed) { avatorRewrite("left"); showTool(); console.log("left"); }
+    if (resetPressed) { avatorRewrite("reset"); showTool(); console.log("reset"); }
 
 });
 
