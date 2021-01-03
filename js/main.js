@@ -248,13 +248,14 @@ function itemShow(image) {
             ctx.fillStyle = "white";
             ctx.fillRect(180 * i + 108, 665, 59, 30);
 
+            // アイテムがなければ背景色でぬりつぶし
             itemColor = ctx.getImageData(180 * i + 3 + 30, 530 + 30, 1, 1)
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
             if (r==233 && g==234 && b==236) {
                 ctx.fillStyle = colorCode;
-                ctx.fillRect(180 * i + 3 - 1, 720 - 1, 530 + 2, 172 + 2);
+                ctx.fillRect(180 * i, 720 - 3, 530 + 5, 172 + 5);
                 itemNum = i+1;
             }
         } else {
@@ -276,7 +277,7 @@ function itemShow(image) {
             var b = itemColor.data[2]
             if (r==233 && g==234 && b==236) {
                 ctx.fillStyle = colorCode;
-                ctx.fillRect(180 * (i - 5) + 3 - 1, 720 - 1 , 172 + 2, 172 + 2);
+                ctx.fillRect(180 * (i - 5), 720 - 3 , 172 + 5, 172 + 5);
                 itemNum = i+1;
             }
         }
