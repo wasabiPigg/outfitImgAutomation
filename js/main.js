@@ -52,6 +52,16 @@ let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
+// 背景色の選択
+let suggestColors = []; // 3つくらい候補をつっこむ
+let colorBoxMargin = 10;
+let colorBoxCriteria = {x:60, y:60};
+let colorBox = {
+    x1:colorBoxCriteria.x, y1:colorBoxCriteria.y,
+    x2:colorBoxCriteria.x, y2:colorBoxCriteria.y+colorBoxMargin,
+    x3:colorBoxCriteria.x, y3:colorBoxCriteria.y+colorBoxMargin,
+};
+
 function deviceSuggest(w, h) {
     if (w == 750 && h == 588) {
         if (window.screen.height == 812) { mode = "iPhone11Pro"; }
@@ -209,11 +219,14 @@ function showAvatorImg(files) {
             deviceSuggest(avator.naturalWidth, avator.naturalHeight);
             // 背景
             ctx.drawImage(avator, 0, 0, 7, 6);
+
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
             colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
             console.log("backgroundColor: ", backgroundColor.data);
             ctx.fillStyle = colorCode;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            // アバターの描画
             ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
         }
         avator.src = event.target.result;   // avatorを読み込む　
@@ -328,6 +341,12 @@ function showTool() {
     ctx.closePath();	//三角形の最後の線 closeさせる
     ctx.stroke();  // 線ひく
     ctx.fill();  // 中を塗る
+    ctx.restore();
+}
+
+function showColorBox() {
+    ctx.save();
+
     ctx.restore();
 }
 
@@ -457,6 +476,8 @@ function chgImg() {
 
     //ツールを消すためにアバターを再描画
     avatorRewrite("none");
+    showScreenshotImg(screenshotsrc);
+
 
     document.getElementById("imgStatus").textContent = "完成！";
     document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
