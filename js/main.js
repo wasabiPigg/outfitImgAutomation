@@ -1,3 +1,11 @@
+// おしらせ（あれば）
+let news = '※現在iPhoneXSMaxでうまく動作しません。修正対応中です。';
+if (news != "") {
+    document.getElementById("news").style = "block";
+    document.getElementById("news").textContent = news;
+}
+
+
 // canvasの初期設定
 var canvas = document.getElementById('canvas');
 var canvasWidth = 900;
@@ -39,6 +47,8 @@ let rightButton = { dx1: btnCenter["x"] + (buttonSize * 1.5 + buttonWeight * 2 +
 let downButton = { dx1: btnCenter["x"], dy1: btnCenter["y"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dx2: btnCenter["x"] - buttonSize / 2, dy2: btnCenter["y"] + 49, dx3: btnCenter["x"] + buttonSize / 2, dy3: btnCenter["y"] + 49 };
 // アバの位置とか
 let avator;
+let screenshot;
+let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
@@ -47,8 +57,8 @@ function deviceSuggest(w, h) {
         if (window.screen.height == 812) { mode = "iPhone11Pro"; }
         else { mode = "iPhone8"; }
     } else if (w == 828 && h == 588) {
-        if (window.screen.height == 896) { mode = "iPhoneXSMax"; }
-        else { mode = "iPhoneXR" };
+        if (window.screen.height == 896) { mode = "iPhoneXR"; }
+        else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
@@ -168,6 +178,7 @@ function decide(mode) {
 
 // すくしょを読み込み
 function showScreenshotImg(files) {
+    screenshotsrc = files;
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         var screenshot = new Image();           // screenshotファイルの処理
@@ -435,7 +446,7 @@ function avatorRewrite(direction) {
             break;
     }
     ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
-
+    showScreenshotImg(screenshotsrc);
 }
 
 // canvasを画像化
