@@ -252,7 +252,7 @@ function showAvatorImg(files) {
 
             // アバターの描画
             // ctx.drawImage(avator.image, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
-            if(avator.h <= 530){
+            if(avator.image.height <= 530){
                 avator.sx = 0;
                 avator.sy = 0;
                 avator.sw = avator.image.width;
@@ -274,6 +274,7 @@ function showAvatorImg(files) {
             }
             avatorCurrent["dx"] = avator.dx;
             avatorCurrent["dy"] = avator.dy;
+            console.log(avator);
             ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
         }
         avator.image.src = event.target.result;   // avatorを読み込む　
