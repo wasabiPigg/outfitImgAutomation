@@ -7,7 +7,7 @@ label {
     color: #888;
 }
 
-#news {
+#bug {
     font-size: 1rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -15,6 +15,16 @@ label {
     padding-right: 1rem;
     color: red;
     background-color: lightpink;
+}
+
+#news {
+    font-size: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white;
+    background-color: gray;
 }
 
 .item {
