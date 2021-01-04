@@ -53,11 +53,11 @@ let rightButton = { dx1: btnCenter["x"] + (buttonSize * 1.5 + buttonWeight * 2 +
 let downButton = { dx1: btnCenter["x"], dy1: btnCenter["y"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dx2: btnCenter["x"] - buttonSize / 2, dy2: btnCenter["y"] + 49, dx3: btnCenter["x"] + buttonSize / 2, dy3: btnCenter["y"] + 49 };
 // アバの位置とか
 var avator = {
-    image:0,
-    topX:0, topY:0,
-    leftX:0, leftY:0, rightX:0, rightY:0,
-    startX:0, startY:0, width:0, height:0,
-    sx:0, sy:0, sw:0, sh:0, dx:0, dy:0, dw:0, dh:0
+    image: 0,
+    topX: 0, topY: 0,
+    leftX: 0, leftY: 0, rightX: 0, rightY: 0,
+    startX: 0, startY: 0, width: 0, height: 0,
+    sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0
 };
 let screenshot;
 let screenshotsrc;
@@ -252,7 +252,7 @@ function showAvatorImg(files) {
 
             // アバターの描画
             // ctx.drawImage(avator.image, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
-            if(avator.image.height <= 530){
+            if (avator.image.height <= 530) {
                 avator.sx = 0;
                 avator.sy = 0;
                 avator.sw = avator.image.width;
@@ -270,7 +270,6 @@ function showAvatorImg(files) {
                 avator.dh = 530;
                 avator.dx = (canvasWidth - avator.dw) / 2;
                 avator.dy = 0;
-                console.log("dw:",avator.dw);
             }
             avatorCurrent["dx"] = avator.dx;
             avatorCurrent["dy"] = avator.dy;
@@ -307,7 +306,9 @@ function itemXY() {
 }
 
 // アバターの表示範囲を判定する
-function specificAvatorRange() {    
+function specificAvatorRange() {
+    dispLoading();
+
     // 非表示のキャンバスをつくる
     canvas_hidden.id = 'canvas_hidden';
     canvas_hidden.width = avator.image.width;
@@ -316,50 +317,50 @@ function specificAvatorRange() {
     ctx_hidden.drawImage(avator.image, 0, 0);
 
     // アバターの左端を取得
-    var i=1, j=1;
-    for (i=1; i<=avator.image.width; i++) {
-        for (j=1; j<=avator.image.height; j++) {
+    var i = 1, j = 1;
+    for (i = 1; i <= avator.image.width; i++) {
+        for (j = 1; j <= avator.image.height; j++) {
             tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
             // 透過していない箇所
-            if(tmpColor.data[3]!=0) {
+            if (tmpColor.data[3] != 0) {
                 avator.leftX = i;
                 avator.leftY = j;
                 break;
             }
         }
-        if(tmpColor.data[3]!=0) {
+        if (tmpColor.data[3] != 0) {
             break;
         }
     }
 
     // アバターの右端を取得
-    for (i=avator.image.width; i>0; i--) {
-        for (j=avator.image.height; j>0; j--) {
+    for (i = avator.image.width; i > 0; i--) {
+        for (j = avator.image.height; j > 0; j--) {
             tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
             // 透過していない箇所
-            if(tmpColor.data[3]!=0) {
+            if (tmpColor.data[3] != 0) {
                 avator.rightX = i;
                 avator.rightY = j;
                 break;
             }
         }
-        if(tmpColor.data[3]!=0) {
+        if (tmpColor.data[3] != 0) {
             break;
         }
     }
 
     // アバターの上端を取得
-    for (j=1; j<=avator.image.height; j++) {
-        for (i=1; i<=avator.image.width; i++) {
+    for (j = 1; j <= avator.image.height; j++) {
+        for (i = 1; i <= avator.image.width; i++) {
             tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
             // 透過していない箇所
-            if(tmpColor.data[3]!=0) {
+            if (tmpColor.data[3] != 0) {
                 avator.topX = i;
                 avator.topY = j;
                 break;
             }
         }
-        if(tmpColor.data[3]!=0) {
+        if (tmpColor.data[3] != 0) {
             break;
         }
     }
@@ -374,6 +375,7 @@ function specificAvatorRange() {
     console.log("アバターの上端のx: ", avator.topX, "y: ", avator.topY);
     console.log("アバターのstartX: ", avator.startX, "startY: ", avator.startY);
     console.log("アバターのw: ", avator.w, "h: ", avator.h);
+    removeLoading();
 }
 
 // アイテムを個別に表示する
@@ -675,3 +677,22 @@ jQuery(function ($) {
     });
 
 });
+
+/* ------------------------------
+ Loading イメージ表示関数
+ ------------------------------ */
+function dispLoading() {
+    console.log("処理開始");
+    loading.style.display = "block"; // loadingを表示
+    document.getElementById("loadingMsg").textContent = "処理中";
+}
+
+/* ------------------------------
+Loading イメージ削除関数
+------------------------------ */
+function removeLoading() {
+    loading.style.display = "none"; // loadingを表示
+    console.log("処理完了");
+    document.getElementById("loadingMsg").textContent = "処理完了";
+
+}
