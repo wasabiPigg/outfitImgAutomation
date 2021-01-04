@@ -39,6 +39,11 @@
 </head>
 
 <body>
+    <!-- ローディング画面 -->
+    <div id="loading" style="display: none;">
+        <div class="text-center"><p id="loadingMsg"></p>
+        <img src="img/loading.gif"></div>
+    </div>
     <!-- デバイスの選択 -->
     <section class="toolForm">
         <h3>コーデを加工するよ!</h3>
@@ -80,7 +85,7 @@
             <div class="item">
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
-                    onchange="showAvatorImg(this.files)">
+                    onchange="showAvatorImg(this.files); dispLoading()">
                 <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
             </div>
             </div>
