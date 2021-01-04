@@ -1,11 +1,11 @@
 // おしらせ（あれば）
-let bug = '※現在iPhoneXSMaxでうまく動作しません。修正対応中です。';
+let bug = '※現在うまく動作しません。修正対応中です。';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "大きいコーデにも対応しました✨";
+let news = "";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
