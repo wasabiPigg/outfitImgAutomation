@@ -1,5 +1,11 @@
 // おしらせ（あれば）
-let news = '※現在iPhoneXSMaxでうまく動作しません。修正対応中です。';
+let bug = '※現在iPhoneXSMaxでうまく動作しません。修正対応中です。';
+if (bug != "") {
+    document.getElementById("bug").style = "block";
+    document.getElementById("bug").textContent = bug;
+}
+
+let news = "大きいコーデにも対応しました✨";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
@@ -46,7 +52,13 @@ let leftButton = { dx1: btnCenter["x"] - (buttonSize * 1.5 + buttonWeight * 2 + 
 let rightButton = { dx1: btnCenter["x"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dy1: btnCenter["y"], dx2: btnCenter["x"] + 49, dy2: btnCenter["y"] - buttonSize / 2, dx3: btnCenter["x"] + 49, dy3: btnCenter["y"] + buttonSize / 2 };
 let downButton = { dx1: btnCenter["x"], dy1: btnCenter["y"] + (buttonSize * 1.5 + buttonWeight * 2 + buttonMargin), dx2: btnCenter["x"] - buttonSize / 2, dy2: btnCenter["y"] + 49, dx3: btnCenter["x"] + buttonSize / 2, dy3: btnCenter["y"] + 49 };
 // アバの位置とか
-let avator;
+var avator = {
+    image:0,
+    topX:0, topY:0,
+    leftX:0, leftY:0, rightX:0, rightY:0,
+    startX:0, startY:0, width:0, height:0,
+    sx:0, sy:0, sw:0, sh:0, dx:0, dy:0, dw:0, dh:0
+};
 let screenshot;
 let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
@@ -215,11 +227,11 @@ function showAvatorImg(files) {
     document.getElementById("saveHint").textContent = "";
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
-        avator = new Image();           // avatorファイルの処理
-        avator.onload = function () {        // avatorファイル読込後の処理
-            deviceSuggest(avator.naturalWidth, avator.naturalHeight);
+        avator.image = new Image();           // avatorファイルの処理
+        avator.image.onload = function () {        // avatorファイル読込後の処理
+            deviceSuggest(avator.image.naturalWidth, avator.image.naturalHeight);
             // 背景
-            ctx.drawImage(avator, 0, 0, 7, 6);
+            ctx.drawImage(avator.image, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
             colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
             suggestColors.length = 0; // 初期化
@@ -231,14 +243,40 @@ function showAvatorImg(files) {
             tmpColor = ctx.getImageData(3, 5, 1, 1);
             suggestColors.push(rgb2colorCode(tmpColor.data[0], tmpColor.data[1], tmpColor.data[2]));
 
+            // アバターの表示範囲を取得
+            specificAvatorRange();
+
             console.log("backgroundColor: ", suggestColors);
             ctx.fillStyle = colorCode;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // アバターの描画
-            ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
+            // ctx.drawImage(avator.image, avatorX, avatorY, avatorW, avatorH, 90, 0, avatorW, avatorH);
+            if(avator.h <= 530){
+                avator.sx = 0;
+                avator.sy = 0;
+                avator.sw = avator.image.width;
+                avator.sh = avator.image.height;
+                avator.dw = avator.w;
+                avator.dh = avator.h;
+                avator.dx = (canvasWidth - avator.image.width) / 2;
+                avator.dy = 0;
+            } else {
+                avator.sx = avator.startX;
+                avator.sy = avator.startY;
+                avator.sw = avator.w;
+                avator.sh = avator.h;
+                avator.dw = avator.w * 530 / avator.h;
+                avator.dh = 530;
+                avator.dx = (canvasWidth - avator.dw) / 2;
+                avator.dy = 0;
+                console.log("dw:",avator.dw);
+            }
+            avatorCurrent["dx"] = avator.dx;
+            avatorCurrent["dy"] = avator.dy;
+            ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
         }
-        avator.src = event.target.result;   // avatorを読み込む　
+        avator.image.src = event.target.result;   // avatorを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
         previewArea.style.display = "none"; // 画像に変更ボタンも非表示
         canvas.style.display = "block"; // canvas表示
@@ -266,6 +304,77 @@ function itemXY() {
     }
     console.log(itemX, itemY);
 }
+
+// アバターの表示範囲を判定する
+function specificAvatorRange() {    
+    // 非表示のキャンバスをつくる
+    canvas_hidden.id = 'canvas_hidden';
+    canvas_hidden.width = avator.image.width;
+    canvas_hidden.height = avator.image.height;
+    ctx_hidden = canvas_hidden.getContext('2d');
+    ctx_hidden.drawImage(avator.image, 0, 0);
+
+    // アバターの左端を取得
+    var i=1, j=1;
+    for (i=1; i<=avator.image.width; i++) {
+        for (j=1; j<=avator.image.height; j++) {
+            tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
+            // 透過していない箇所
+            if(tmpColor.data[3]!=0) {
+                avator.leftX = i;
+                avator.leftY = j;
+                break;
+            }
+        }
+        if(tmpColor.data[3]!=0) {
+            break;
+        }
+    }
+
+    // アバターの右端を取得
+    for (i=avator.image.width; i>0; i--) {
+        for (j=avator.image.height; j>0; j--) {
+            tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
+            // 透過していない箇所
+            if(tmpColor.data[3]!=0) {
+                avator.rightX = i;
+                avator.rightY = j;
+                break;
+            }
+        }
+        if(tmpColor.data[3]!=0) {
+            break;
+        }
+    }
+
+    // アバターの上端を取得
+    for (j=1; j<=avator.image.height; j++) {
+        for (i=1; i<=avator.image.width; i++) {
+            tmpColor = ctx_hidden.getImageData(i, j, 1, 1);
+            // 透過していない箇所
+            if(tmpColor.data[3]!=0) {
+                avator.topX = i;
+                avator.topY = j;
+                break;
+            }
+        }
+        if(tmpColor.data[3]!=0) {
+            break;
+        }
+    }
+    avator.startX = avator.leftX;
+    avator.startY = avator.topY;
+    avator.w = avator.rightX - avator.leftX;
+    avator.h = avator.image.height - avator.topY;
+
+    console.log("アバターの表示範囲取得\n w: ", canvas_hidden.width, " h: ", canvas_hidden.height);
+    console.log("アバターの左端のx: ", avator.leftX, "y: ", avator.leftY);
+    console.log("アバターの右端のx: ", avator.rightX, "y: ", avator.rightY);
+    console.log("アバターの上端のx: ", avator.topX, "y: ", avator.topY);
+    console.log("アバターのstartX: ", avator.startX, "startY: ", avator.startY);
+    console.log("アバターのw: ", avator.w, "h: ", avator.h);
+}
+
 // アイテムを個別に表示する
 function itemShow(image) {
     for (let i = 0; i < itemNum; i++) {
@@ -510,8 +619,8 @@ function avatorRewrite(how) {
             avatorCurrent["dx"] -= moveSize;
             break;
         case "reset":
-            avatorCurrent["dx"] = 90;
-            avatorCurrent["dy"] = 0;
+            avatorCurrent["dx"] = avator.dx;
+            avatorCurrent["dy"] = avator.dy;
             break;
         case "c1":
             colorCode = suggestColors[0];
@@ -527,7 +636,7 @@ function avatorRewrite(how) {
     }
     ctx.fillStyle = colorCode;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
-    ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
+    ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     itemShow(screenshotsrc);
 }
 
@@ -537,7 +646,7 @@ function chgImg() {
     ctx.fillStyle = colorCode;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     // avatorRewrite("none");
-    ctx.drawImage(avator, avatorX, avatorY, avatorW, avatorH, avatorCurrent["dx"], avatorCurrent["dy"], avatorW, avatorH);
+    ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     itemShow(screenshotsrc);
 
 
