@@ -1,11 +1,11 @@
 // おしらせ（あれば）
-let bug = '※現在iPhoneXRでうまく動作しません。修正対応中です。';
+let bug = '';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "大きいサイズのコーデに対応しました";
+let news = "大きいサイズのコーデに対応しました✨";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
@@ -20,13 +20,13 @@ var canvasHeight = 900;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 var ctx = canvas.getContext('2d');
-var screenshotWidth = 1125; // iPhone11Proのスクショの幅(デフォ)
-var itemBoxLength = 172.5 // iPhone11Proのアイテムの箱の大きさ（デフォ）
+var screenshotWidth = 1125; // iPhoneX, iPhoneXs, iPhone11Proのスクショの幅(デフォ)
+var itemBoxLength = 172.5 // iPhoneX, iPhoneXs, iPhone11Proのアイテムの箱の大きさ（デフォ）
 
-var mode = "iPhone11Pro"; // デフォはiPhone11Pro
+var mode = "iPhoneX, iPhoneXs, iPhone11Pro"; // デフォはiPhoneX, iPhoneXs, iPhone11Pro
 let itemNum = 10;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
 
-// 変数の定義(iPhone11Proをデフォとする)
+// 変数の定義(iPhoneX, iPhoneXs, iPhone11Proをデフォとする)
 let itemRow = 6;       // 1列にいくつアイテムが並んでいるか？
 let itemMarginX = 13;   // アイテム同士の左右の余白はいくつ？
 let itemMarginY = 13;   // アイテム同士の上下の余白はいくつ？
@@ -76,11 +76,12 @@ let colorBox = {
 
 function deviceSuggest(w, h) {
     if (w == 750 && h == 588) {
-        if (window.screen.height == 812) { mode = "iPhone11Pro"; }
-        else { mode = "iPhone8"; }
+        if (window.screen.height == 812) { mode = "iPhoneX, iPhoneXs, iPhone11Pro"; }
+        else { mode = "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro"; }
     } else if (w == 828 && h == 588) {
-        if (window.screen.height == 896) { mode = "iPhoneXR"; }
-        else { mode = "iPhoneXSMax" };
+        mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax";
+        // if (window.screen.height == 896) { mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax"; }
+        // else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
@@ -101,7 +102,7 @@ function decide(mode) {
 
     // デバイスごとにサイズ調整
     switch (mode) {
-        case "iPhone11Pro":
+        case "iPhoneX, iPhoneXs, iPhone11Pro":
             itemRow = 6;
             itemMarginX = 13;
             itemMarginY = 13;
@@ -114,7 +115,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1121;
             break;
-        case "iPhone8":
+        case "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro":
             itemRow = 6;
             itemMarginX = 10;
             itemMarginY = itemMarginX;
@@ -127,7 +128,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 600;
             break;
-        case "iPhoneXR":
+        case "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax":
             itemRow = 6;
             itemMarginX = 20;
             itemMarginY = 9;
@@ -204,13 +205,23 @@ function showScreenshotImg(files) {
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         var screenshot = new Image();           // screenshotファイルの処理
         screenshot.onload = function () {        // screenshotファイル読込後の処理
-            screenshotWidth = this.width;
-            console.log("width: ", this.width);
+            screenshotWidth = screenshot.width;
+            console.log("width: ", screenshot.width);
+
+            // デバイス推定
+            if(mode == "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax" && screenshot.naturalWidth == 1242) {
+                decide("iPhoneXSMax");
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro" && screenshot.naturalWidth == 1125) {
+                decide("iPhoneX, iPhoneXs, iPhone11Pro");
+                console.log("スクショ読み込み後に変更、モード",mode);
+            }
+
             itemBoxCalc();
             itemXY();
-            itemShow(this);
+            itemShow(screenshot);
             showTool();
-            screenshotsrc = this;
+            screenshotsrc = screenshot;
         }
         screenshot.src = event.target.result;   // screenshotを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
@@ -304,6 +315,21 @@ function itemXY() {
     }
     console.log(itemX, itemY);
 }
+
+// スクリーンショットを任意のw,hにリサイズする
+// function resize(image, w, h) {
+//     w = parseInt(w);
+//     h = parseInt(h);
+//     canvas_hidden2.id = 'canvas_hidden2';
+//     canvas_hidden2.width = w;
+//     canvas_hidden2.height = h;
+//     ctx_hidden2 = canvas_hidden2.getContext('2d');
+//     ctx_hidden2.drawImage(image, 0, 0, w, h);
+//     var result = canvas_hidden2.toDataURL();
+//     screenshot = result;
+//     console.log("hidden2 w,h=",w,h);
+//     console.log("resized screenshot size w, h=", result.width, result.height);
+// }
 
 // アバターの表示範囲を判定する
 function specificAvatorRange() {
