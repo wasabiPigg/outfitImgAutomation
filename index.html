@@ -56,9 +56,9 @@
             <label for="custom-select-1b">デバイスの種類</label>
             <select id="custom-select-1b" class="custom-select" name="device" onchange="decide();">
                 <option value="iPhone8">iPhone 8</option>
-                <option value="iPhoneXR">iPhone XR</option>
+                <option value="iPhone XR, iPhone11">iPhone XR, iPhone11</option>
                 <option value="iPhoneXSMax">iPhone XS Max</option>
-                <option value="iPhone11Pro" selected>iPhone 11 Pro</option>
+                <option value="iPhone11Pro, iPhoneX, iPhoneXs" selected>iPhone11Pro, iPhoneX, iPhoneXs</option>
                 <option value="iPadPro11inch">iPad Pro 11インチ</option>
                 <option value="ARROWSF-52A">ARROWS F-52A</option>
                 <option value="vivo1935">vivo 1935</option>
@@ -101,6 +101,7 @@
                 <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900">
                 <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas_hidden" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvas_hidden2" class="rounded" style="display: none;"></canvas></div>
                 <div><img id="result" class="rounded" style="display: none;"></div>
                 <span id="saveHint"></span>
             </div>
