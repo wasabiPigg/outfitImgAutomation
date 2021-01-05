@@ -85,6 +85,7 @@ function deviceSuggest(w, h) {
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
+    else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -192,6 +193,15 @@ function decide(mode) {
             avatorH = 588;
             firstItemX = itemsLeft;
             firstItemY = 831;
+            break;
+        case "HUAWEInova2":
+            itemRow = 6;
+            itemMarginX = 20;
+            itemMarginY = 11;
+            itemsLeft = 17;
+            itemsRight = 19;
+            firstItemX = itemsLeft;
+            firstItemY = 885;
             break;
         default:
             break;
