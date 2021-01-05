@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "大きいサイズのコーデに対応しました✨";
+let news = "HUAWEInova2, Xperia5Ⅱに対応しました✨";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
@@ -86,6 +86,7 @@ function deviceSuggest(w, h) {
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
+    else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -203,6 +204,14 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 885;
             break;
+        case "Xperia5Ⅱ":
+            itemRow = 6;
+            itemMarginX = 18;
+            itemMarginY = 11;
+            itemsLeft = 15;
+            itemsRight = 16;
+            firstItemX = itemsLeft;
+            firstItemY = 890;
         default:
             break;
     }
