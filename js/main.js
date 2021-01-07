@@ -1,5 +1,5 @@
 // おしらせ（あれば）
-let bug = '一部端末で表示がずれます。修正中です！';
+let bug = '';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
@@ -217,6 +217,7 @@ function decide(mode) {
             itemsRight = 16;
             firstItemX = itemsLeft;
             firstItemY = 890;
+            break;
         case "Galaxy Note9":
             itemRow = 7;
             itemMarginX = 14;
@@ -228,6 +229,7 @@ function decide(mode) {
             console.log("アイテムの横の数", itemRow);
             console.log("アイテムのmargin", itemMarginX, itemMarginY);
             console.log("アイテムの最初のY座標", firstItemY);
+            break;
         case "AQUOSzero2":
             itemRow = 7;
             itemMarginX = 10;
@@ -236,6 +238,7 @@ function decide(mode) {
             itemsRight = 8;
             firstItemX = itemsLeft;
             firstItemY = 814;
+            break;
         default:
             break;
     }
