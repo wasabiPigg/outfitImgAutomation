@@ -87,10 +87,11 @@ function deviceSuggest(w, h) {
         // if (window.screen.height == 896) { mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax"; }
         // else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
-    else if (w == 872 && h == 588) { mode = "ARROWSF-52A"; }
+    else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
+    else if (w == 898 && h ==588) { mode = "Galaxy Note9"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -173,7 +174,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1014;
             break;
-        case "ARROWSF-52A":
+        case "ARROWSF-52A, AQUOSzero2":
             itemRow = 7;
             itemMarginX = 10;
             itemMarginY = 10;
@@ -216,6 +217,22 @@ function decide(mode) {
             itemsRight = 16;
             firstItemX = itemsLeft;
             firstItemY = 890;
+        case "Galaxy Note9":
+            itemRow = 7;
+            itemMarginX = 14;
+            itemMarginY = 10;
+            itemsLeft = 11;
+            itemsRight = 12;
+            firstItemX = itemsLeft;
+            firstItemY = 783;
+        case "AQUOSzero2":
+            itemRow = 7;
+            itemMarginX = 10;
+            itemMarginY = 10;
+            itemsLeft = 8;
+            itemsRight = 8;
+            firstItemX = itemsLeft;
+            firstItemY = 814;
         default:
             break;
     }
@@ -231,12 +248,15 @@ function showScreenshotImg(files) {
             screenshotWidth = screenshot.width;
             console.log("width: ", screenshot.width);
 
-            // デバイス推定
+            // デバイス推定(アバの画像サイズが同じ場合さらに分けるためにここで推定する)
             if(mode == "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax" && screenshot.naturalWidth == 1242) {
                 decide("iPhoneXSMax");
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro" && screenshot.naturalWidth == 1125) {
                 decide("iPhoneX, iPhoneXs, iPhone11Pro");
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "ARROWSF-52A, AQUOSzero2" && screenshot.naturalHeight == 2340) {
+                decide("AQUOSzero2");
                 console.log("スクショ読み込み後に変更、モード",mode);
             }
 
