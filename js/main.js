@@ -96,6 +96,7 @@ function deviceSuggest(w, h) {
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
     else if (w == 898 && h ==588) { mode = "Galaxy Note9"; }
+    else if (w == 859 && h ==588) { mode = "HW-01K"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -242,6 +243,15 @@ function decide(mode) {
             itemsRight = 8;
             firstItemX = itemsLeft;
             firstItemY = 814;
+            break;
+        case "HW-01K":
+            itemRow = 6;
+            itemMarginX = 30;
+            itemMarginY = 11;
+            itemsLeft = 28;
+            itemsRight = 28;
+            firstItemX = itemsLeft;
+            firstItemY = 834;
             break;
         default:
             break;
