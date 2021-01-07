@@ -225,6 +225,9 @@ function decide(mode) {
             itemsRight = 12;
             firstItemX = itemsLeft;
             firstItemY = 783;
+            console.log("アイテムの横の数", itemRow);
+            console.log("アイテムのmargin", itemMarginX, itemMarginY);
+            console.log("アイテムの最初のY座標", firstItemY);
         case "AQUOSzero2":
             itemRow = 7;
             itemMarginX = 10;
@@ -336,6 +339,17 @@ function showAvatorImg(files) {
         canvas.style.display = "block"; // canvas表示
     }
     reader.readAsDataURL(files[0]);
+}
+
+// アバターのシルエットを用意するための関数
+function avator2silhouette() {
+    // 非表示のキャンバスをつくる
+    canvas_silhouette.id = 'canvas_silhouette';
+    canvas_silhouette.width = avator.image.width;
+    canvas_silhouette.height = avator.image.height;
+    ctx_hidden = canvas_silhouette.getContext('2d');
+    ctx_hidden.drawImage(avator.image, 0, 0);
+    
 }
 
 // 背景画像読み込み
