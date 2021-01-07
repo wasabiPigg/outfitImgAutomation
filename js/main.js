@@ -1,5 +1,5 @@
 // おしらせ（あれば）
-let bug = '';
+let bug = '一部端末で表示がずれます。修正中です！';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
@@ -254,15 +254,17 @@ function showScreenshotImg(files) {
             // デバイス推定(アバの画像サイズが同じ場合さらに分けるためにここで推定する)
             if(mode == "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax" && screenshot.naturalWidth == 1242) {
                 decide("iPhoneXSMax");
+                mode = "iPhoneXSMax";
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro" && screenshot.naturalWidth == 1125) {
                 decide("iPhoneX, iPhoneXs, iPhone11Pro");
+                mode = "iPhoneX, iPhoneXs, iPhone11Pro";
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "ARROWSF-52A, AQUOSzero2" && screenshot.naturalHeight == 2340) {
                 decide("AQUOSzero2");
+                mode = "AQUOSzero2";
                 console.log("スクショ読み込み後に変更、モード",mode);
             }
-
             itemBoxCalc();
             itemXY();
             itemShow(screenshot);
