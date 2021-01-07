@@ -736,8 +736,8 @@ function avatorRewrite(how) {
             break;
     }
     if (backgroundImg != null && isVisibleBackgroundImg == true) {
-        ctx.drawImage(backgroundImg, 0, 0, 900, 900);
-    } else if (isVisibleBackgroundImg == false) {
+        ctx.drawImage(backgroundImg, 0, 0, canvasWidth, canvasHeight);
+    } else {
         ctx.fillStyle = colorCode;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
