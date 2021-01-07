@@ -79,6 +79,15 @@ label {
     text-align: center;
     margin-top: 30vh;
 }
+
+label#imgStatus {
+    width: 100%;
+}
+
+.hosoku {
+    font-size: 0.6rem;
+}
+
 /***
 Spectrum Colorpicker v1.8.0
 https://github.com/bgrins/spectrum

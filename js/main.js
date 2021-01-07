@@ -5,12 +5,11 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "HUAWEInova2, Xperia5Ⅱに対応しました✨";
+let news = "背景画像を好きなものにできるようになりました✨";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
 }
-
 
 // canvasの初期設定
 var canvas = document.getElementById('canvas');
@@ -64,14 +63,19 @@ let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
+// 背景画像用
+var backgroundImg;
+var isVisibleBackgroundImg;
+
 // 背景色の選択
 let suggestColors = []; // 3つくらい候補をつっこむ
 let colorBoxMargin = 10;
-let colorBoxCriteria = { x: 100, y: 100 };
+let colorBoxCriteria = { x: 100, y: 80 };
 let colorBox = {
     x1: colorBoxCriteria.x, y1: colorBoxCriteria.y,
     x2: colorBoxCriteria.x, y2: colorBoxCriteria.y + colorBoxMargin * 2 + buttonSize * 2,
-    x3: colorBoxCriteria.x, y3: colorBoxCriteria.y + colorBoxMargin * 4 + buttonSize * 4
+    x3: colorBoxCriteria.x, y3: colorBoxCriteria.y + colorBoxMargin * 4 + buttonSize * 4,
+    x4: colorBoxCriteria.x, y4: colorBoxCriteria.y + colorBoxMargin * 6 + buttonSize * 6
 };
 
 function deviceSuggest(w, h) {
@@ -314,6 +318,28 @@ function showAvatorImg(files) {
     reader.readAsDataURL(files[0]);
 }
 
+// 背景画像読み込み
+function showBackgroundImg(files) {
+    var reader = new FileReader();              // ローカルファイルの処理
+    reader.onload = function (event) {           // ローカルファイルを読込後処理
+        backgroundImg = new Image();           // backgroundImgファイルの処理
+        backgroundImg.onload = function () {        // backgroundImgファイル読込後の処理
+            // 背景
+            ctx.drawImage(backgroundImg, 0, 0, 900, 900);
+            isVisibleBackgroundImg = true;
+            ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+            showColorBox();
+            showTool()
+            itemShow(screenshotsrc);
+        }
+        backgroundImg.src = event.target.result;   // avatorを読み込む　
+        document.getElementById("imgStatus").textContent = "プレビュー";
+        previewArea.style.display = "none"; // 画像に変更ボタンも非表示
+        canvas.style.display = "block"; // canvas表示
+    }
+    reader.readAsDataURL(files[0]);
+}
+
 // アイテムの箱の大きさを計算する
 function itemBoxCalc() {
     itemBoxLength = (screenshotWidth - itemsLeft - itemsRight - itemMarginX * (itemRow - 1)) / itemRow;
@@ -334,21 +360,6 @@ function itemXY() {
     }
     console.log(itemX, itemY);
 }
-
-// スクリーンショットを任意のw,hにリサイズする
-// function resize(image, w, h) {
-//     w = parseInt(w);
-//     h = parseInt(h);
-//     canvas_hidden2.id = 'canvas_hidden2';
-//     canvas_hidden2.width = w;
-//     canvas_hidden2.height = h;
-//     ctx_hidden2 = canvas_hidden2.getContext('2d');
-//     ctx_hidden2.drawImage(image, 0, 0, w, h);
-//     var result = canvas_hidden2.toDataURL();
-//     screenshot = result;
-//     console.log("hidden2 w,h=",w,h);
-//     console.log("resized screenshot size w, h=", result.width, result.height);
-// }
 
 // アバターの表示範囲を判定する
 function specificAvatorRange() {
@@ -436,7 +447,7 @@ function itemShow(image) {
             // 所持数隠し
             ctx.beginPath();
             ctx.fillStyle = "white";
-            ctx.fillRect(180 * i + 108, 665, 59, 30);
+            ctx.fillRect(180 * i + 58, 665, 109, 30);
 
             // アイテムがなければ背景色でぬりつぶし
             itemColor = ctx.getImageData(180 * i + 3 + 30, 530 + 30, 1, 1)
@@ -446,7 +457,7 @@ function itemShow(image) {
             if (r == 233 && g == 234 && b == 236) {
                 ctx.fillStyle = colorCode;
                 ctx.fillRect(180 * i, 720 - 3, 530 + 5, 172 + 5);
-                itemNum = i + 1;
+                itemNum = i;
             }
         } else {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
@@ -458,7 +469,7 @@ function itemShow(image) {
             // 所持数隠し
             ctx.beginPath();
             ctx.fillStyle = "white";
-            ctx.fillRect(180 * (i - 5) + 108, 855, 59, 30);
+            ctx.fillRect(180 * (i - 5) + 58, 855, 109, 30);
 
             // アイテムがなければ背景色でぬりつぶし
             itemColor = ctx.getImageData(180 * (i - 5) + 3 + 30, 720 + 30, 1, 1)
@@ -468,7 +479,7 @@ function itemShow(image) {
             if (r == 233 && g == 234 && b == 236) {
                 ctx.fillStyle = colorCode;
                 ctx.fillRect(180 * (i - 5), 720 - 3, 172 + 5, 172 + 5);
-                itemNum = i + 1;
+                itemNum = i;
             }
         }
     }
@@ -517,6 +528,13 @@ function showColorBox() {
     drawCircle(colorBox.x1, colorBox.y1, buttonSize, suggestColors[0]);
     drawCircle(colorBox.x2, colorBox.y2, buttonSize, suggestColors[1]);
     drawCircle(colorBox.x3, colorBox.y3, buttonSize, suggestColors[2]);
+    if (backgroundImg != null) {
+        ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
+        drawCircle(colorBox.x4, colorBox.y4, buttonSize, "#fff"); // 角丸の矩形を描画（クリッピング用）
+        ctx.clip();  // (角丸矩形でクリッピング)
+        ctx.drawImage(backgroundImg, colorBox.x4-buttonSize, colorBox.y4-buttonSize, buttonSize*2, buttonSize*2);
+        ctx.restore(); // クリッピング領域の設定を破棄
+    }
     ctx.restore();
 }
 
@@ -621,6 +639,15 @@ canvas.addEventListener("click", e => {
         (c3square.x <= point.x && point.x <= c3square.x + c3square.w)  // 横方向の判定
         && (c3square.y <= point.y && point.y <= c3square.y + c3square.h)  // 縦方向の判定
 
+    // 色4(背景画像を読み込んだときのみ)
+    const c4square = {
+        x: (colorBox.x4 - buttonSize - buttonWeight) * ratio, y: (colorBox.y4 - buttonSize - buttonWeight) * ratio,  // 座標
+        w: (buttonSize * 2 + buttonWeight * 2) * ratio, h: (buttonSize * 2 + buttonWeight * 2) * ratio   // サイズ
+    };
+    const c4Pressed =
+        (c4square.x <= point.x && point.x <= c4square.x + c4square.w)  // 横方向の判定
+        && (c4square.y <= point.y && point.y <= c4square.y + c4square.h)  // 縦方向の判定
+
     if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
     if (downPressed) { avatorRewrite("down"); showTool(); console.log("down"); }
     if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right"); }
@@ -629,6 +656,7 @@ canvas.addEventListener("click", e => {
     if (c1Pressed) { avatorRewrite("c1"); showTool(); console.log("c1"); }
     if (c2Pressed) { avatorRewrite("c2"); showTool(); console.log("c2"); }
     if (c3Pressed) { avatorRewrite("c3"); showTool(); console.log("c3"); }
+    if (c4Pressed) { avatorRewrite("c4"); showTool(); console.log("c4"); }
 
 });
 
@@ -672,18 +700,27 @@ function avatorRewrite(how) {
             break;
         case "c1":
             colorCode = suggestColors[0];
+            isVisibleBackgroundImg = false;
             break;
         case "c2":
             colorCode = suggestColors[1];
+            isVisibleBackgroundImg = false;
             break;
         case "c3":
             colorCode = suggestColors[2];
+            isVisibleBackgroundImg = false;
             break;
+        case "c4":
+            isVisibleBackgroundImg = true;
         default:
             break;
     }
-    ctx.fillStyle = colorCode;
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
+    if (backgroundImg != null && isVisibleBackgroundImg == true) {
+        ctx.drawImage(backgroundImg, 0, 0, 900, 900);
+    } else if (isVisibleBackgroundImg == false) {
+        ctx.fillStyle = colorCode;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
+    }
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     itemShow(screenshotsrc);
 }
@@ -691,13 +728,15 @@ function avatorRewrite(how) {
 // canvasを画像化
 function chgImg() {
     //ツールを消すためにアバターを再描画
-    ctx.fillStyle = colorCode;
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
+    if (backgroundImg != null && isVisibleBackgroundImg == true) {
+        ctx.drawImage(backgroundImg, 0, 0, 900, 900); // 背景画像がある場合は背景画像描画しなおし
+    } else if (isVisibleBackgroundImg == false) {
+        ctx.fillStyle = colorCode;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
+    }
     // avatorRewrite("none");
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     itemShow(screenshotsrc);
-
-
 
     result.style.display = "block"; // resultを表示
     canvas.style.display = "none"; // canvasは非表示にする
