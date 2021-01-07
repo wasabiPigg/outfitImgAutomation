@@ -63,6 +63,10 @@ let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
+// シルエット作成用
+var silhouetteImgData;
+var silhouetteData;
+
 // 背景画像用
 var backgroundImg;
 var isVisibleBackgroundImg;
@@ -107,7 +111,7 @@ function decide(mode) {
     // var mode = document.modeEdit.device.options[num].value;
     // itemNum = document.modeEdit.itemNum.options[num2].value;
 
-    // デバイスごとにサイズ調整
+    // デバイスごとにサイズ調整。break忘れ気を付けて
     switch (mode) {
         case "iPhoneX, iPhoneXs, iPhone11Pro":
             itemRow = 6;
@@ -337,6 +341,7 @@ function showAvatorImg(files) {
             avatorCurrent["dy"] = avator.dy;
             console.log(avator);
             ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
+            // avator2silhouette();
         }
         avator.image.src = event.target.result;   // avatorを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
@@ -346,16 +351,38 @@ function showAvatorImg(files) {
     reader.readAsDataURL(files[0]);
 }
 
-// アバターのシルエットを用意するための関数
-function avator2silhouette() {
-    // 非表示のキャンバスをつくる
-    canvas_silhouette.id = 'canvas_silhouette';
-    canvas_silhouette.width = avator.image.width;
-    canvas_silhouette.height = avator.image.height;
-    ctx_hidden = canvas_silhouette.getContext('2d');
-    ctx_hidden.drawImage(avator.image, 0, 0);
-    
-}
+// // アバターのシルエットを用意するための関数
+// function avator2silhouette() {
+//     var canvas_silhouette = document.getElementById('canvas_silhouette');
+//     canvas_silhouette.width = avator.image.width;
+//     canvas_silhouette.height = avator.image.height;
+
+//     var centerX = canvas_silhouette.width / 2;
+//     var centerY = canvas_silhouette.height / 2;
+
+//     var context = canvas_silhouette.getContext('2d');
+
+//     var bgImg = new Image();
+//     bgImg.onload = function () {
+//         context.globalCompositeOperation = 'source-over';
+//         context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+//         drawMask();
+//     };
+//     bgImg.src = 'img/bg.png';
+
+//     function drawMask () {
+//         context.globalCompositeOperation = 'destination-in';
+//         drawImageMask(avator.image);
+//     };
+
+//     function drawImageMask (src) {
+//         var maskImg = new Image();
+//         maskImg.onload = function () {
+//             context.drawImage(maskImg, centerX - (maskImg.width / 2), centerY - (maskImg.height / 2), maskImg.width, maskImg.height);
+//         };
+//         maskImg.src = src;
+//     };
+// }
 
 // 背景画像読み込み
 function showBackgroundImg(files) {
@@ -769,7 +796,7 @@ function chgImg() {
     //ツールを消すためにアバターを再描画
     if (backgroundImg != null && isVisibleBackgroundImg == true) {
         ctx.drawImage(backgroundImg, 0, 0, 900, 900); // 背景画像がある場合は背景画像描画しなおし
-    } else if (isVisibleBackgroundImg == false) {
+    } else {
         ctx.fillStyle = colorCode;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
