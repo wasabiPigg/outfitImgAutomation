@@ -64,12 +64,13 @@ let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
 
 // シルエット作成用
-var silhouetteImgData;
-var silhouetteData;
+var silhouette = new Image();
+
 
 // 背景画像用
 var backgroundImg;
 var isVisibleBackgroundImg;
+
 
 // 背景色の選択
 let suggestColors = []; // 3つくらい候補をつっこむ
@@ -341,7 +342,9 @@ function showAvatorImg(files) {
             avatorCurrent["dy"] = avator.dy;
             console.log(avator);
             ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
-            // avator2silhouette();
+            avator2silhouette();
+            ctx.drawImage(silhouette, 0, 0, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
+
         }
         avator.image.src = event.target.result;   // avatorを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
@@ -351,38 +354,50 @@ function showAvatorImg(files) {
     reader.readAsDataURL(files[0]);
 }
 
-// // アバターのシルエットを用意するための関数
-// function avator2silhouette() {
-//     var canvas_silhouette = document.getElementById('canvas_silhouette');
-//     canvas_silhouette.width = avator.image.width;
-//     canvas_silhouette.height = avator.image.height;
+// アバターのシルエットを用意するための関数
+function avator2silhouette() {
+    var canvas_silhouette = document.getElementById('canvas_silhouette');
+    canvas_silhouette.width = avator.image.width;
+    canvas_silhouette.height = avator.image.height;
 
-//     var centerX = canvas_silhouette.width / 2;
-//     var centerY = canvas_silhouette.height / 2;
+    var centerX = canvas_silhouette.width / 2;
+    var centerY = canvas_silhouette.height / 2;
 
-//     var context = canvas_silhouette.getContext('2d');
+    var context = canvas_silhouette.getContext('2d');
 
-//     var bgImg = new Image();
-//     bgImg.onload = function () {
-//         context.globalCompositeOperation = 'source-over';
-//         context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-//         drawMask();
-//     };
-//     bgImg.src = 'img/bg.png';
+    var bgImg = new Image();
+    bgImg.onload = function () {
+        context.globalCompositeOperation = 'source-over';
+        context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        context.fillStyle = "red";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        drawMask();
+    };
+    bgImg.src = './img/bg.png';
 
-//     function drawMask () {
-//         context.globalCompositeOperation = 'destination-in';
-//         drawImageMask(avator.image);
-//     };
+    var drawMask = function () {
+        context.globalCompositeOperation = 'destination-in';
+        drawImageMask(avator.image.src);
+    };
 
-//     function drawImageMask (src) {
-//         var maskImg = new Image();
-//         maskImg.onload = function () {
-//             context.drawImage(maskImg, centerX - (maskImg.width / 2), centerY - (maskImg.height / 2), maskImg.width, maskImg.height);
-//         };
-//         maskImg.src = src;
-//     };
-// }
+    var drawImageMask = function (src) {
+        var maskImg = new Image();
+        maskImg.onload = function () {
+            context.drawImage(maskImg, centerX - (maskImg.width / 2), centerY - (maskImg.height / 2), maskImg.width, maskImg.height);
+        };
+        maskImg.src = src;
+    };
+    silhouette.src = canvas_silhouette.toDataURL();
+    ctx.drawImage(silhouette, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
+
+    context.drawImage(silhouette, 0, 0); // あとでけす
+    var canvas_silhouette2 = document.getElementById('canvas_silhouette2');
+    canvas_silhouette2.width = avator.image.width;
+    canvas_silhouette2.height = avator.image.height;
+    var context2 = canvas_silhouette2.getContext('2d');
+    context2.drawImage(canvas_silhouette,avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
+
+}
 
 // 背景画像読み込み
 function showBackgroundImg(files) {
