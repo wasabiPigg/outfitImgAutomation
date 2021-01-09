@@ -382,6 +382,7 @@ function avator2silhouette() {
         context.fillStyle = "red";
         context.fillRect(0, 0, canvas.width, canvas.height);
         drawMask();
+        context.fillRect(0, 0, 150,150);
     };
     bgImg.src = './img/bg.png';
 
@@ -406,6 +407,7 @@ function avator2silhouette() {
     canvas_silhouette2.height = avator.image.height;
     var context2 = canvas_silhouette2.getContext('2d');
     context2.drawImage(canvas_silhouette,avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
+    context2.fillRect(3,3,150,150);
 
 }
 
