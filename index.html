@@ -117,6 +117,18 @@
         <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
             画像に変換！
         </button>
+        <button class="btn" id="showLogBtn" onclick="showLog()" style="display: none;">
+            ログを表示<span class="hosoku">(うまくいかないときはここをタップ)</span>
+        </button>
+        <div id="logArea" style="display: none;">
+            以下の情報を<a href="https://twitter.com/wasabipigg">わさび</a>にご共有ください<br>
+            推定端末：<span id="logTanmatsu"></span><br>
+            アバの画像サイズ：横=<span id="logAvaW"></span> 縦=<span id="logAvaH"></span><br>
+            スクショの画像サイズ：横=<span id="logScreenshotW"></span> 縦=<span id="logScreenshotH"></span><br>
+            取得した背景色：<span id="logColors"></span><br>
+            使用アイテム数：<span id="logItemNum"></span><br>
+            背景画像の有無：<span id="logBackgroundImg"></span>
+        </div>
     </section>
     <!-- JS読み込み -->
     <script src="js/main.js"></script>

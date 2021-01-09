@@ -20,6 +20,7 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 var ctx = canvas.getContext('2d');
 var screenshotWidth = 1125; // iPhoneX, iPhoneXs, iPhone11Proのスクショの幅(デフォ)
+var screenshotHeight
 var itemBoxLength = 172.5 // iPhoneX, iPhoneXs, iPhone11Proのアイテムの箱の大きさ（デフォ）
 
 var mode = "iPhoneX, iPhoneXs, iPhone11Pro"; // デフォはiPhoneX, iPhoneXs, iPhone11Pro
@@ -276,6 +277,7 @@ function showScreenshotImg(files) {
         var screenshot = new Image();           // screenshotファイルの処理
         screenshot.onload = function () {        // screenshotファイル読込後の処理
             screenshotWidth = screenshot.width;
+            screenshotHeight = screenshot.height;
             console.log("width: ", screenshot.width);
 
             // デバイス推定(アバの画像サイズが同じ場合さらに分けるためにここで推定する)
@@ -367,6 +369,7 @@ function showAvatorImg(files) {
         document.getElementById("imgStatus").textContent = "プレビュー";
         previewArea.style.display = "none"; // 画像に変更ボタンも非表示
         canvas.style.display = "block"; // canvas表示
+        showLogBtn.style.display = "block"; // log表示ボタン表示
     }
     reader.readAsDataURL(files[0]);
 }
@@ -832,6 +835,23 @@ function chgImg() {
     document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
     var png = canvas.toDataURL();
     document.getElementById("result").src = png;
+}
+
+// ログを表示
+function showLog() {
+    logArea.style.display = "block"; // logを表示する
+    document.getElementById("logTanmatsu").textContent = mode;
+    document.getElementById("logAvaW").textContent = avator.image.width;
+    document.getElementById("logAvaH").textContent = avator.image.height;
+    document.getElementById("logScreenshotW").textContent = screenshotWidth;
+    document.getElementById("logScreenshotH").textContent = screenshotHeight;
+    document.getElementById("logColors").textContent = suggestColors;
+    document.getElementById("logItemNum").textContent = itemNum;
+    if (backgroundImg != null) {
+        document.getElementById("logBackgroundImg").textContent = "あり";
+    } else {
+        document.getElementById("logBackgroundImg").textContent = "なし";
+    }
 }
 
 jQuery(function ($) {
