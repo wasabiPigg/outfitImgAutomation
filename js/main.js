@@ -24,7 +24,7 @@ var screenshotHeight
 var itemBoxLength = 172.5 // iPhoneX, iPhoneXs, iPhone11Proのアイテムの箱の大きさ（デフォ）
 
 var mode = "iPhoneX, iPhoneXs, iPhone11Pro"; // デフォはiPhoneX, iPhoneXs, iPhone11Pro
-let itemNum;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
+let itemNum = 10;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
 
 // 変数の定義(iPhoneX, iPhoneXs, iPhone11Proをデフォとする)
 let itemRow = 6;       // 1列にいくつアイテムが並んでいるか？
@@ -840,6 +840,8 @@ function chgImg() {
 // ログを表示
 function showLog() {
     logArea.style.display = "block"; // logを表示する
+    document.getElementById("logTanmatsuW").textContent = window.screen.width;
+    document.getElementById("logTanmatsuH").textContent = window.screen.height;
     document.getElementById("logTanmatsu").textContent = mode;
     document.getElementById("logAvaW").textContent = avator.image.width;
     document.getElementById("logAvaH").textContent = avator.image.height;
