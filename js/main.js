@@ -19,12 +19,12 @@ var canvasHeight = 900;
 canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 var ctx = canvas.getContext('2d');
-var screenshotWidth = 1125; // iPhoneX, iPhoneXs, iPhone11Proのスクショの幅(デフォ)
+var screenshotWidth // iPhoneX, iPhoneXs, iPhone11Proのスクショの幅(デフォ)
 var screenshotHeight
 var itemBoxLength = 172.5 // iPhoneX, iPhoneXs, iPhone11Proのアイテムの箱の大きさ（デフォ）
 
 var mode = "iPhoneX, iPhoneXs, iPhone11Pro"; // デフォはiPhoneX, iPhoneXs, iPhone11Pro
-let itemNum = 10;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
+let itemNum;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
 
 // 変数の定義(iPhoneX, iPhoneXs, iPhone11Proをデフォとする)
 let itemRow = 6;       // 1列にいくつアイテムが並んでいるか？
@@ -310,9 +310,6 @@ function showScreenshotImg(files) {
 
 // 透過アバ画像を読み込み
 function showAvatorImg(files) {
-    result.style.display = "none";
-    document.getElementById("imgStatus").textContent = "プレビュー";
-    document.getElementById("saveHint").textContent = "";
     var reader = new FileReader();              // ローカルファイルの処理
     reader.onload = function (event) {           // ローカルファイルを読込後処理
         avator.image = new Image();           // avatorファイルの処理
@@ -369,6 +366,9 @@ function showAvatorImg(files) {
         document.getElementById("imgStatus").textContent = "プレビュー";
         previewArea.style.display = "none"; // 画像に変更ボタンも非表示
         canvas.style.display = "block"; // canvas表示
+        result.style.display = "none";
+        document.getElementById("imgStatus").textContent = "プレビュー";
+        document.getElementById("saveHint").textContent = "";
         showLogBtn.style.display = "block"; // log表示ボタン表示
     }
     reader.readAsDataURL(files[0]);
