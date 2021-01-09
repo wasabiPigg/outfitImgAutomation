@@ -97,6 +97,7 @@ function deviceSuggest(w, h) {
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
     else if (w == 898 && h ==588) { mode = "Galaxy Note9"; }
     else if (w == 859 && h ==588) { mode = "HW-01K"; }
+    else if (w == 846 && h == 588){ mode = "Galaxys10"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -252,6 +253,15 @@ function decide(mode) {
             itemsRight = 28;
             firstItemX = itemsLeft;
             firstItemY = 834;
+            break;
+        case "Galaxys10":
+            itemRow = 6;
+            itemMarginX = 29;
+            itemMarginY = 10;
+            itemsLeft = 26;
+            itemsRight = 27;
+            firstItemX = itemsLeft;
+            firstItemY = 876;
             break;
         default:
             break;
