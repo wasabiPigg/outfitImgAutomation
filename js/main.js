@@ -546,7 +546,7 @@ function itemShow(image) {
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
-            if (r == 233 && g == 234 && b == 236) {
+            if ((r == 233 && g == 234 && b == 236) || (r == 232 && g == 234 && b == 236) ) {
                 ctx.fillStyle = colorCode;
                 ctx.fillRect(180 * i, 720 - 3, 530 + 5, 172 + 5);
                 itemNum = i;
@@ -568,7 +568,7 @@ function itemShow(image) {
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
-            if (r == 233 && g == 234 && b == 236) {
+            if ((r == 233 && g == 234 && b == 236) || (r == 232 && g == 234 && b == 236) ) {
                 ctx.fillStyle = colorCode;
                 ctx.fillRect(180 * (i - 5), 720 - 3, 172 + 5, 172 + 5);
                 itemNum = i;
