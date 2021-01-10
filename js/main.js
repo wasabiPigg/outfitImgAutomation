@@ -63,6 +63,8 @@ let screenshot;
 let screenshotsrc;
 let avatorCurrent = { dx: 90, dy: 0, w: avatorW, h: avatorY };
 let colorCode;
+// ログ用
+var logItemBoxColor = [];
 
 // シルエット作成用
 var silhouetteImgData;
@@ -571,6 +573,7 @@ function itemShow(image) {
                 itemNum = i;
             }
         }
+        logItemBoxColor.push(rgb2colorCode(r,g,b));
     }
 }
 
@@ -849,6 +852,7 @@ function showLog() {
     document.getElementById("logScreenshotH").textContent = screenshotHeight;
     document.getElementById("logColors").textContent = suggestColors;
     document.getElementById("logItemNum").textContent = itemNum;
+    document.getElementById("logItemBoxColor").textContent = logItemBoxColor;
     if (backgroundImg != null) {
         document.getElementById("logBackgroundImg").textContent = "あり";
     } else {
