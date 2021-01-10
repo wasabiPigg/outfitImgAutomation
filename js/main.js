@@ -318,10 +318,10 @@ function showAvatorImg(files) {
         avator.image.onload = function () {        // avatorファイル読込後の処理
             deviceSuggest(avator.image.naturalWidth, avator.image.naturalHeight);
             // 背景
+            suggestColors.length = 0; // 初期化
             ctx.drawImage(avator.image, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
             colorCode = rgb2colorCode(backgroundColor.data[0], backgroundColor.data[1], backgroundColor.data[2]);
-            suggestColors.length = 0; // 初期化
             suggestColors.push(colorCode);
 
             // 背景色をもう２つ余分にとっておく
@@ -527,6 +527,7 @@ function specificAvatorRange() {
 
 // アイテムを個別に表示する
 function itemShow(image) {
+    logItemBoxColor.length = 0; // ログ用の中身を初期化
     for (let i = 0; i < itemNum; i++) {
         if (i < 5) {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
