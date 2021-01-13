@@ -101,6 +101,7 @@ function deviceSuggest(w, h) {
     else if (w == 898 && h ==588) { mode = "Galaxy Note9"; }
     else if (w == 859 && h ==588) { mode = "HW-01K"; }
     else if (w == 846 && h == 588){ mode = "Galaxys10"; }
+    else if (w == 794 && h == 588){ mode = "pixel 3a"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -265,6 +266,15 @@ function decide(mode) {
             itemsRight = 27;
             firstItemX = itemsLeft;
             firstItemY = 876;
+            break;
+        case "pixel 3a":
+            itemRow = 6;
+            itemMarginX = 20;
+            itemMarginY = 11;
+            itemsLeft = 17;
+            itemsRight = 18;
+            firstItemX = itemsLeft;
+            firstItemY = 870;
             break;
         default:
             break;
