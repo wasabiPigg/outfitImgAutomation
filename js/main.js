@@ -5,10 +5,10 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "背景画像を好きなものにできるようになりました✨";
+let news = 'リンクにしたいから今回はここ関係なしだよ';
 if (news != "") {
     document.getElementById("news").style = "block";
-    document.getElementById("news").textContent = news;
+    // document.getElementById("news").textContent = news; //今回はリンクなのでHTMLのほうにかく
 }
 
 // canvasの初期設定
