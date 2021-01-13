@@ -19,7 +19,7 @@
     <meta name="twitter:description" content="ピグパーティのコーデ加工を自動でするツールです" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <!-- <link rel="icon" href="img/favicon.ico"> -->
-    <link rel="stylesheet" href="css/beta-style.css">
+    <link rel="stylesheet" href="css/beta_style.css">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>ピグパーティコーデ加工ツール</title>
     <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
@@ -76,26 +76,23 @@
                     <div><img id="result" class="rounded" style="display: none;"></div>
                     <span id="saveHint"></span>
                 </div>
-                <!-- <div class="item">
-                <div class="custom-file" style="display: none;">
-                    <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
-                        onchange="showAvatorImg(this.files); dispLoading()">
-                    <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
-                </div>
-                </div>
-                <div class="item">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="custom-file-1" name="screenshot" id="screenshot"
-                        onchange="showScreenshotImg(this.files);">
-                    <label class="custom-file-label" for="custom-file-1">着用画面のスクショ</label>
-                </div>
-                </div>
                 <div class="item">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="custom-file-1" name="backgroundImg" id="backgroundImg"
                             onchange="showBackgroundImg(this.files);">
                         <label class="custom-file-label" for="custom-file-1">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
                     </div>
+                </div>
+                <!-- <div class="toolItem text-center">
+                    <span class="toolItemLabel">背景</span>
+                    <span class="toolItemColors">
+                        <button type="button" class="toolItemColor" id="c1">　</button>
+                        <button type="button" class="toolItemColor" id="c2">　</button>
+                        <button type="button" class="toolItemColor" id="c3">　</button>
+                        <button type="button" class="toolItemColor" id="c4 backgroundImg">　</button>
+                        <input type="file" class="toolItemColor" id="c4 custom-file-1" name="backgroundImg"
+                        onchange="showBackgroundImg(this.files);" style="opacity: 0;">
+                    </span>
                 </div> -->
             </form>
             <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
