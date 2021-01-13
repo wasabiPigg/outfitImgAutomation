@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = "背景画像を好きなものにできるようになりました✨";
+let news = "";
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news;
@@ -22,6 +22,8 @@ var ctx = canvas.getContext('2d');
 var screenshotWidth // iPhoneX, iPhoneXs, iPhone11Proのスクショの幅(デフォ)
 var screenshotHeight
 var itemBoxLength = 172.5 // iPhoneX, iPhoneXs, iPhone11Proのアイテムの箱の大きさ（デフォ）
+const defaultAvatorImg = new Image();
+const defaultScreenshotImg = new Image();
 
 var mode = "iPhoneX, iPhoneXs, iPhone11Pro"; // デフォはiPhoneX, iPhoneXs, iPhone11Pro
 let itemNum = 10;      // このコーデにいくつのアイテムを使ったか？(プルダウンからとってくる)、デフォ10
@@ -40,6 +42,9 @@ let avatorW = 750;
 let avatorH = 588;
 var itemX = []; // 各アイテムのx座標を格納する配列
 var itemY = []; // 各アイテムのy座標を格納する配列
+
+// ピグパ色
+const piggColorHEX = "#03cdb4";
 
 // アバ画像の移動に必要な変数の定義
 // ボタンたち
@@ -272,6 +277,20 @@ function decide(mode) {
     console.log(mode, itemRow);
 }
 
+window.onload = function() {
+    // 最初はデフォ画像を表示しておく
+    defaultAvatorImg.src = "img/default_avator.png";
+    defaultScreenshotImg.src = "img/default_screenshot.png";
+    ctx.fillStyle = piggColorHEX;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    defaultAvatorImg.onload = () => {
+        ctx.drawImage(defaultAvatorImg, 0, 0);
+    };
+    defaultScreenshotImg.onload = () => {
+        ctx.drawImage(defaultScreenshotImg, 0, 0);
+    };
+}
+
 // すくしょを読み込み
 function showScreenshotImg(files) {
     var reader = new FileReader();              // ローカルファイルの処理
@@ -299,15 +318,18 @@ function showScreenshotImg(files) {
             itemBoxCalc();
             itemXY();
             itemShow(screenshot);
-            showTool();
             screenshotsrc = screenshot;
+            avatorRewrite("none");
+            showTool();
         }
         screenshot.src = event.target.result;   // screenshotを読み込む　
-        document.getElementById("imgStatus").textContent = "プレビュー";
+        // document.getElementById("imgStatus").textContent = "プレビュー";
 
     }
     reader.readAsDataURL(files[0]);             // ローカルファイルを読み込む
-    chgImgBtn.style.display = "block"; // canvasは表示にする
+    chgImgBtn.style.display = "block"; // 画像に変換ボタンは表示にする
+    step2.style.display = "none";
+    customFile2.style.display = "none";
 }
 
 // 透過アバ画像を読み込み
@@ -363,6 +385,7 @@ function showAvatorImg(files) {
             console.log(avator);
             ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avator.dx, avator.dy, avator.dw, avator.dh);
             // avator2silhouette();
+            ctx.drawImage(defaultScreenshotImg, 0, 0);
         }
         avator.image.src = event.target.result;   // avatorを読み込む　
         document.getElementById("imgStatus").textContent = "プレビュー";
@@ -374,6 +397,9 @@ function showAvatorImg(files) {
         showLogBtn.style.display = "block"; // log表示ボタン表示
     }
     reader.readAsDataURL(files[0]);
+    customFile1.style.display = "none";
+    step1.style.display = "none";
+    customFile2.style.display = "block";
 }
 
 // // アバターのシルエットを用意するための関数
@@ -451,6 +477,19 @@ function itemXY() {
     }
     console.log(itemX, itemY);
 }
+
+// $(".step1").on('click', function(){
+//     $("input[type='file']").on('click', function(e){
+//       e.stopPropagation();
+//       console.log("せいこう！");
+//     });
+//     $("input[type='file']").click();
+//     return false;
+//     $("input[type='file']").on('change',function(){
+//       // 何かしらの処理
+//     });
+
+//   });
 
 // アバターの表示範囲を判定する
 function specificAvatorRange() {
@@ -834,8 +873,8 @@ function chgImg() {
     result.style.display = "block"; // resultを表示
     canvas.style.display = "none"; // canvasは非表示にする
     chgImgBtn.style.display = "none"; // 画像に変更ボタンも非表示
-
-    document.getElementById("imgStatus").textContent = "完成！";
+    showLogBtn.style.display = "none"; // うまくいかないボタン非表示
+    // document.getElementById("imgStatus").textContent = "完成！";
     document.getElementById("saveHint").textContent = "画像を長押しで保存できます";
     var png = canvas.toDataURL();
     document.getElementById("result").src = png;

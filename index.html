@@ -44,94 +44,76 @@
         <div class="text-center"><p id="loadingMsg"></p>
         <img src="img/loading.gif"></div>
     </div>
-    <!-- デバイスの選択 -->
-    <section class="toolForm">
-        <h3>コーデを加工するよ!</h3>
-        <hr>
-        <p id="bug" style="display: none;"></p>
-        <p id="news" style="display: none;"></p>
-        <form name="modeEdit">
-            <label for="" id="modeName"></label>
-            <!-- <div class="item">
-            <label for="custom-select-1b">デバイスの種類</label>
-            <select id="custom-select-1b" class="custom-select" name="device" onchange="decide();">
-                <option value="iPhone8">iPhone 8</option>
-                <option value="iPhone XR, iPhone11">iPhone XR, iPhone11</option>
-                <option value="iPhoneXSMax">iPhone XS Max</option>
-                <option value="iPhone11Pro, iPhoneX, iPhoneXs" selected>iPhone11Pro, iPhoneX, iPhoneXs</option>
-                <option value="iPadPro11inch">iPad Pro 11インチ</option>
-                <option value="ARROWSF-52A">ARROWS F-52A</option>
-                <option value="vivo1935">vivo 1935</option>
-            </select>
-            </div> -->
+    <div id="stepDiv">
+        <img src="img/step1.png" alt="" class="stepImg step1" id="step1">
+        <img src="img/step2.png" alt="" class="stepImg step2" id="step2">
+    </div>
+    <div id="tools">
+        <div><p id="version" class="hosoku">バージョン2.1</p></div>
+        <!-- デバイスの選択 -->
+        <section class="toolForm boxShadow blurBg">
+            <p id="bug" style="display: none;"></p>
+            <p id="news" style="display: none;"></p>
+            <input type="file" id="customFile1" name="avator" id="avator"
+            onchange="showAvatorImg(this.files); dispLoading()" style="opacity: 0;">
+            <input type="file" id="customFile2" name="screenshot" id="screenshot"
+            onchange="showScreenshotImg(this.files);" style="opacity: 0; display: none;">
+            <form name="modeEdit">
+                <label for="" id="modeName"></label>
+                <!-- 画像の設定と読み込み -->
+                <div class="text-center">
+                    <!-- <label id="imgStatus">↓ここにプレビューが表示されます</label> -->
+                    <!-- <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900"> -->
+                    <div id="canvaswrap"><canvas id="canvas"></canvas>
+                        <div></div><button type="button" id="showLogBtn" onclick="showLog()">
+                            <span class="hosoku">うまくいかないときは</span>
+                        </button>
+                    </div>
 
-            <!-- <div class="item">
-            <label for="custom-select-1b">コーデに使用したアイテムの数</label>
-            <select id="custom-select-1b" class="custom-select" name="itemNum" onchange="decide();">
-                <option value="1">1こ</option>
-                <option value="2">2こ</option>
-                <option value="3">3こ</option>
-                <option value="4">4こ</option>
-                <option value="5">5こ</option>
-                <option value="6">6こ</option>
-                <option value="7">7こ</option>
-                <option value="8">8こ</option>
-                <option value="9">9こ</option>
-                <option value="10" selected>10こ</option>
-            </select>
-            </div> -->
-
-            <!-- 画像の設定と読み込み -->
-            <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
-                    onchange="showAvatorImg(this.files); dispLoading()">
-                <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
-            </div>
-            </div>
-            <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-1" name="screenshot" id="screenshot"
-                    onchange="showScreenshotImg(this.files);">
-                <label class="custom-file-label" for="custom-file-1">着用画面のスクショ</label>
-            </div>
-            </div>
-            <div class="item">
+                    <div><canvas id="canvas_hidden" class="rounded" style="display: none;"></canvas></div>
+                    <div><canvas id="canvas_hidden2" class="rounded" style="display: none;"></canvas></div>
+                    <div><canvas id="canvas_silhouette" class="rounded" style="display: none;"></canvas></div>
+                    <div><img id="result" class="rounded" style="display: none;"></div>
+                    <span id="saveHint"></span>
+                </div>
+                <!-- <div class="item">
+                <div class="custom-file" style="display: none;">
+                    <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
+                        onchange="showAvatorImg(this.files); dispLoading()">
+                    <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
+                </div>
+                </div>
+                <div class="item">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="custom-file-1" name="backgroundImg" id="backgroundImg"
-                        onchange="showBackgroundImg(this.files);">
-                    <label class="custom-file-label" for="custom-file-1">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
+                    <input type="file" class="custom-file-input" id="custom-file-1" name="screenshot" id="screenshot"
+                        onchange="showScreenshotImg(this.files);">
+                    <label class="custom-file-label" for="custom-file-1">着用画面のスクショ</label>
                 </div>
                 </div>
-            <div class="text-center">
-                <label id="imgStatus">↓ここにプレビューが表示されます</label>
-                <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900">
-                <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden2" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_silhouette" class="rounded" style="display: none;"></canvas></div>
-                <div><img id="result" class="rounded" style="display: none;"></div>
-                <span id="saveHint"></span>
+                <div class="item">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="custom-file-1" name="backgroundImg" id="backgroundImg"
+                            onchange="showBackgroundImg(this.files);">
+                        <label class="custom-file-label" for="custom-file-1">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
+                    </div>
+                </div> -->
+            </form>
+            <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
+                画像に変換！
+            </button>
+            <div id="logArea" style="display: none;">
+                以下の情報を<a href="https://twitter.com/wasabipigg">わさび</a>にご共有ください<br>
+                表示エリアサイズ：横=<span id="logTanmatsuW"></span> 縦=<span id="logTanmatsuH"></span><br>
+                推定端末：<span id="logTanmatsu"></span><br>
+                アバの画像サイズ：横=<span id="logAvaW"></span> 縦=<span id="logAvaH"></span><br>
+                スクショの画像サイズ：横=<span id="logScreenshotW"></span> 縦=<span id="logScreenshotH"></span><br>
+                取得した背景色：<span id="logColors"></span><br>
+                使用アイテム数：<span id="logItemNum"></span><br>
+                使用アイテム枠(30,30)の色：<span id="logItemBoxColor"></span><br>
+                背景画像の有無：<span id="logBackgroundImg"></span>
             </div>
-        </form>
-        <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
-            画像に変換！
-        </button>
-        <button class="btn" id="showLogBtn" onclick="showLog()" style="display: none;">
-            ログを表示<span class="hosoku">(うまくいかないときはここをタップ)</span>
-        </button>
-        <div id="logArea" style="display: none;">
-            以下の情報を<a href="https://twitter.com/wasabipigg">わさび</a>にご共有ください<br>
-            表示エリアサイズ：横=<span id="logTanmatsuW"></span> 縦=<span id="logTanmatsuH"></span><br>
-            推定端末：<span id="logTanmatsu"></span><br>
-            アバの画像サイズ：横=<span id="logAvaW"></span> 縦=<span id="logAvaH"></span><br>
-            スクショの画像サイズ：横=<span id="logScreenshotW"></span> 縦=<span id="logScreenshotH"></span><br>
-            取得した背景色：<span id="logColors"></span><br>
-            使用アイテム数：<span id="logItemNum"></span><br>
-            使用アイテム枠(30,30)の色：<span id="logItemBoxColor"></span><br>
-            背景画像の有無：<span id="logBackgroundImg"></span>
-        </div>
-    </section>
+        </section>
+    </div>
     <!-- JS読み込み -->
     <script src="js/main.js"></script>
 </body>
