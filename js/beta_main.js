@@ -287,8 +287,8 @@ function decide(mode) {
     console.log(mode, itemRow);
 }
 
+// 最初はデフォ画像を表示しておく
 window.onload = function() {
-    // 最初はデフォ画像を表示しておく
     defaultAvatorImg.src = "img/default_avator.png";
     defaultScreenshotImg.src = "img/default_screenshot.png";
     ctx.fillStyle = piggColorHEX;
@@ -350,6 +350,7 @@ function showAvatorImg(files) {
         avator.image.onload = function () {        // avatorファイル読込後の処理
             deviceSuggest(avator.image.naturalWidth, avator.image.naturalHeight);
             // 背景
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight)
             suggestColors.length = 0; // 初期化
             ctx.drawImage(avator.image, 0, 0, 7, 6);
             var backgroundColor = ctx.getImageData(4, 4, 1, 1);
