@@ -57,7 +57,8 @@ var avator = {
     topX: 0, topY: 0,
     leftX: 0, leftY: 0, rightX: 0, rightY: 0,
     startX: 0, startY: 0, width: 0, height: 0,
-    sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0
+    sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0,
+    shadow: false
 };
 let screenshot;
 let screenshotsrc;
@@ -621,6 +622,22 @@ function showTool() {
     ctx.stroke();  // 線ひく
     ctx.fill();  // 中を塗る
     ctx.restore();
+    
+    // 影on/off
+    ctx.save();
+    ctx.font = '50pt Arial';
+    ctx.fillStyle = 'gray';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 4;
+    if (avator.shadow) {
+        ctx.strokeText('影あり', 680, 500);
+        ctx.fillText('影あり', 680, 500);
+    } else {
+        ctx.strokeText('影なし', 680, 500);
+        ctx.fillText('影なし', 680, 500);
+    }
+    ctx.restore();
+
     showColorBox();
 }
 
@@ -751,6 +768,15 @@ canvas.addEventListener("click", e => {
         (c4square.x <= point.x && point.x <= c4square.x + c4square.w)  // 横方向の判定
         && (c4square.y <= point.y && point.y <= c4square.y + c4square.h)  // 縦方向の判定
 
+    // 影のオンオフ
+    const shadowsquare = {
+        x: 680 * ratio, y: 450 * ratio,  // 座標
+        w: 150 * ratio, h: 50 * ratio   // サイズ
+    };
+    const shadowPressed =
+        (shadowsquare.x <= point.x && point.x <= shadowsquare.x + shadowsquare.w)  // 横方向の判定
+        && (shadowsquare.y <= point.y && point.y <= shadowsquare.y + shadowsquare.h)  // 縦方向の判定
+
     if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
     if (downPressed) { avatorRewrite("down"); showTool(); console.log("down"); }
     if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right"); }
@@ -760,6 +786,7 @@ canvas.addEventListener("click", e => {
     if (c2Pressed) { avatorRewrite("c2"); showTool(); console.log("c2"); }
     if (c3Pressed) { avatorRewrite("c3"); showTool(); console.log("c3"); }
     if (c4Pressed) { avatorRewrite("c4"); showTool(); console.log("c4"); }
+    if (shadowPressed) {  avator.shadow = !avator.shadow; avatorRewrite(""); showTool(); console.log("影オンオフ"); }
 
 });
 
@@ -824,7 +851,16 @@ function avatorRewrite(how) {
         ctx.fillStyle = colorCode;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
+    if (avator.shadow == true){
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.253)";
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+    }
+    console.log("影ありなし", avator.shadow);
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+    ctx.restore();
     itemShow(screenshotsrc);
 }
 
@@ -838,7 +874,16 @@ function chgImg() {
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
     // avatorRewrite("none");
+    if (avator.shadow == true){
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.253)";
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+    }
+    console.log("保存時の影の有無", avator.shadow);
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+    ctx.restore();
     itemShow(screenshotsrc);
 
     result.style.display = "block"; // resultを表示

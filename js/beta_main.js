@@ -62,7 +62,8 @@ var avator = {
     topX: 0, topY: 0,
     leftX: 0, leftY: 0, rightX: 0, rightY: 0,
     startX: 0, startY: 0, width: 0, height: 0,
-    sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0
+    sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0,
+    shadow: true
 };
 let screenshot;
 let screenshotsrc;
@@ -864,7 +865,16 @@ function avatorRewrite(how) {
         ctx.fillStyle = colorCode;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
+    if (avator.shadow == true){
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.253)";
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+    }
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+    ctx.restore(); // ドロップシャドウの設定を破棄
+
     itemShow(screenshotsrc);
 }
 
@@ -878,7 +888,16 @@ function chgImg() {
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
     // avatorRewrite("none");
+    if (avator.shadow == true){
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.253)";
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+    }
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+    ctx.restore(); // ドロップシャドウの設定を破棄
+
     itemShow(screenshotsrc);
 
     result.style.display = "block"; // resultを表示
