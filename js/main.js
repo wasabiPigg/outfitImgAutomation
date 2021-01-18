@@ -5,10 +5,10 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = 'リンクにしたいから今回はここ関係なしだよ';
+let news = 'ふちどりがつけられるようになりました！';
 if (news != "") {
     document.getElementById("news").style = "block";
-    // document.getElementById("news").textContent = news; //今回はリンクなのでHTMLのほうにかく
+    document.getElementById("news").textContent = news; 
 }
 
 // canvasの初期設定
@@ -58,7 +58,8 @@ var avator = {
     leftX: 0, leftY: 0, rightX: 0, rightY: 0,
     startX: 0, startY: 0, width: 0, height: 0,
     sx: 0, sy: 0, sw: 0, sh: 0, dx: 0, dy: 0, dw: 0, dh: 0,
-    shadow: false
+    shadow: false,
+    border: false
 };
 let screenshot;
 let screenshotsrc;
@@ -615,6 +616,21 @@ function showTool() {
     }
     ctx.restore();
 
+    // フチon/off
+    ctx.save();
+    ctx.font = '50pt Arial';
+    ctx.fillStyle = 'gray';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 4;
+    if (avator.border) {
+        ctx.strokeText('縁あり', 680, 400);
+        ctx.fillText('縁あり', 680, 400);
+    } else {
+        ctx.strokeText('縁なし', 680, 400);
+        ctx.fillText('縁なし', 680, 400);
+    }
+    ctx.restore();
+
     showColorBox();
 }
 
@@ -754,6 +770,15 @@ canvas.addEventListener("click", e => {
         (shadowsquare.x <= point.x && point.x <= shadowsquare.x + shadowsquare.w)  // 横方向の判定
         && (shadowsquare.y <= point.y && point.y <= shadowsquare.y + shadowsquare.h)  // 縦方向の判定
 
+    // 縁のオンオフ
+    const bordersquare = {
+        x: 680 * ratio, y: 350 * ratio,  // 座標
+        w: 150 * ratio, h: 50 * ratio   // サイズ
+    };
+    const borderPressed =
+        (bordersquare.x <= point.x && point.x <= bordersquare.x + bordersquare.w)  // 横方向の判定
+        && (bordersquare.y <= point.y && point.y <= bordersquare.y + bordersquare.h)  // 縦方向の判定
+
     if (upPressed) { avatorRewrite("up"); showTool(); console.log("up"); }
     if (downPressed) { avatorRewrite("down"); showTool(); console.log("down"); }
     if (rightPressed) { avatorRewrite("right"); showTool(); console.log("right"); }
@@ -764,6 +789,7 @@ canvas.addEventListener("click", e => {
     if (c3Pressed) { avatorRewrite("c3"); showTool(); console.log("c3"); }
     if (c4Pressed) { avatorRewrite("c4"); showTool(); console.log("c4"); }
     if (shadowPressed) {  avator.shadow = !avator.shadow; avatorRewrite(""); showTool(); console.log("影オンオフ"); }
+    if (borderPressed) {  avator.border = !avator.border; avatorRewrite(""); showTool(); console.log("縁オンオフ"); }
 
 });
 
@@ -828,13 +854,31 @@ function avatorRewrite(how) {
         ctx.fillStyle = colorCode;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
+
     if (avator.shadow == true){
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.253)";
-        ctx.shadowOffsetX = 5;
-        ctx.shadowOffsetY = 5;
+        ctx.shadowOffsetX = 6;
+        ctx.shadowOffsetY = 6;
         ctx.shadowBlur = 5;
+        ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+        ctx.restore();
     }
+
+    if (avator.border == true){
+        ctx.save();
+        ctx.shadowColor = "white";
+        for (i=-3; i<=3; i+=3) {
+            for (j=-3; j<=3; j+=3) {
+                ctx.shadowOffsetX = i;
+                ctx.shadowOffsetY = j;
+                ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+            }
+        }
+        ctx.restore();
+    }
+
+    console.log("フチありなし", avator.border);
     console.log("影ありなし", avator.shadow);
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     ctx.restore();
@@ -851,14 +895,32 @@ function chgImg() {
         ctx.fillRect(0, 0, canvasWidth, canvasHeight); //背景塗りなおすことで画面再描画
     }
     // avatorRewrite("none");
+
+    // 影ONなら影描画
     if (avator.shadow == true){
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.253)";
-        ctx.shadowOffsetX = 5;
-        ctx.shadowOffsetY = 5;
+        ctx.shadowOffsetX = 6;
+        ctx.shadowOffsetY = 6;
         ctx.shadowBlur = 5;
+        ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+        ctx.restore();
+    }
+    // 縁がONなら縁描画
+    if (avator.border == true){
+        ctx.save();
+        ctx.shadowColor = "white";
+        for (i=-3; i<=3; i+=3) {
+            for (j=-3; j<=3; j+=3) {
+                ctx.shadowOffsetX = i;
+                ctx.shadowOffsetY = j;
+                ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+            }
+        }
+        ctx.restore();
     }
     console.log("保存時の影の有無", avator.shadow);
+    console.log("保存時のフチの有無", avator.border);
     ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
     ctx.restore();
     itemShow(screenshotsrc);
