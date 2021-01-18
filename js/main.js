@@ -103,6 +103,7 @@ function deviceSuggest(w, h) {
     else if (w == 859 && h ==588) { mode = "HW-01K"; }
     else if (w == 846 && h == 588){ mode = "Galaxys10"; }
     else if (w == 794 && h == 588){ mode = "pixel 3a"; }
+    else if (w == 821 && h == 588){ mode = "Galaxy S20 5G SC-51A"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -277,6 +278,15 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 870;
             break;
+        case "Galaxy S20 5G SC-51A":
+            itemRow = 6;
+            itemMarginX = 24;
+            itemMarginY = 11;
+            itemsLeft = 22;
+            itemsRight = 23;
+            firstItemX = itemsLeft;
+            firstItemY = 866;
+            break;
         default:
             break;
     }
@@ -386,39 +396,6 @@ function showAvatorImg(files) {
     }
     reader.readAsDataURL(files[0]);
 }
-
-// // アバターのシルエットを用意するための関数
-// function avator2silhouette() {
-//     var canvas_silhouette = document.getElementById('canvas_silhouette');
-//     canvas_silhouette.width = avator.image.width;
-//     canvas_silhouette.height = avator.image.height;
-
-//     var centerX = canvas_silhouette.width / 2;
-//     var centerY = canvas_silhouette.height / 2;
-
-//     var context = canvas_silhouette.getContext('2d');
-
-//     var bgImg = new Image();
-//     bgImg.onload = function () {
-//         context.globalCompositeOperation = 'source-over';
-//         context.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-//         drawMask();
-//     };
-//     bgImg.src = 'img/bg.png';
-
-//     function drawMask () {
-//         context.globalCompositeOperation = 'destination-in';
-//         drawImageMask(avator.image);
-//     };
-
-//     function drawImageMask (src) {
-//         var maskImg = new Image();
-//         maskImg.onload = function () {
-//             context.drawImage(maskImg, centerX - (maskImg.width / 2), centerY - (maskImg.height / 2), maskImg.width, maskImg.height);
-//         };
-//         maskImg.src = src;
-//     };
-// }
 
 // 背景画像読み込み
 function showBackgroundImg(files) {
