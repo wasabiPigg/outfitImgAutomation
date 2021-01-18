@@ -238,7 +238,7 @@ function decide(mode) {
             itemsLeft = 11;
             itemsRight = 12;
             firstItemX = itemsLeft;
-            firstItemY = 783;
+            firstItemY = 784;
             console.log("アイテムの横の数", itemRow);
             console.log("アイテムのmargin", itemMarginX, itemMarginY);
             console.log("アイテムの最初のY座標", firstItemY);
@@ -520,9 +520,9 @@ function itemShow(image) {
     for (let i = 0; i < itemNum; i++) {
         if (i < 5) {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
-            drawsq(180 * i + 3, 530, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
+            drawsq(180 * i + 4, 530, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
             ctx.clip();  // (角丸矩形でクリッピング)
-            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * i + 3, 530, 172, 172);
+            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * i + 4, 530, 172, 172);
             ctx.restore(); // クリッピング領域の設定を破棄
 
             // 所持数隠し
@@ -531,7 +531,7 @@ function itemShow(image) {
             ctx.fillRect(180 * i + 58, 665, 109, 30);
 
             // アイテムがなければ背景色でぬりつぶし
-            itemColor = ctx.getImageData(180 * i + 3 + 30, 530 + 30, 1, 1)
+            itemColor = ctx.getImageData(180 * i + 4 + 30, 530 + 30, 1, 1)
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
@@ -542,9 +542,9 @@ function itemShow(image) {
             }
         } else {
             ctx.save(); // 現在の状態を保存（クリッピング領域特に指定なし）
-            drawsq(180 * (i - 5) + 3, 720, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
+            drawsq(180 * (i - 5) + 4, 720, 172, 172, 12); // 角丸の矩形を描画（クリッピング用）
             ctx.clip();  // (角丸矩形でクリッピング)
-            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * (i - 5) + 3, 720, 172, 172);
+            ctx.drawImage(image, itemX[i], itemY[i], itemBoxLength, itemBoxLength, 180 * (i - 5) + 4, 720, 172, 172);
             ctx.restore(); // クリッピング領域の設定を破棄
 
             // 所持数隠し
@@ -553,7 +553,7 @@ function itemShow(image) {
             ctx.fillRect(180 * (i - 5) + 58, 855, 109, 30);
 
             // アイテムがなければ背景色でぬりつぶし
-            itemColor = ctx.getImageData(180 * (i - 5) + 3 + 30, 720 + 30, 1, 1)
+            itemColor = ctx.getImageData(180 * (i - 5) + 4 + 30, 720 + 30, 1, 1)
             var r = itemColor.data[0]
             var g = itemColor.data[1]
             var b = itemColor.data[2]
