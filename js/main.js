@@ -868,8 +868,8 @@ function avatorRewrite(how) {
     if (avator.border == true){
         ctx.save();
         ctx.shadowColor = "white";
-        for (i=-3; i<=3; i+=3) {
-            for (j=-3; j<=3; j+=3) {
+        for (i=-3; i<=3; i++) {
+            for (j=-3; j<=3; j++) {
                 ctx.shadowOffsetX = i;
                 ctx.shadowOffsetY = j;
                 ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
@@ -910,8 +910,8 @@ function chgImg() {
     if (avator.border == true){
         ctx.save();
         ctx.shadowColor = "white";
-        for (i=-3; i<=3; i+=3) {
-            for (j=-3; j<=3; j+=3) {
+        for (i=-3; i<=3; i++) {
+            for (j=-3; j<=3; j++) {
                 ctx.shadowOffsetX = i;
                 ctx.shadowOffsetY = j;
                 ctx.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
