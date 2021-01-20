@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = 'ふちどりがつけられるようになりました！';
+let news = 'ご利用ルールや使い方の記事を更新しました。上記のリンクをタップし記事をお読みになってからお使いください。';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
@@ -105,6 +105,7 @@ function deviceSuggest(w, h) {
     else if (w == 846 && h == 588){ mode = "Galaxys10"; }
     else if (w == 794 && h == 588){ mode = "pixel 3a"; }
     else if (w == 821 && h == 588){ mode = "Galaxy S20 5G SC-51A"; }
+    else if (w == 769 && h == 588){ mode = "SONY Xperia SO-41A"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -287,6 +288,15 @@ function decide(mode) {
             itemsRight = 23;
             firstItemX = itemsLeft;
             firstItemY = 866;
+            break;
+        case "SONY Xperia SO-41A":
+            itemRow = 6;
+            itemMarginX = 16;
+            itemMarginY = 12;
+            itemsLeft = 13;
+            itemsRight = 13;
+            firstItemX = itemsLeft;
+            firstItemY = 905;
             break;
         default:
             break;
