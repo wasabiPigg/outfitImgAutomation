@@ -106,6 +106,8 @@ function deviceSuggest(w, h) {
     else if (w == 794 && h == 588){ mode = "pixel 3a"; }
     else if (w == 821 && h == 588){ mode = "Galaxy S20 5G SC-51A"; }
     else if (w == 769 && h == 588){ mode = "SONY Xperia SO-41A"; }
+    else if (w == 744 && h == 588){ mode = "AQUOS Xx3 mini"; }
+    else if (w == 1620 && h == 1002){ mode = "iPad 第7世代　10.2インチ"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -297,6 +299,24 @@ function decide(mode) {
             itemsRight = 13;
             firstItemX = itemsLeft;
             firstItemY = 905;
+            break;
+        case "AQUOS Xx3 mini":
+            itemRow = 5;
+            itemMarginX = 41;
+            itemMarginY = 12;
+            itemsLeft = 38;
+            itemsRight = 38;
+            firstItemX = itemsLeft;
+            firstItemY = 943;
+            break;
+        case "iPad 第7世代　10.2インチ":
+            itemRow = 10;
+            itemMarginX = 18;
+            itemMarginY = 0;
+            itemsLeft = 16;
+            itemsRight = 284;
+            firstItemX = itemsLeft;
+            firstItemY = 1014;
             break;
         default:
             break;
