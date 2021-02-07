@@ -101,11 +101,11 @@ function deviceSuggest(w, h) {
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
-    else if (w == 898 && h ==588) { mode = "Galaxy Note9"; }
+    else if (w == 898 && h ==588) { mode = "Galaxy Note9, Galaxy S10+"; }
     else if (w == 859 && h ==588) { mode = "HW-01K"; }
     else if (w == 846 && h == 588){ mode = "Galaxys10"; }
     else if (w == 794 && h == 588){ mode = "pixel 3a"; }
-    else if (w == 821 && h == 588){ mode = "Galaxy S20 5G SC-51A"; }
+    else if (w == 821 && h == 588){ mode = "Galaxy S20 5G SC-51A, XPERIA SOV36"; }
     else if (w == 769 && h == 588){ mode = "SONY Xperia SO-41A"; }
     else if (w == 744 && h == 588){ mode = "AQUOS Xx3 mini"; }
     else if (w == 1620 && h == 1002){ mode = "iPad 第7世代　10.2インチ"; }
@@ -235,7 +235,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 890;
             break;
-        case "Galaxy Note9":
+        case "Galaxy Note9, Galaxy S10+":
             itemRow = 7;
             itemMarginX = 14;
             itemMarginY = 10;
@@ -283,7 +283,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 870;
             break;
-        case "Galaxy S20 5G SC-51A":
+        case "Galaxy S20 5G SC-51A, XPERIA SOV36":
             itemRow = 6;
             itemMarginX = 24;
             itemMarginY = 11;
@@ -328,6 +328,24 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1165;
             break;
+        case "XPERIA SOV36":
+            itemRow = 6;
+            itemMarginX = 24;
+            itemMarginY = 11;
+            itemsLeft = 22;
+            itemsRight = 22;
+            firstItemX = itemsLeft;
+            firstItemY = 850;
+            break;
+        case "Galaxy S10+":
+            itemRow = 7;
+            itemMarginX = 14;
+            itemMarginY = 9;
+            itemsLeft = 11;
+            itemsRight = 12;
+            firstItemX = itemsLeft;
+            firstItemY = 830;
+            break;
         default:
             break;
     }
@@ -362,6 +380,14 @@ function showScreenshotImg(files) {
             } else if(mode == "ARROWSF-52A, AQUOSzero2" && screenshot.naturalHeight == 2340) {
                 decide("AQUOSzero2");
                 mode = "AQUOSzero2";
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "Galaxy S20 5G SC-51A, XPERIA SOV36" && screenshot.naturalHeight == 1920) {
+                decide("XPERIA SOV36")
+                mode = "XPERIA SOV36";
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "Galaxy Note9, Galaxy S10+" && screenshot.naturalHeight == 2280) {
+                decide("Galaxy S10+")
+                mode = "Galaxy S10+";
                 console.log("スクショ読み込み後に変更、モード",mode);
             }
             itemBoxCalc();
