@@ -109,6 +109,7 @@ function deviceSuggest(w, h) {
     else if (w == 769 && h == 588){ mode = "SONY Xperia SO-41A"; }
     else if (w == 744 && h == 588){ mode = "AQUOS Xx3 mini"; }
     else if (w == 1620 && h == 1002){ mode = "iPad 第7世代　10.2インチ"; }
+    else if (w == 808 && h == 588){ mode = "HUAWEI P20 lite"; }
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -345,6 +346,15 @@ function decide(mode) {
             itemsRight = 12;
             firstItemX = itemsLeft;
             firstItemY = 830;
+            break;
+        case "HUAWEI P20 lite":
+            itemRow = 6;
+            itemMarginX = 23;
+            itemMarginY = 11;
+            itemsLeft = 20;
+            itemsRight = 21;
+            firstItemX = itemsLeft;
+            firstItemY = 892;
             break;
         default:
             break;
