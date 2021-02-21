@@ -110,6 +110,7 @@ function deviceSuggest(w, h) {
     else if (w == 744 && h == 588){ mode = "AQUOS Xx3 mini"; }
     else if (w == 1620 && h == 1002){ mode = "iPad 第7世代　10.2インチ"; }
     else if (w == 808 && h == 588){ mode = "HUAWEI P20 lite"; }
+    else if (w == 718 && h == 588){ mode = "AQUOS R2 compact"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -355,6 +356,15 @@ function decide(mode) {
             itemsRight = 21;
             firstItemX = itemsLeft;
             firstItemY = 892;
+            break;
+        case "AQUOS R2 compact":
+            itemRow = 5;
+            itemMarginX = 36;
+            itemMarginY = 12;
+            itemsLeft = 33;
+            itemsRight = 34;
+            firstItemX = itemsLeft;
+            firstItemY = 1009;
             break;
         default:
             break;
