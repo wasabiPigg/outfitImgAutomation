@@ -91,7 +91,7 @@ function deviceSuggest(w, h) {
     if (w == 750 && h == 588) {
         if (window.screen.height == 812) { mode = "iPhoneX, iPhoneXs, iPhone11Pro"; }
         else if (window.screen.height == 844) {mode = "iPhone12";}
-        else { mode = "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12"; }
+        else { mode = "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12, iPhoneSE2"; }
     } else if (w == 828 && h == 588) {
         mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax";
         // if (window.screen.height == 896) { mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax"; }
@@ -141,7 +141,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1121;
             break;
-        case "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12":
+        case "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12, iPhoneSE2":
             itemRow = 6;
             itemMarginX = 10;
             itemMarginY = itemMarginX;
@@ -387,7 +387,7 @@ function showScreenshotImg(files) {
                 decide("iPhoneXSMax");
                 mode = "iPhoneXSMax";
                 console.log("スクショ読み込み後に変更、モード",mode);
-            } else if(mode == "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12") {
+            } else if(mode == "iPhone6, iPhone6s, iPhone7, iPhone8, iPhoneX, iPhoneXs, iPhone11Pro, iPhone12, iPhoneSE2") {
                 if (screenshot.naturalWidth == 1125) {
                     decide("iPhoneX, iPhoneXs, iPhone11Pro");
                     mode = "iPhoneX, iPhoneXs, iPhone11Pro";
