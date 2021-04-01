@@ -97,7 +97,7 @@ function deviceSuggest(w, h) {
         // if (window.screen.height == 896) { mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax"; }
         // else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
-    else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2"; }
+    else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2, Xperia XZ3"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
@@ -193,7 +193,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1014;
             break;
-        case "ARROWSF-52A, AQUOSzero2":
+        case "ARROWSF-52A, AQUOSzero2, Xperia XZ3":
             itemRow = 7;
             itemMarginX = 10;
             itemMarginY = 10;
@@ -366,6 +366,15 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1009;
             break;
+        case "Xperia XZ3":
+            itemRow = 7;
+            itemMarginX = 14;
+            itemMarginY = 12;
+            itemsLeft = 10;
+            itemsRight = 11;
+            firstItemX = itemsLeft;
+            firstItemY = 1073;
+            break;
         default:
             break;
     }
@@ -397,9 +406,14 @@ function showScreenshotImg(files) {
                     mode = ("iPhone12");
                     console.log("スクショ読み込み後に変更、モード",mode);
                 }
-            } else if(mode == "ARROWSF-52A, AQUOSzero2" && screenshot.naturalHeight == 2340) {
-                decide("AQUOSzero2");
-                mode = "AQUOSzero2";
+            } else if(mode == "ARROWSF-52A, AQUOSzero2, Xperia XZ3") {
+                if (screenshot.naturalHeight == 2340){
+                    decide("AQUOSzero2");
+                    mode = "AQUOSzero2";
+                } else if (screenshot.naturalHeight == 2880){
+                    decide("Xperia XZ3");
+                    mode = "Xperia XZ3";
+                }
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "Galaxy S20 5G SC-51A, XPERIA SOV36" && screenshot.naturalHeight == 1920) {
                 decide("XPERIA SOV36")
