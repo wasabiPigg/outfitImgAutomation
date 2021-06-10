@@ -97,9 +97,6 @@ function deviceSuggest(w, h) {
         // if (window.screen.height == 896) { mode = "iPhoneXR, iPhone11, iPhone11ProMax, iPhoneXsMax"; }
         // else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
-
-    else if (w == 780 && h == 642) { mode = "iPhone12"; }
-
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2, Xperia XZ3"; }
     else if (w == 884 && h == 588) { mode = "vivo1935"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
