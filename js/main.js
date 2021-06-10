@@ -1,5 +1,5 @@
 // おしらせ（あれば）
-let bug = '';
+let bug = 'iPhoneでピグパを1.91.1にアプデした方は、うまくいかない場合があります。修正予定です。';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
