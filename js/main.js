@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = 'ご利用ルールや使い方の記事を更新しました。上記のリンクをタップし記事をお読みになってからお使いください。';
+let news = '';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
@@ -111,6 +111,9 @@ function deviceSuggest(w, h) {
     else if (w == 1620 && h == 1002){ mode = "iPad 第7世代　10.2インチ"; }
     else if (w == 808 && h == 588){ mode = "HUAWEI P20 lite"; }
     else if (w == 718 && h == 588){ mode = "AQUOS R2 compact"}
+    // 新サイズ対応
+    else if (w == 780 && h == 642){ mode = "iPhone12(アプデ後)"}
+    else if (w == 750 && h == 647){ mode = "iPhone12mini(アプデ後)"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -374,6 +377,26 @@ function decide(mode) {
             itemsRight = 11;
             firstItemX = itemsLeft;
             firstItemY = 1073;
+            break;
+
+        // 新サイズ対応
+        case "iPhone12(アプデ後)":
+            itemRow = 6;
+            itemMarginX = 19;
+            itemMarginY = 12;
+            itemsLeft = 16;
+            itemsRight = 16;
+            firstItemX = itemsLeft;
+            firstItemY = 980;
+            break;
+        case "iPhone12mini(アプデ後)":
+            itemRow = 6;
+            itemMarginX = 13;
+            itemMarginY = 12;
+            itemsLeft = 9;
+            itemsRight = 9;
+            firstItemX = itemsLeft;
+            firstItemY = 989;
             break;
         default:
             break;
