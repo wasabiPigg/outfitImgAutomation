@@ -115,6 +115,7 @@ function deviceSuggest(w, h) {
     else if (w == 780 && h == 642){ mode = "iPhone12(アプデ後)"}
     else if (w == 750 && h == 647){ mode = "iPhone12mini(アプデ後)"}
     else if (w == 750 && h == 635){ mode = "iPhone11Pro(アプデ後)"}
+    else if (w == 828 && h == 643){ mode = "iPhoneXR(アプデ後)"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -407,6 +408,15 @@ function decide(mode) {
             itemsRight = 9;
             firstItemX = itemsLeft;
             firstItemY = 971;
+            break;
+        case "iPhoneXR(アプデ後)":
+            itemRow = 6;
+            itemMarginX = 20;
+            itemMarginY = 8;
+            itemsLeft = 17;
+            itemsRight = 17;
+            firstItemX = itemsLeft;
+            firstItemY = 655;
             break;
         default:
             break;
