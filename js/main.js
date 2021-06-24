@@ -416,7 +416,7 @@ function decide(mode) {
             itemsLeft = 17;
             itemsRight = 17;
             firstItemX = itemsLeft;
-            firstItemY = 655;
+            firstItemY = 656;
             break;
         default:
             break;
