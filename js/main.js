@@ -116,6 +116,7 @@ function deviceSuggest(w, h) {
     else if (w == 750 && h == 647){ mode = "iPhone12mini(アプデ後)"}
     else if (w == 750 && h == 635){ mode = "iPhone11Pro(アプデ後)"}
     else if (w == 828 && h == 643){ mode = "iPhoneXR(アプデ後)"}
+    else if (w == 1731 && h == 1002){ mode = "szj-js202"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -417,6 +418,15 @@ function decide(mode) {
             itemsRight = 17;
             firstItemX = itemsLeft;
             firstItemY = 656;
+            break;
+        case "szj-js202":
+            itemRow = 10;
+            itemMarginX = 12;
+            itemMarginY = 0;
+            itemsLeft = 11;
+            itemsRight = 143;
+            firstItemX = itemsLeft;
+            firstItemY = 496;
             break;
         default:
             break;
