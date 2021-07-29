@@ -1,11 +1,11 @@
 // おしらせ（あれば）
-let bug = 'iPhoneでピグパを1.91.1にアプデした方は、うまくいかない場合があります。修正予定です。';
+let bug = '';
 if (bug != "") {
     document.getElementById("bug").style = "block";
     document.getElementById("bug").textContent = bug;
 }
 
-let news = '';
+let news = '対応端末を追加しました(2021/07/29)';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
@@ -117,6 +117,8 @@ function deviceSuggest(w, h) {
     else if (w == 750 && h == 635){ mode = "iPhone11Pro(アプデ後)"}
     else if (w == 828 && h == 643){ mode = "iPhoneXR(アプデ後)"}
     else if (w == 1731 && h == 1002){ mode = "szj-js202"}
+    else if (w == 856 && h == 641) { mode = "iPhone12ProMax(アプデ後)"}
+    else if (w == 1640 && h == 1002){ mode = "iPad Air第四世代(アプデ後)"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
     document.getElementById("modeName").textContent = mode;
@@ -427,6 +429,24 @@ function decide(mode) {
             itemsRight = 143;
             firstItemX = itemsLeft;
             firstItemY = 496;
+            break;
+        case "iPhone12ProMax(アプデ後)":
+            itemRow = 6;
+            itemMarginX = 35;
+            itemMarginY = 12;
+            itemsLeft = 32;
+            itemsRight = 32;
+            firstItemX = itemsLeft;
+            firstItemY = 980;
+            break;
+        case "iPad Air第四世代(アプデ後)":
+            itemRow = 10;
+            itemMarginX = 20;
+            itemMarginY = 0;
+            itemsLeft = 17;
+            itemsRight = 288;
+            firstItemX = itemsLeft;
+            firstItemY = 1014;
             break;
         default:
             break;
