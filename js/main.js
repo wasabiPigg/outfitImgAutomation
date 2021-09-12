@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = '対応端末を追加しました(2021/07/29)';
+let news = '対応端末を追加しました(2021/09/12)';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
@@ -98,7 +98,7 @@ function deviceSuggest(w, h) {
         // else { mode = "iPhoneXSMax" };
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2, Xperia XZ3"; }
-    else if (w == 884 && h == 588) { mode = "vivo1935"; }
+    else if (w == 884 && h == 588) { mode = "vivo1935, GalaxyS20+5G"; }
     else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
     else if (w == 898 && h ==588) { mode = "Galaxy Note9, Galaxy S10+"; }
@@ -214,7 +214,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 833;
             break;
-        case "vivo1935":
+        case "vivo1935, GalaxyS20+5G":
             itemRow = 7;
             itemMarginX = 11;
             itemMarginY = 10;
@@ -448,6 +448,15 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 1014;
             break;
+        case "GalaxyS20+5G":
+            itemRow = 7;
+            itemMarginX = 12;
+            itemMarginY = 11;
+            itemsLeft = 10;
+            itemsRight = 9;
+            firstItemX = itemsLeft;
+            firstItemY = 804;
+            break;
         default:
             break;
     }
@@ -495,6 +504,10 @@ function showScreenshotImg(files) {
             } else if(mode == "Galaxy Note9, Galaxy S10+" && screenshot.naturalHeight == 2280) {
                 decide("Galaxy S10+")
                 mode = "Galaxy S10+";
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "vivo1935, GalaxyS20+5G" && screenshot.naturalHeight == 2400) {
+                decide("GalaxyS20+5G")
+                mode = "GalaxyS20+5G";
                 console.log("スクショ読み込み後に変更、モード",mode);
             }
             itemBoxCalc();
