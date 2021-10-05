@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = '対応端末を追加しました(2021/09/12)';
+let news = '対応端末を追加しました(2021/10/05)';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
@@ -99,7 +99,7 @@ function deviceSuggest(w, h) {
     } else if (w == 1668 && h == 1002) { mode = "iPadPro11inch"; }
     else if (w == 872 && h == 588) { mode = "ARROWSF-52A, AQUOSzero2, Xperia XZ3"; }
     else if (w == 884 && h == 588) { mode = "vivo1935, GalaxyS20+5G"; }
-    else if (w == 795 && h == 588) { mode = "HUAWEInova2"; }
+    else if (w == 795 && h == 588) { mode = "HUAWEInova2, pixel3"; }
     else if (w == 782 && h ==588) { mode = "Xperia5Ⅱ"; }
     else if (w == 898 && h ==588) { mode = "Galaxy Note9, Galaxy S10+"; }
     else if (w == 859 && h ==588) { mode = "HW-01K"; }
@@ -117,7 +117,7 @@ function deviceSuggest(w, h) {
     else if (w == 750 && h == 635){ mode = "iPhone11Pro(アプデ後)"}
     else if (w == 828 && h == 643){ mode = "iPhoneXR(アプデ後)"}
     else if (w == 1731 && h == 1002){ mode = "szj-js202"}
-    else if (w == 856 && h == 641) { mode = "iPhone12ProMax(アプデ後)"}
+    else if (w == 856 && h == 641){ mode = "iPhone12ProMax(アプデ後)"}
     else if (w == 1640 && h == 1002){ mode = "iPad Air第四世代(アプデ後)"}
     else { mode = "お使いの端末は対象外です"; }
     console.log(w, h);
@@ -227,7 +227,7 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 831;
             break;
-        case "HUAWEInova2":
+        case "HUAWEInova2, pixel3":
             itemRow = 6;
             itemMarginX = 20;
             itemMarginY = 11;
@@ -457,6 +457,15 @@ function decide(mode) {
             firstItemX = itemsLeft;
             firstItemY = 804;
             break;
+        case "pixel3":
+            itemRow = 6;
+            itemMarginX = 20;
+            itemMarginY = 12;
+            itemsLeft = 18;
+            itemsRight = 17;
+            firstItemX = itemsLeft;
+            firstItemY = 880;
+            break;
         default:
             break;
     }
@@ -498,16 +507,20 @@ function showScreenshotImg(files) {
                 }
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "Galaxy S20 5G SC-51A, XPERIA SOV36" && screenshot.naturalHeight == 1920) {
-                decide("XPERIA SOV36")
+                decide("XPERIA SOV36");
                 mode = "XPERIA SOV36";
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "Galaxy Note9, Galaxy S10+" && screenshot.naturalHeight == 2280) {
-                decide("Galaxy S10+")
+                decide("Galaxy S10+");
                 mode = "Galaxy S10+";
                 console.log("スクショ読み込み後に変更、モード",mode);
             } else if(mode == "vivo1935, GalaxyS20+5G" && screenshot.naturalHeight == 2400) {
-                decide("GalaxyS20+5G")
+                decide("GalaxyS20+5G");
                 mode = "GalaxyS20+5G";
+                console.log("スクショ読み込み後に変更、モード",mode);
+            } else if(mode == "HUAWEInova2, pixel3" && screenshot.naturalHeight == 2160) {
+                decide("pixel3");
+                mode = "pixel3";
                 console.log("スクショ読み込み後に変更、モード",mode);
             }
             itemBoxCalc();
