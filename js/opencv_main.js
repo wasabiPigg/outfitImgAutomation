@@ -47,8 +47,8 @@ function aa(contours, hierarchy, threshold) {
     //   console.log(itemNum);
     // }
 
-    console.log(contours);
-    var rect = cv.boundingRect(contours.get(0));
+    var rect = cv.boundingRect(contours.get(42));
+    console.log(Object.values(contours));
     let contoursColor = new cv.Scalar(0, 255, 0, 255);
     let rectangleColor = new cv.Scalar(255, 0, 0, 255);
     cv.drawContours(readImg, contours, -1, contoursColor, 5, 8, hierarchy, 100);
