@@ -12,6 +12,7 @@
 <p id="status">OpenCV.js is loading...</p>
 <div>
   <div class="inputoutput">
+    <label>↓そのままの画像</label>
     <img id="imageSrc" alt="No Image" />
     <div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
   </div>
@@ -22,6 +23,13 @@
   </form>
   <br>
   <div class="inputoutput">
+    <label>↓グレスケ後</label>
+    <canvas id="canvasOutputGrayScale" ></canvas>
+    <label>↓2値化（色反転）</label>
+    <canvas id="canvasOutputThreshold" ></canvas>
+    <label>↓輪郭にドット打つ</label>
+    <canvas id="canvasOutputFindContours" ></canvas>
+    <label>↓最終的な出力</label>
     <canvas id="canvasOutput" ></canvas>
     <div class="caption">canvasOutput</div>
   </div>
