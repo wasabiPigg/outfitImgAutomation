@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja_JP">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="G0L1Yn6YTFQkna9_bexSQ68SBO-oHZqe5jarh3NTYGM" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/i18n/jquery.spectrum-ja.min.js"></script>
+    <meta property="og:title" content="ピグパーティアイテム切り抜きツール">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="ピグパーティの着せ替え画面スクショからアイテム欄を切り抜くツールです。">
+    <meta property="og:url" content="https://wasabipigg.github.io/outfitImgAutomation/" />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/master/img/OGP.png">
+    <meta property="og:site_name" content="ピグパーティコーデ加工自動化ツール">
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@wasabiPigg" />
+    <meta name="twitter:description" content="ピグパーティの着せ替え画面スクショからアイテム欄を切り抜くツールです。" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- <link rel="icon" href="img/favicon.ico"> -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>アイテム切り抜きツール</title>
+    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap" rel="stylesheet">
+    <!-- bootstrap -->
+    <meta charset="utf-8">
+    <!-- BootstrapのCSS読み込み -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- BootstrapのJS読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- ローディング画面 -->
+    <div id="loading" style="display: none;">
+        <div class="text-center"><p id="loadingMsg"></p>
+        <img src="img/loading.gif"></div>
+    </div>
+    <!-- デバイスの選択 -->
+    <section class="toolForm">
+        <h4 class="text-center">アイテム切り抜きツール</h4>
+        <hr>
+        <p class="text-center">着せ替え画面のスクショから、アイテムを所持数を隠して<br>整列させた透過画像を作ることができるツールです。</p>
+        <p id="bug" style="display: none;"></p>
+        <p id="news" style="display: none;"></p>
+        <form name="modeEdit">
+            <label for="" id="modeName"></label>
+            <!-- 画像の設定と読み込み -->
+            <div class="item">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="fileInput" name="screenshot" id="screenshot">
+                <label class="custom-file-label" for="fileInput">着用画面のスクショ</label>
+            </div>
+            </div>
+            <div class="text-center">
+                <label id="imgStatus">↓画像を読み込むとここに表示されます。</label>
+                <img id="imageSrc" alt="No Image" style="display: none;">
+                <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemHs" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemHc" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemVs" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemVc" class="rounded" style="display: none;"></canvas></div>
+                <div><img id="itemHs" class="rounded">
+                <img id="itemHc" class="rounded"></div>
+                <div><img id="itemVs" class="rounded">
+                <img id="itemVc" class="rounded"></div>
+                <span id="saveHint"></span>
+            </div>
+        </form>
+    </section>
+    <!-- JS読み込み -->
+    <script async src="js/opencv.js"></script>
+    <script src="js/itemList.js"></script>
+</body>
+
+</html>

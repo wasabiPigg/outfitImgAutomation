@@ -4,6 +4,7 @@ html {
 
 body {
     width: 100%;
+    background-color: #dee !important;
 }
 
 label {
@@ -42,6 +43,26 @@ label {
     max-height: 450px;
     min-width: 300px;
     min-height: 300px;
+}
+
+#itemHs, #itemHc {
+    margin: auto;
+    width: 50%;
+    max-width: 450px;
+    max-height: 185px;
+    min-width: 300px;
+    min-height: 123px;
+    border: 3px solid #0BA;
+}
+
+#itemVs, #itemVc {
+    margin: auto;
+    width: 25%;
+    max-width: 185px;
+    max-height: 450px;
+    min-width: 123px;
+    min-height: 300px;
+    border: 3px solid #0BA;
 }
 
 .toolForm {
