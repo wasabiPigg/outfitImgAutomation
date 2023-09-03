@@ -5,7 +5,7 @@ if (bug != "") {
     document.getElementById("bug").textContent = bug;
 }
 
-let news = '対応端末を追加しました(2021/10/05)';
+let news = '';
 if (news != "") {
     document.getElementById("news").style = "block";
     document.getElementById("news").textContent = news; 
