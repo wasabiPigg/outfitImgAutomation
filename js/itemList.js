@@ -131,7 +131,7 @@ function itemSquareTileHorizontally(items, itemNum) {
         // 所持数隠し
         chs.beginPath();
         chs.fillStyle = "white";
-        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 109, 32);
+        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 113, 32);
 
         chs.restore(); // クリッピング領域の設定を破棄
         const png = canvasItemHs.toDataURL();
@@ -155,7 +155,7 @@ function itemCircleTileHorizontally(items, itemNum) {
         // 所持数隠し
         chc.beginPath();
         chc.fillStyle = "white";
-        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 109, 32);
+        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 113, 32);
 
         chc.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
@@ -174,13 +174,17 @@ function itemSquareTileVertically(items, itemNum) {
 
         // 角丸矩形でクリッピング
         cvs.save();
-        drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
+        // drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
+        drawsq(cvs, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172, 12);
+
         cvs.clip();
-        cvs.drawImage(imgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
+        // cvs.drawImage(imgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
+        cvs.drawImage(imgElement, x, y, w, h, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
+
         // 所持数隠し
         cvs.beginPath();
         cvs.fillStyle = "white";
-        cvs.fillRect(180 * (i%2) + 58, 180 * Math.floor(i/2) + 138, 109, 32);
+        cvs.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 113, 32);
 
         cvs.restore(); // クリッピング領域の設定を破棄
         const png = canvasItemVs.toDataURL();
@@ -198,16 +202,16 @@ function itemCircleTileVertically(items, itemNum) {
 
         // 円でクリッピング
         cvc.save();
-        drawCircle(cvc, 180 * (i%2) + 90, 180 * Math.floor(i/2) + 90, 86);
+        drawCircle(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
         cvc.clip();
-        cvc.drawImage(imgElement, x+3, y+3, w-6, h-6, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
+        cvc.drawImage(imgElement, x+3, y+3, w-6, h-6, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
         // 所持数隠し
         cvc.beginPath();
         cvc.fillStyle = "white";
-        cvc.fillRect(180 * (i%2) + 58, 180 * Math.floor(i/2) + 138, 109, 32);
+        cvc.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 113, 32);
 
         cvc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(cvc, 180 * (i%2) + 90, 180 * Math.floor(i/2) + 90, 86);
+        drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
         const png = canvasItemVc.toDataURL();
         document.getElementById("itemVc").src = png;
     }
