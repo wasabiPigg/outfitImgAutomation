@@ -1,3 +1,8 @@
+// 代表色を取るための前準備
+const colorThief = new ColorThief();
+// 背景色を変更するボタン用の処理
+var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
+
 // アバター透過画像
 let avatorImgElement = document.getElementById('avatorSrc');
 let inputAvatorElement = document.getElementById('custom-file-1');
@@ -7,10 +12,13 @@ inputAvatorElement.addEventListener('change', (e) => {
 
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
+    pickColors();
+    calcAvatorArea();
     showAvator();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
     previewArea.style.display = "none";
     canvas.style.display = "block";
+    colorButtons.style.display = "block";
     result.style.display = "none";
 });
 
@@ -23,6 +31,7 @@ inputScreenShotElement.addEventListener('change', (e) => {
 
 // スクショ画像が読み込めたら処理開始
 screenShotImgElement.addEventListener('load', (e) => {
+    calcItemListArea();
     showItemList();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
     previewArea.style.display = "none";
@@ -30,25 +39,49 @@ screenShotImgElement.addEventListener('load', (e) => {
     result.style.display = "none";
 });
 
-let color = "rgb(214,215,218)";
+
+// 背景画像
+let backgroundImgElement = document.getElementById('backgroundSrc');
+let inputbackgroundElement = document.getElementById('custom-file-3');
+inputbackgroundElement.addEventListener('change', (e) => {
+    backgroundImgElement.src = URL.createObjectURL(e.target.files[0]);
+}, false);
+
+// 背景画像が読み込めたら処理開始
+backgroundImgElement.addEventListener('load', (e) => {
+    calcBackground();
+    showBackgroundImg();
+    showAvator();
+    showItemList();
+    // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
+    previewArea.style.display = "none";
+    canvas.style.display = "block";
+    result.style.display = "none";
+});
+
+// 灰色はこれ
+let grayColor = "rgb(214,215,218)";
+// アバターから取った代表色
+var pickedColorList = [];
 // Canvasの準備
 var canvas = document.getElementById('canvas');
 var canvasItemHs = document.getElementById('canvasItemHs');
 var canvasItemHc = document.getElementById('canvasItemHc');
 var canvasItemVs = document.getElementById('canvasItemVs');
 var canvasItemVc = document.getElementById('canvasItemVc');
-var canvasHidden = document.getElementById('canvas_hidden');
+var canvasAvator = document.getElementById('canvasAvator');
+var canvasBackground = document.getElementById('canvasBackgroundImg');
 
 var long = 900;
 var short = 370;
 
-// 横長の画像
+// アイテム用Canvas（横長）
 canvasItemHs.width = long;
 canvasItemHs.height = short;
 canvasItemHc.width = long;
 canvasItemHc.height = short;
 
-// 縦長の画像
+// アイテム用Canvas（縦長）
 canvasItemVs.width = short;
 canvasItemVs.height = long;
 canvasItemVc.width = short;
@@ -58,25 +91,115 @@ canvasItemVc.height = long;
 canvas.width = long;
 canvas.height = long;
 
+// アバター用Canvas
+canvasAvator.width = long;
+canvasAvator.height = long;
+
+// 背景画像用Canvas
+canvasBackground.width = long;
+canvasBackground.height = long;
+
 var c = canvas.getContext('2d');
 var chs = canvasItemHs.getContext('2d');
 var chc = canvasItemHc.getContext('2d');
 var cvs = canvasItemVs.getContext('2d');
 var cvc = canvasItemVc.getContext('2d');
 
-var ch1 = canvasHidden.getContext('2d');
+var cha = canvasAvator.getContext('2d');
+var chb = canvasBackground.getContext('2d');
 
-function clearCanvas() {
+function clearAllCanvas() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     chs.clearRect(0, 0, canvasItemHs.width, canvasItemHs.height);
     chc.clearRect(0, 0, canvasItemHc.width, canvasItemHc.height);
     cvs.clearRect(0, 0, canvasItemVs.width, canvasItemVs.height);
     cvc.clearRect(0, 0, canvasItemVc.width, canvasItemVc.height);
-    ch1.clearRect(0, 0, canvasHidden.width, canvasHidden.height);
+    cha.clearRect(0, 0, canvasAvator.width, canvasAvator.height);
+    chb.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
 }
 
-/// アバター表示
+/// アバターを表示
 function showAvator() {
+    c.drawImage(canvasAvator, 0, 0);
+}
+/// アイテムを表示
+function showItemList() {
+    // どのデザインパターンかの引数を受け取りたいところ
+    c.drawImage(canvasItemHs, 0, 530);
+    chgImgBtn.style.display = "block";
+}
+/// 背景画像を表示
+function showBackgroundImg() {
+    c.drawImage(canvasBackground, 0, 0);
+}
+
+/// 背景色を変更
+function changeBackground(n) {
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    switch (n) {
+        case 4:
+            // 背景色なし
+            
+            break;
+        case 5:
+            // 任意の背景画像
+            showBackgroundImg();
+            break;
+        default:
+            // 配列内の背景色
+            c.fillStyle = pickedColorList[n];
+            c.fillRect(0, 0, canvas.width, canvas.height);
+            break;
+    }
+
+    //  アバターとアイテムを表示し直す
+    showAvator();
+    showItemList();
+}
+
+/// アバター画像から代表色を取得する
+function pickColors() {
+    // 代表色をRGBからHEXに変換する
+    pickedColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
+    console.log(pickedColorList);
+
+    // ボタンの背景色に設定する
+    const $getListAItems = document.getElementById("colorButtons").children;
+    for( var $i = 0; $i < $getListAItems.length; $i++ ){
+        $getListAItems[$i].style.backgroundColor = pickedColorList[$i];
+
+        $getListAItems[$i].onclick =
+        function(){
+            const index = colorButtonElements.indexOf(this);
+            console.log(index);
+            changeBackground(index);
+        };
+    }
+}
+
+// RGBをHEXに変換する
+function rgb2hex ( rgb ) {
+	return "#" + rgb.map( function ( value ) {
+		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
+	} ).join( "" ) ;
+}
+
+/// 背景画像計算
+function calcBackground() {
+    
+    chb.drawImage(backgroundImgElement, 0, 0, 900, 900);
+
+    // 背景色ボタンの背景に画像を設定する
+    const $image = backgroundImgElement.src;
+    const $elementReference = document.getElementById( "colorBtn5" );
+    $elementReference.style.backgroundImage = "url( " + $image + " )";
+    // 背景アイコンが邪魔なので消す
+    document.getElementById("backgroundIc").style.display = "none";
+}
+
+/// アバター表示計算
+function calcAvatorArea() {
+    cha.clearRect(0, 0, canvasAvator.width, canvasAvator.height);
     // let avatorSilhouette = cv.imread(avatorImgElement, cv.IMREAD_UNCHANGED);
 
     // // アルファ値以外の値を255にして、不透明部分だけを切り抜く
@@ -87,8 +210,8 @@ function showAvator() {
     // }
 
     // グレースケール
-    let avatorMat = cv.imread(avatorImgElement, cv.IMREAD_UNCHANGED);
-    var avatorDst = new cv.Mat();
+    const avatorMat = cv.imread(avatorImgElement, cv.IMREAD_UNCHANGED);
+    let avatorDst = new cv.Mat();
     cv.cvtColor(avatorMat, avatorDst, cv.COLOR_RGBA2GRAY, 0);
     // 白黒反転して2値化
     let avatorThreshold = new cv.Mat();
@@ -99,7 +222,7 @@ function showAvator() {
     cv.findContours(avatorThreshold, avatorContours, avatorHierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
     // アバターの表示領域を見つける
-    var avatorTmpRect = {
+    let avatorTmpRect = {
         x1: [], y1: [], x2: [], y2: []
     }
     for (let i=0; i<avatorContours.size(); i++){
@@ -120,7 +243,7 @@ function showAvator() {
         x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2-avatorTmpRect.x1, h: avatorTmpRect.y2-avatorTmpRect.y1
     };
     // アバターを900x900内に収めた時のサイズ
-    var avatorResized = {
+    let avatorResized = {
         w: avatorRect.w, h: avatorRect.h
     };
     if (avatorRect.h > 510) {
@@ -129,14 +252,22 @@ function showAvator() {
         avatorResized.h *= 510 / avatorRect.h;
     }
     console.log("アバターの表示領域：",avatorRect);
-    c.drawImage(avatorImgElement, avatorRect.x, avatorRect.y, avatorRect.w, avatorRect.h, (long-avatorResized.w)/2, 10, avatorResized.w, avatorResized.h);
+    // アバター用の非表示canvasに表示しておく
+    cha.drawImage(avatorImgElement, avatorRect.x, avatorRect.y, avatorRect.w, avatorRect.h, (long-avatorResized.w)/2, 10, avatorResized.w, avatorResized.h);
+    document.getElementById("imgStatus").innerText = "↓タップして背景の変更";
 }
 
-/// アイテム表示
-function showItemList() {
+/// アイテム表示計算
+function calcItemListArea() {
+    // アイテム用Canvasの初期化
+    chs.clearRect(0, 0, canvasItemHs.width, canvasItemHs.height);
+    chc.clearRect(0, 0, canvasItemHc.width, canvasItemHc.height);
+    cvs.clearRect(0, 0, canvasItemVs.width, canvasItemVs.height);
+    cvc.clearRect(0, 0, canvasItemVc.width, canvasItemVc.height);
+
     // グレースケール
     let mat = cv.imread(screenShotImgElement);
-    var dst = new cv.Mat();
+    let dst = new cv.Mat();
     cv.cvtColor(mat, dst, cv.COLOR_RGBA2GRAY, 0);
 
     // 白黒反転して2値化
@@ -149,8 +280,8 @@ function showItemList() {
     cv.findContours(threshold, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
     // 輪郭の矩形領域
-    var itemNum = 0;
-    var items = [[]];
+    let itemNum = 0;
+    let items = [[]];
     // 1個も四角がない場合はそこで終わり
     if (contours.size() < 1) {
         document.getElementById("imgStatus").innerText = "アイテムを検出できませんでした。"
@@ -184,9 +315,6 @@ function showItemList() {
     itemSquareTileVertically(items, itemNum);
     itemCircleTileHorizontally(items, itemNum);
     itemCircleTileVertically(items, itemNum);
-    document.getElementById("imgStatus").innerText = "↓画像を長押しで保存できます。\n緑の枠は保存時に消えます。";
-    c.drawImage(canvasItemHs, 0, 530);
-    chgImgBtn.style.display = "block";
 }
 
 function createPng() {
@@ -226,7 +354,7 @@ function itemSquareTileHorizontally(items, itemNum) {
         // 所持数隠し
         chs.beginPath();
         chs.fillStyle = "white";
-        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 113, 32);
+        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
 
         chs.restore(); // クリッピング領域の設定を破棄
     }
@@ -248,7 +376,7 @@ function itemCircleTileHorizontally(items, itemNum) {
         // 所持数隠し
         chc.beginPath();
         chc.fillStyle = "white";
-        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 113, 32);
+        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
 
         chc.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
@@ -275,7 +403,7 @@ function itemSquareTileVertically(items, itemNum) {
         // 所持数隠し
         cvs.beginPath();
         cvs.fillStyle = "white";
-        cvs.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 113, 32);
+        cvs.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
 
         cvs.restore(); // クリッピング領域の設定を破棄
     }
@@ -297,7 +425,7 @@ function itemCircleTileVertically(items, itemNum) {
         // 所持数隠し
         cvc.beginPath();
         cvc.fillStyle = "white";
-        cvc.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 113, 32);
+        cvc.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
 
         cvc.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
@@ -308,8 +436,8 @@ function itemCircleTileVertically(items, itemNum) {
 function drawsq(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.lineWidth = 1;
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
+    ctx.strokeStyle = grayColor;
+    ctx.fillStyle = grayColor;
     ctx.moveTo(x, y + r);  //←①
     ctx.arc(x + r, y + h - r, r, Math.PI, Math.PI * 0.5, true);  //←②
     ctx.arc(x + w - r, y + h - r, r, Math.PI * 0.5, 0, 1);  //←③
@@ -323,7 +451,7 @@ function drawsq(ctx, x, y, w, h, r) {
 // 円を描画する（クリッピングのため）
 function drawCircle(ctx, dx, dy, r) {
     ctx.save();
-    ctx.fillStyle = color;
+    ctx.fillStyle = grayColor;
     ctx.beginPath();
     ctx.arc(dx, dy, r, 0, Math.PI * 2);
     ctx.closePath();	// closeさせる
@@ -336,7 +464,7 @@ function drawCircle(ctx, dx, dy, r) {
 function drawCircleEdge(ctx, dx, dy, r) {
     ctx.beginPath();
     ctx.arc(dx, dy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = grayColor;
     ctx.lineWidth = 5;
     ctx.stroke();
 }

@@ -36,6 +36,14 @@ label {
     margin-bottom: 1rem;
 }
 
+.rounded-circle{
+    font-size: xx-small;
+}
+
+#colorBtn5 {
+    background-size: cover;
+}
+
 #canvas, #result, #previewArea{
     margin: auto;
     width: 50%;

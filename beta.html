@@ -70,23 +70,32 @@
                 <img id="screenshotSrc" alt="No Image" style="display: none;">
             </div>
             </div>
-            <!-- <div class="item">
+            <div class="item">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="custom-file-3" name="backgroundImg" id="backgroundImg"
-                        onchange="showBackgroundImg(this.files);">
+                    <input type="file" class="custom-file-input" id="custom-file-3" name="backgroundImg" id="backgroundImg">
                     <label class="custom-file-label" for="custom-file-3">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
+                    <img id="backgroundSrc" alt="No Image" style="display: none;">
                 </div>
-            </div> -->
+            </div>
             <div class="text-center">
                 <label id="imgStatus">↓ここにプレビューが表示されます</label>
+                <p id="colorButtons" style="display: none;">
+                    <button id="colorBtn0" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"></button>
+                    <button id="colorBtn1" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"></button>
+                    <button id="colorBtn2" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"></button>
+                    <button id="colorBtn3" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"></button>
+                    <button id="colorBtn4" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"><span class="fas fa-eye-slash fa-xs"></span></button>
+                    <button id="colorBtn5" type="button" class="btn rounded-circle" style="width: 40px;height: 40px;"><span id="backgroundIc" class="fas fa-image fa-xs"></span></button>
+
+                </p>
                 <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900">
                 <div><canvas id="canvasItemHs" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvasItemHc" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvasItemVs" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvasItemVc" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden2" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasAvator" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasBackgroundImg" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas_silhouette" class="rounded" style="display: none;"></canvas></div>
                 <div><img id="result" class="rounded" style="display: none;"></div>
                 <span id="saveHint"></span>
@@ -98,6 +107,7 @@
     </section>
     <!-- JS読み込み -->
     <script async src="js/opencv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="js/beta_main.js"></script>
 </body>
 
