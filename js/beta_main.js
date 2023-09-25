@@ -14,11 +14,15 @@ inputAvatorElement.addEventListener('change', (e) => {
 avatorImgElement.addEventListener('load', (e) => {
     pickColors();
     calcAvatorArea();
+    // とりあえず1色目の背景色をつけておく&選択中と示すために丸くする
+    changeBackground(0);
+    colorBtn0.classList.replace('rounded-square','rounded-circle');
     showAvator();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
     previewArea.style.display = "none";
     canvas.style.display = "block";
-    colorButtons.style.display = "block";
+    editMenu.style.display = "grid";
+    // colorButtons.style.display = "inline-block";
     result.style.display = "none";
 });
 
@@ -138,12 +142,12 @@ function changeBackground(n) {
     c.clearRect(0, 0, canvas.width, canvas.height);
     switch (n) {
         case 4:
-            // 背景色なし
-            
-            break;
-        case 5:
             // 任意の背景画像
             showBackgroundImg();
+            break;
+        case 5:
+            // 背景色なし
+            
             break;
         default:
             // 配列内の背景色
@@ -171,6 +175,12 @@ function pickColors() {
         $getListAItems[$i].onclick =
         function(){
             const index = colorButtonElements.indexOf(this);
+            // 一旦全部四角くする
+            for ( var j = 0; j < colorButtonElements.length; j++ ) {
+                colorButtonElements[j].classList.replace('rounded-circle','rounded-square');
+            }
+            // 選択中の背景は形を丸くする
+            this.classList.replace('rounded-square','rounded-circle');
             console.log(index);
             changeBackground(index);
         };
@@ -254,7 +264,7 @@ function calcAvatorArea() {
     console.log("アバターの表示領域：",avatorRect);
     // アバター用の非表示canvasに表示しておく
     cha.drawImage(avatorImgElement, avatorRect.x, avatorRect.y, avatorRect.w, avatorRect.h, (long-avatorResized.w)/2, 10, avatorResized.w, avatorResized.h);
-    document.getElementById("imgStatus").innerText = "↓タップして背景の変更";
+    // document.getElementById("imgStatus").innerText = "↓タップして背景の変更";
 }
 
 /// アイテム表示計算
@@ -284,7 +294,7 @@ function calcItemListArea() {
     let items = [[]];
     // 1個も四角がない場合はそこで終わり
     if (contours.size() < 1) {
-        document.getElementById("imgStatus").innerText = "アイテムを検出できませんでした。"
+        // document.getElementById("imgStatus").innerText = "アイテムを検出できませんでした。"
         return
     }
 
@@ -308,7 +318,7 @@ function calcItemListArea() {
         }
     }
     if (itemNum == 0) {
-        document.getElementById("imgStatus").innerText = "アイテムを検出できませんでした。"
+        // document.getElementById("imgStatus").innerText = "アイテムを検出できませんでした。"
         return;
     }
     itemSquareTileHorizontally(items, itemNum);
