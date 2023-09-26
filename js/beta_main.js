@@ -2,6 +2,8 @@
 const colorThief = new ColorThief();
 // 背景色を変更するボタン用の処理
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
+// 選択中の背景
+var bgIndex = 0;
 
 // アバター透過画像
 let avatorImgElement = document.getElementById('avatorSrc');
@@ -9,6 +11,10 @@ let inputAvatorElement = document.getElementById('custom-file-1');
 inputAvatorElement.addEventListener('change', (e) => {
     avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
+
+// 影ボタン切り替え
+let shadowElement = document.getElementById("shadow");
+shadowElement.addEventListener('change', toggleShadow);
 
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
@@ -75,6 +81,7 @@ var canvasItemVs = document.getElementById('canvasItemVs');
 var canvasItemVc = document.getElementById('canvasItemVc');
 var canvasAvator = document.getElementById('canvasAvator');
 var canvasBackground = document.getElementById('canvasBackgroundImg');
+var canvasShadow = document.getElementById('canvas_shadow');
 
 var long = 900;
 var short = 370;
@@ -103,6 +110,10 @@ canvasAvator.height = long;
 canvasBackground.width = long;
 canvasBackground.height = long;
 
+// 影付け用Canvas
+canvasShadow.width = long;
+canvasShadow.height = long;
+
 var c = canvas.getContext('2d');
 var chs = canvasItemHs.getContext('2d');
 var chc = canvasItemHc.getContext('2d');
@@ -111,6 +122,7 @@ var cvc = canvasItemVc.getContext('2d');
 
 var cha = canvasAvator.getContext('2d');
 var chb = canvasBackground.getContext('2d');
+var csh = canvasShadow.getContext('2d');
 
 function clearAllCanvas() {
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -120,11 +132,16 @@ function clearAllCanvas() {
     cvc.clearRect(0, 0, canvasItemVc.width, canvasItemVc.height);
     cha.clearRect(0, 0, canvasAvator.width, canvasAvator.height);
     chb.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
+    csh.clearRect(0, 0, canvasShadow.width, canvasShadow.height);
 }
 
 /// アバターを表示
 function showAvator() {
-    c.drawImage(canvasAvator, 0, 0);
+    if (shadowElement.checked) {
+        c.drawImage(canvasShadow, 0, 0);
+    } else {
+        c.drawImage(canvasAvator, 0, 0);
+    }
 }
 /// アイテムを表示
 function showItemList() {
@@ -161,6 +178,26 @@ function changeBackground(n) {
     showItemList();
 }
 
+// 影をつけたり消したりする
+function toggleShadow() {
+    if (shadowElement.checked) {
+        csh.save();
+        csh.shadowColor = "rgba(0,0,0,0.253)";
+        csh.shadowOffsetX = 6;
+        csh.shadowOffsetY = 6;
+        csh.shadowBlur = 5;
+        csh.drawImage(canvasAvator, 0, 0);
+        // csh.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
+        csh.restore();
+    } else {
+        csh.clearRect(0, 0, canvasShadow.width, canvasShadow.height);
+    }
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    changeBackground(bgIndex);
+    showAvator();
+    showItemList();
+}
+
 /// アバター画像から代表色を取得する
 function pickColors() {
     // 代表色をRGBからHEXに変換する
@@ -174,15 +211,15 @@ function pickColors() {
 
         $getListAItems[$i].onclick =
         function(){
-            const index = colorButtonElements.indexOf(this);
+            bgIndex = colorButtonElements.indexOf(this);
             // 一旦全部四角くする
             for ( var j = 0; j < colorButtonElements.length; j++ ) {
                 colorButtonElements[j].classList.replace('rounded-circle','rounded-square');
             }
             // 選択中の背景は形を丸くする
             this.classList.replace('rounded-square','rounded-circle');
-            console.log(index);
-            changeBackground(index);
+            console.log(bgIndex);
+            changeBackground(bgIndex);
         };
     }
 }
