@@ -1,9 +1,108 @@
 // 代表色を取るための前準備
 const colorThief = new ColorThief();
-// 背景色を変更するボタン用の処理
-var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
-// 選択中の背景
-var bgIndex = 0;
+
+// 描画に必要なデータ用
+class DrawImageInfo {
+    constructor(img, sx, sy, sw, sh, dx, dy, dw, dh) {
+        this.img = img;
+        this.sx = sx;
+        this.sy = sy;
+        this.sw = sw;
+        this.sh = sh;
+        this.dx = dx;
+        this.dy = dy;
+        this.dw = dw;
+        this.dh = dh;
+    }
+
+    // メインキャンバスに描画
+    drawImage() {
+        c.drawImage(
+            this.img,
+            this.sx,
+            this.sy,
+            this.sw,
+            this.sh,
+            this.dx,
+            this.dy,
+            this.dw,
+            this.dh
+            );
+    }
+    // 影付きでメインキャンバスに描画
+    drawShadowImage() {
+        c.save();
+        c.shadowColor = "rgba(0,0,0,0.253)";
+        c.shadowOffsetX = 6;
+        c.shadowOffsetY = 6;
+        c.shadowBlur = 5;
+        this.drawImage();
+        c.restore();
+    }
+
+    setDrawImageInfo(img, sx, sy, sw, sh, dx, dy, dw, dh) {
+        this.img = img;
+        this.sx = sx;
+        this.sy = sy;
+        this.sw = sw;
+        this.sh = sh;
+        this.dx = dx;
+        this.dy = dy;
+        this.dw = dw;
+        this.dh = dh;
+    }
+
+    setMovedDrawImageInfo(dx, dy, dw, dh) {
+        this.dx = dx;
+        this.dy = dy;
+        this.dw = dw;
+        this.dh = dh;
+    }
+}
+
+// 背景に必要なデータ用
+class BgInfo {
+    constructor(elm, bgIndex) {
+        this.elm = elm;
+        this.bgIndex = bgIndex;
+    }
+
+    // 選択中の一つのボタンだけ丸くする
+    round(index) {
+        // 一旦全部四角くする
+        for ( var j = 0; j < this.elm.length; j++ ) {
+            this.elm[j].classList.replace('rounded-circle','rounded-square');
+        }
+        // 選択中の背景は形を丸くする
+        this.elm[index].classList.replace('rounded-square','rounded-circle');
+    }
+
+    changeIndex(newIndex) {
+        this.bgIndex = newIndex;
+        this.round(this.bgIndex);
+    }
+
+    // canvasの背景を変更
+    changeBackground() {
+        this.round(this.bgIndex);
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        switch (this.bgIndex) {
+            case 4:
+                // 任意の背景画像
+                c.drawImage(canvasBackground, 0, 0);
+                break;
+            case 5:
+                // 背景色なし
+                
+                break;
+            default:
+                // 配列内の背景色
+                c.fillStyle = pickedColorList[this.bgIndex];
+                c.fillRect(0, 0, canvas.width, canvas.height);
+                break;
+        }
+    }
+}
 
 // アバター透過画像
 let avatorImgElement = document.getElementById('avatorSrc');
@@ -11,19 +110,21 @@ let inputAvatorElement = document.getElementById('custom-file-1');
 inputAvatorElement.addEventListener('change', (e) => {
     avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
+var avatorDrawImageInfo = new DrawImageInfo;
+
+// 背景色を変更するボタン用の処理
+var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
+var bgInfo = new BgInfo(colorButtonElements, 0);
 
 // 影ボタン切り替え
 let shadowElement = document.getElementById("shadow");
-shadowElement.addEventListener('change', toggleShadow);
+shadowElement.addEventListener('change', redrawCanvas);
 
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
     pickColors();
     calcAvatorArea();
-    // とりあえず1色目の背景色をつけておく&選択中と示すために丸くする
-    changeBackground(0);
-    colorBtn0.classList.replace('rounded-square','rounded-circle');
-    showAvator();
+    redrawCanvas();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
     previewArea.style.display = "none";
     canvas.style.display = "block";
@@ -42,13 +143,8 @@ inputScreenShotElement.addEventListener('change', (e) => {
 // スクショ画像が読み込めたら処理開始
 screenShotImgElement.addEventListener('load', (e) => {
     calcItemListArea();
-    showItemList();
-    // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
-    previewArea.style.display = "none";
-    canvas.style.display = "block";
-    result.style.display = "none";
+    redrawCanvas();
 });
-
 
 // 背景画像
 let backgroundImgElement = document.getElementById('backgroundSrc');
@@ -60,13 +156,8 @@ inputbackgroundElement.addEventListener('change', (e) => {
 // 背景画像が読み込めたら処理開始
 backgroundImgElement.addEventListener('load', (e) => {
     calcBackground();
-    showBackgroundImg();
-    showAvator();
-    showItemList();
-    // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
-    previewArea.style.display = "none";
-    canvas.style.display = "block";
-    result.style.display = "none";
+    bgInfo.changeIndex(4);
+    redrawCanvas();
 });
 
 // 灰色はこれ
@@ -135,67 +226,11 @@ function clearAllCanvas() {
     csh.clearRect(0, 0, canvasShadow.width, canvasShadow.height);
 }
 
-/// アバターを表示
-function showAvator() {
-    if (shadowElement.checked) {
-        c.drawImage(canvasShadow, 0, 0);
-    } else {
-        c.drawImage(canvasAvator, 0, 0);
-    }
-}
 /// アイテムを表示
 function showItemList() {
     // どのデザインパターンかの引数を受け取りたいところ
     c.drawImage(canvasItemHs, 0, 530);
     chgImgBtn.style.display = "block";
-}
-/// 背景画像を表示
-function showBackgroundImg() {
-    c.drawImage(canvasBackground, 0, 0);
-}
-
-/// 背景色を変更
-function changeBackground(n) {
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    switch (n) {
-        case 4:
-            // 任意の背景画像
-            showBackgroundImg();
-            break;
-        case 5:
-            // 背景色なし
-            
-            break;
-        default:
-            // 配列内の背景色
-            c.fillStyle = pickedColorList[n];
-            c.fillRect(0, 0, canvas.width, canvas.height);
-            break;
-    }
-
-    //  アバターとアイテムを表示し直す
-    showAvator();
-    showItemList();
-}
-
-// 影をつけたり消したりする
-function toggleShadow() {
-    if (shadowElement.checked) {
-        csh.save();
-        csh.shadowColor = "rgba(0,0,0,0.253)";
-        csh.shadowOffsetX = 6;
-        csh.shadowOffsetY = 6;
-        csh.shadowBlur = 5;
-        csh.drawImage(canvasAvator, 0, 0);
-        // csh.drawImage(avator.image, avator.sx, avator.sy, avator.sw, avator.sh, avatorCurrent["dx"], avatorCurrent["dy"], avator.dw, avator.dh);
-        csh.restore();
-    } else {
-        csh.clearRect(0, 0, canvasShadow.width, canvasShadow.height);
-    }
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    changeBackground(bgIndex);
-    showAvator();
-    showItemList();
 }
 
 /// アバター画像から代表色を取得する
@@ -212,14 +247,9 @@ function pickColors() {
         $getListAItems[$i].onclick =
         function(){
             bgIndex = colorButtonElements.indexOf(this);
-            // 一旦全部四角くする
-            for ( var j = 0; j < colorButtonElements.length; j++ ) {
-                colorButtonElements[j].classList.replace('rounded-circle','rounded-square');
-            }
-            // 選択中の背景は形を丸くする
-            this.classList.replace('rounded-square','rounded-circle');
+            bgInfo.changeIndex(bgIndex);
             console.log(bgIndex);
-            changeBackground(bgIndex);
+            redrawCanvas();
         };
     }
 }
@@ -247,14 +277,6 @@ function calcBackground() {
 /// アバター表示計算
 function calcAvatorArea() {
     cha.clearRect(0, 0, canvasAvator.width, canvasAvator.height);
-    // let avatorSilhouette = cv.imread(avatorImgElement, cv.IMREAD_UNCHANGED);
-
-    // // アルファ値以外の値を255にして、不透明部分だけを切り抜く
-    // for (let i=3; i<avatorSilhouette.data.length; i+=4) {
-    //     avatorSilhouette.data[i-3] = 255;
-    //     avatorSilhouette.data[i-2] = 255;
-    //     avatorSilhouette.data[i-1] = 255;
-    // }
 
     // グレースケール
     const avatorMat = cv.imread(avatorImgElement, cv.IMREAD_UNCHANGED);
@@ -286,6 +308,7 @@ function calcAvatorArea() {
     avatorTmpRect.y2 = Math.max(...avatorTmpRect.y2);
 
     // アバターの表示領域
+
     let avatorRect = {
         x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2-avatorTmpRect.x1, h: avatorTmpRect.y2-avatorTmpRect.y1
     };
@@ -299,9 +322,17 @@ function calcAvatorArea() {
         avatorResized.h *= 510 / avatorRect.h;
     }
     console.log("アバターの表示領域：",avatorRect);
-    // アバター用の非表示canvasに表示しておく
-    cha.drawImage(avatorImgElement, avatorRect.x, avatorRect.y, avatorRect.w, avatorRect.h, (long-avatorResized.w)/2, 10, avatorResized.w, avatorResized.h);
-    // document.getElementById("imgStatus").innerText = "↓タップして背景の変更";
+    avatorDrawImageInfo.setDrawImageInfo(
+        avatorImgElement,
+        avatorRect.x,
+        avatorRect.y,
+        avatorRect.w,
+        avatorRect.h,
+        (long-avatorResized.w)/2,
+        10,
+        avatorResized.w,
+        avatorResized.h
+    );
 }
 
 /// アイテム表示計算
@@ -514,4 +545,20 @@ function drawCircleEdge(ctx, dx, dy, r) {
     ctx.strokeStyle = grayColor;
     ctx.lineWidth = 5;
     ctx.stroke();
+}
+
+// 再描画する
+function redrawCanvas() {
+    // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
+    previewArea.style.display = "none";
+    canvas.style.display = "block";
+    result.style.display = "none";
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    bgInfo.changeBackground();
+    if (shadowElement.checked) {
+        avatorDrawImageInfo.drawShadowImage();
+    } else {
+        avatorDrawImageInfo.drawImage();
+    }
+    showItemList();
 }
