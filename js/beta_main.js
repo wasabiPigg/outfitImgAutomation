@@ -215,6 +215,77 @@ var cha = canvasAvator.getContext('2d');
 var chb = canvasBackground.getContext('2d');
 var csh = canvasShadow.getContext('2d');
 
+
+// 描画用の座標を覚えるためのクラス
+class PointTable
+{
+    constructor( _table_max = 10 ) {
+        this.x = []
+        this.y = []
+        this.table_max = _table_max
+        for ( let i=0 ; i<_table_max ; i++ ) {
+            this.x.push( 0 )
+            this.y.push( 0 )
+        }
+    }
+
+    get_idx( _i ) {
+        const i = ( _i < 0 ? -_i : _i ) // abs
+        return i % this.table_max
+    }
+
+    get_xy( _tc ) {
+        const r = this.get_idx( _tc.identifier )
+        return { x: this.x[r], y: this.y[r] }
+    }
+
+    set_xy( _tc ){
+        const r = this.get_idx( _tc.identifier )
+        const rect = _tc.target.getBoundingClientRect();
+        this.x[r] = (_tc.pageX - rect.x - window.scrollX) * (canvas.width/canvas.clientWidth)
+        this.y[r] = (_tc.pageY - rect.y - window.scrollY) * (canvas.height/canvas.clientHeight)
+    }
+}
+const xy_tbl = new PointTable()
+const for_touches = ( _evt, _fnc ) => {
+    for ( let i=0 ; i<_evt.changedTouches.length ; i++ )
+        _fnc( _evt.changedTouches[i] )
+}
+
+const c_draw_line = ( _t ) => {   // cに線を描く
+    const p = xy_tbl.get_xy( _t )
+    c.beginPath()
+    c.moveTo( p.x, p.y )
+    const rect = _t.target.getBoundingClientRect();
+
+    const x = (_t.pageX - rect.x - window.scrollX) * (canvas.width/canvas.clientWidth)
+    const y = (_t.pageY - rect.y - window.scrollY) * (canvas.height/canvas.clientHeight)
+    c.lineTo(x, y)
+    console.log(rect)
+    c.lineWidth = 4
+    c.strokeStyle = "red"
+    c.stroke()
+    xy_tbl.set_xy( _t )
+    document.getElementById("saveHint").textContent = (`scY: ${window.scrollY}`);
+}
+
+canvas.addEventListener( "touchstart", ( _evt ) => {
+    _evt.preventDefault()
+    for_touches( _evt, ( _t ) => xy_tbl.set_xy( _t ) )
+}, false )
+
+canvas.addEventListener( "touchmove", ( _evt ) => {
+    _evt.preventDefault()
+    for_touches( _evt, ( _t ) => c_draw_line( _t ) )
+}, false )
+
+canvas.addEventListener( "touchend", ( _evt ) => {
+    _evt.preventDefault()
+    for_touches( _evt, ( _t ) => {
+        c_draw_line( _t )
+    })
+}, false )
+
 function clearAllCanvas() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     chs.clearRect(0, 0, canvasItemHs.width, canvasItemHs.height);
