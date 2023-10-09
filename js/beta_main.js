@@ -507,7 +507,6 @@ function calcItemListArea() {
 function createPng() {
     const png = canvas.toDataURL();
     document.getElementById("result").src = png;
-    canvas.style.display = "none";
     result.style.display = "block";
 }
 

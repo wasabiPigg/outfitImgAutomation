@@ -93,8 +93,8 @@
                 <div><canvas id="canvasBackgroundImg" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas_shadow" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas_silhouette" class="rounded" style="display: none;"></canvas></div>
-                <div><img id="result" class="rounded" style="display: none;"></div>
-                <span id="saveHint"></span>
+                <!-- <div><img id="result" class="rounded" style="display: none;"></div> -->
+                
                 <!-- <label id="imgStatus">↑ここにプレビューが表示されます</label> -->
             </div>
             <div id="editMenu" style="display: none;">
@@ -116,23 +116,23 @@
                     <div class="tab-content border-left border-right border-bottom rounded-bottom" id="myTabContent">
                         <div class="tab-pane fade show active" id="bg" role="tabpanel" aria-labelledby="bg-tab">
                             <div class="text-center">
-                            <span id="colorButtons">
-                                <button id="colorBtn0" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"></button>
-                                <button id="colorBtn1" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"></button>
-                                <button id="colorBtn2" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"></button>
-                                <button id="colorBtn3" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"></button>
-                                <button id="colorBtn5" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"><span id="backgroundIc"
-                                        class="fas fa-image fa-xs"></span></button>
-                                <button id="colorBtn4" type="button" class="btn rounded-square"
-                                    style="width: 40px;height: 40px;"><span
-                                        class="fas fa-eye-slash fa-xs"></span></button>
-                            </span>
-                        </div>
+                                <span id="colorButtons">
+                                    <button id="colorBtn0" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn1" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn2" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn3" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn5" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"><span id="backgroundIc"
+                                            class="fas fa-image fa-xs"></span></button>
+                                    <button id="colorBtn4" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"><span
+                                            class="fas fa-eye-slash fa-xs"></span></button>
+                                </span>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="shadow" role="tabpanel" aria-labelledby="shadow-tab">
                             <div class="text-center form-group">
@@ -152,33 +152,36 @@
                     </div>
 
                 </div>
-                <!-- <div>
-                    <span class="text">影</span>
-                    <label class="switch">
-                        <input id="shadow" type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="text">ふち</span>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="text">タテ</span>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="text">丸</span>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </div> -->
             </div>
         </form>
-        <button class="btn btn-primary" id="chgImgBtn" onclick="createPng()" style="display: none;">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" id="chgImgBtn" data-toggle="modal" data-target="#exampleModalCenter" onclick="createPng()" style="display: none;">
             編集完了する！
         </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <div class="text-center modal-title" id="exampleModalCenterTitle"><h5>編集お疲れ様でした！</h5></div> -->
+                        <h5 class="modal-title" id="exampleModalCenterTitle">編集お疲れ様でした！</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div><img id="result" class="rounded" style="display: none;"></div>
+                        <div class="text-center" id="saveHint">画像を長押しで保存できます</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">編集に戻る</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- JS読み込み -->
     <script async src="js/opencv.js"></script>
