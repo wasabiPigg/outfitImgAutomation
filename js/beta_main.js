@@ -52,11 +52,10 @@ class DrawImageInfo {
         this.dh = dh;
     }
 
-    setMovedDrawImageInfo(dx, dy, dw, dh) {
+    setMovedDrawImageInfo(dx, dy) {
         this.dx = dx;
         this.dy = dy;
-        this.dw = dw;
-        this.dh = dh;
+        redrawCanvas();
     }
 }
 
@@ -252,21 +251,19 @@ const for_touches = ( _evt, _fnc ) => {
         _fnc( _evt.changedTouches[i] )
 }
 
-const c_draw_line = ( _t ) => {   // cに線を描く
+// canvas上の画像を移動する
+const moveImage = ( _t ) => {
     const p = xy_tbl.get_xy( _t )
-    c.beginPath()
-    c.moveTo( p.x, p.y )
     const rect = _t.target.getBoundingClientRect();
 
     const x = (_t.pageX - rect.x - window.scrollX) * (canvas.width/canvas.clientWidth)
     const y = (_t.pageY - rect.y - window.scrollY) * (canvas.height/canvas.clientHeight)
-    c.lineTo(x, y)
-    console.log(rect)
-    c.lineWidth = 4
-    c.strokeStyle = "red"
-    c.stroke()
+
+    avatorDrawImageInfo.setMovedDrawImageInfo(
+        avatorDrawImageInfo.dx + (x - p.x),
+        avatorDrawImageInfo.dy + (y - p.y)
+    );
     xy_tbl.set_xy( _t )
-    document.getElementById("saveHint").textContent = (`scY: ${window.scrollY}`);
 }
 
 canvas.addEventListener( "touchstart", ( _evt ) => {
@@ -276,13 +273,13 @@ canvas.addEventListener( "touchstart", ( _evt ) => {
 
 canvas.addEventListener( "touchmove", ( _evt ) => {
     _evt.preventDefault()
-    for_touches( _evt, ( _t ) => c_draw_line( _t ) )
+    for_touches( _evt, ( _t ) => moveImage( _t ) )
 }, false )
 
 canvas.addEventListener( "touchend", ( _evt ) => {
     _evt.preventDefault()
     for_touches( _evt, ( _t ) => {
-        c_draw_line( _t )
+        moveImage( _t )
     })
 }, false )
 
