@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="G0L1Yn6YTFQkna9_bexSQ68SBO-oHZqe5jarh3NTYGM" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/i18n/jquery.spectrum-ja.min.js"></script>
     <meta property="og:title" content="ピグパーティコーデ加工自動化ツール">
@@ -18,7 +18,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@wasabiPigg" />
     <meta name="twitter:description" content="ピグパーティのコーデ加工を自動でするツールです。" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <!-- <link rel="icon" href="img/favicon.ico"> -->
     <link rel="stylesheet" href="css/style.css">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
@@ -42,72 +43,222 @@
 <body>
     <!-- ローディング画面 -->
     <div id="loading" style="display: none;">
-        <div class="text-center"><p id="loadingMsg"></p>
-        <img src="img/loading.gif"></div>
+        <div class="text-center">
+            <p id="loadingMsg"></p>
+            <img src="img/loading.gif">
+        </div>
     </div>
-    <!-- デバイスの選択 -->
     <section class="toolForm">
-        <h4 class="text-center">コーデ加工自動化ツール</h4>
-        <hr>
-        <p class="text-center"><a href="https://wasabipigg.hatenablog.com/entry/2021/01/20/144242">こちらの記事をよく読んで<br>理解してからご利用願います</a></p>
+        <!-- <p class="text-center"><a href="https://wasabipigg.hatenablog.com/entry/2021/01/20/144242">ご利用前にお読みください</a></p>
         <p id="bug" style="display: none;"></p>
         <p id="news" style="display: none;"></p>
-        <p id="news"><a href="https://wasabipigg.github.io/outfitImgAutomation/itemList.html">アイテム切り抜きツール</a>が増えました！(2023/09/03)</p>
+        <p id="news"><a
+                href="https://wasabipigg.github.io/outfitImgAutomation/itemList.html">アイテム切り抜きツール</a>が増えました！(2023/09/03)
+        </p> -->
         <form name="modeEdit">
-            <label for="" id="modeName"></label>
+            <h5 id="titleLabel" class="text-center border-bottom">
+                コーデ加工ツール
+                <i data-toggle="modal" data-target="#infoModalCenter" class="fas fa-question-circle"
+                    style="color: #707070;"></i>
+            </h5>
             <!-- 画像の設定と読み込み -->
-            <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
-                    onchange="showAvatorImg(this.files); dispLoading()">
-                <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
+            <div class="text-center items">
+                <label>
+                    <img id="avImg" class="rounded" alt="" style="width: 90px; height: 90px;">
+                    <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator"
+                        style="display: none;">
+                    <img id="avatorSrc" alt="No Image" style="display: none;">
+                </label>
+                <label>
+                    <img id="clImg" class="rounded" alt="" style="width: 90px; height: 90px;">
+                    <input type="file" class="custom-file-input" id="custom-file-2" name="screenshot" id="screenshot"
+                        style="display: none;">
+                    <img id="screenshotSrc" alt="No Image" style="display: none;">
+                </label>
+                <label>
+                    <img id="bgImg" class="rounded" alt="">
+                    <input type="file" class="custom-file-input" id="custom-file-3" name="backgroundImg"
+                        id="backgroundImg" style="display: none;">
+                    <img id="backgroundSrc" alt="No Image" style="display: none;">
+                </label>
             </div>
-            </div>
-            <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-1" name="screenshot" id="screenshot"
-                    onchange="showScreenshotImg(this.files);">
-                <label class="custom-file-label" for="custom-file-1">着用画面のスクショ</label>
-            </div>
-            </div>
-            <div class="item">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="custom-file-1" name="backgroundImg" id="backgroundImg"
-                        onchange="showBackgroundImg(this.files);">
-                    <label class="custom-file-label" for="custom-file-1">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
-                </div>
-                </div>
             <div class="text-center">
-                <label id="imgStatus">↓ここにプレビューが表示されます</label>
                 <img id="previewArea" class="rounded mx-auto d-blockd" src="http://via.placeholder.com/900x900">
+                <div><canvas id="canvasItemHs" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemHc" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemVs" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasItemVc" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden" class="rounded" style="display: none;"></canvas></div>
-                <div><canvas id="canvas_hidden2" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasAvator" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvasBackgroundImg" class="rounded" style="display: none;"></canvas></div>
+                <div><canvas id="canvas_shadow" class="rounded" style="display: none;"></canvas></div>
                 <div><canvas id="canvas_silhouette" class="rounded" style="display: none;"></canvas></div>
-                <div><img id="result" class="rounded" style="display: none;"></div>
-                <span id="saveHint"></span>
+                <!-- <div><img id="result" class="rounded" style="display: none;"></div> -->
+
+                <!-- <label id="imgStatus">↑ここにプレビューが表示されます</label> -->
+            </div>
+            <div id="editMenu" style="display: none;">
+                <div>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="bg-tab" data-toggle="tab" href="#bg" role="tab"
+                                aria-controls="bg" aria-selected="true">背景</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="shadow-tab" data-toggle="tab" href="#shadow" role="tab"
+                                aria-controls="shadow" aria-selected="false">かげ・ふち</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="template-tab" data-toggle="tab" href="#template" role="tab"
+                                aria-controls="template" aria-selected="false">テンプレ</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content border-left border-right border-bottom rounded-bottom" id="myTabContent">
+                        <div class="tab-pane fade show active" id="bg" role="tabpanel" aria-labelledby="bg-tab">
+                            <div class="text-center">
+                                <span id="colorButtons">
+                                    <button id="colorBtn0" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn1" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn2" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn3" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"></button>
+                                    <button id="colorBtn5" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"><span id="backgroundIc"
+                                            class="fas fa-image fa-xs"></span></button>
+                                    <button id="colorBtn4" type="button" class="btn rounded-square"
+                                        style="width: 40px;height: 40px;"><span
+                                            class="fas fa-eye-slash fa-xs"></span></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="shadow" role="tabpanel" aria-labelledby="shadow-tab">
+                            <div class="text-center form-group">
+                                <label for="shadowControl">かげ</label>
+                                <input type="range" class="custom-range" min="0" max="10" step="0.5" id="shadowControl">
+                                <label for="shadowControl" id="shadowValue"></label>
+                            </div>
+                            <div class="text-center">
+                                <label for="fuchiControl">ふち</label>
+                                <input type="range" class="custom-range" min="0" max="10" step="0.5" id="fuchiControl">
+                                <label for="fuchiControl" id="fuchiValue">5</label>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="template" role="tabpanel" aria-labelledby="template-tab">
+                            準備中
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </form>
-        <button class="btn btn-primary" id="chgImgBtn" onclick="chgImg()" style="display: none;">
-            画像に変換！
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" id="chgImgBtn" data-toggle="modal"
+            data-target="#completeModalCenter" onclick="createPng()" style="display: none;">
+            編集完了する！
         </button>
-        <button class="btn" id="showLogBtn" onclick="showLog()" style="display: none;">
-            ログを表示<span class="hosoku">(うまくいかないときはここをタップ)</span>
-        </button>
-        <div id="logArea" style="display: none;">
-            対応端末の追加は<a href="https://forms.gle/1i19edFdPAkkHaNf9">こちら</a>から<br>
-            以下の情報を<a href="https://twitter.com/wasabipigg">わさび</a>にご共有ください<br>
-            表示エリアサイズ：横=<span id="logTanmatsuW"></span> 縦=<span id="logTanmatsuH"></span><br>
-            推定端末：<span id="logTanmatsu"></span><br>
-            アバの画像サイズ：横=<span id="logAvaW"></span> 縦=<span id="logAvaH"></span><br>
-            スクショの画像サイズ：横=<span id="logScreenshotW"></span> 縦=<span id="logScreenshotH"></span><br>
-            取得した背景色：<span id="logColors"></span><br>
-            使用アイテム数：<span id="logItemNum"></span><br>
-            使用アイテム枠(30,30)の色：<span id="logItemBoxColor"></span><br>
-            背景画像の有無：<span id="logBackgroundImg"></span>
+
+        <!-- Modal -->
+        <div class="modal fade" id="completeModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="completeModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="completeModalCenterTitle">編集お疲れ様でした！</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div><img id="result" class="rounded" style="display: none;"></div>
+                        <div class="text-center" id="saveHint">画像を長押しで保存できます</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">編集に戻る</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="infoModalCenter" tabindex="-1" role="dialog" aria-labelledby="infoModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="infoModalCenterTitle">ツールの使い方</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800"
+                                        height="300" xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+                                        aria-label="Placeholder: 準備中">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#777" /><text x="43%" y="50%" fill="#555"
+                                            dy=".3em">準備中</text>
+                                    </svg>
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>準備中 label</h5>
+                                        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800"
+                                        height="300" xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+                                        aria-label="Placeholder: 準備中">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#666" /><text x="43%" y="50%" fill="#444"
+                                            dy=".3em">準備中</text>
+                                    </svg>
+                                </div>
+                                <div class="carousel-item">
+                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800"
+                                        height="300" xmlns="http://www.w3.org/2000/svg"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
+                                        aria-label="Placeholder: 準備中">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#555" /><text x="43%" y="50%" fill="#333"
+                                            dy=".3em">準備中</text>
+                                    </svg>
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">ツールに戻る</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <!-- JS読み込み -->
+    <script async src="js/opencv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="js/main.js"></script>
 </body>
 
