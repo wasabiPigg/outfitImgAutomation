@@ -36,6 +36,28 @@ label {
     margin-bottom: 1rem;
 }
 
+.items label {
+    width: 90%;
+}
+.items {
+    padding-bottom: 1rem;
+}
+
+.items label, .items img {
+    width: 90px !important;
+    height: 90px;
+}
+
+#titleLabel {
+    margin: 1rem !important;
+    padding-bottom: 0.5rem;
+}
+
+#avImg, #bgImg, #clImg {
+    background-color: rgb(214,215,218);
+    background-size: contain;
+    object-fit: cover;
+}
 .rounded-circle{
     font-size: xx-small;
 }

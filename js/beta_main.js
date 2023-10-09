@@ -151,8 +151,11 @@ class BgInfo {
 // アバター透過画像
 let avatorImgElement = document.getElementById('avatorSrc');
 let inputAvatorElement = document.getElementById('custom-file-1');
+let avImgBtn = document.getElementById('avImg');
+avImgBtn.src = '../img/avBtnImg.PNG';
 inputAvatorElement.addEventListener('change', (e) => {
     avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
+    avImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 var avatorDrawImageInfo = new DrawImageInfo;
 
@@ -176,8 +179,11 @@ avatorImgElement.addEventListener('load', (e) => {
 // スクショ
 let screenShotImgElement = document.getElementById('screenshotSrc');
 let inputScreenShotElement = document.getElementById('custom-file-2');
+let clImgBtn = document.getElementById('clImg');
+clImgBtn.src = '../img/clBtnImg.PNG';
 inputScreenShotElement.addEventListener('change', (e) => {
     screenShotImgElement.src = URL.createObjectURL(e.target.files[0]);
+    clImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
 // スクショ画像が読み込めたら処理開始
@@ -189,8 +195,11 @@ screenShotImgElement.addEventListener('load', (e) => {
 // 背景画像
 let backgroundImgElement = document.getElementById('backgroundSrc');
 let inputbackgroundElement = document.getElementById('custom-file-3');
+let bgImgBtn = document.getElementById('bgImg');
+bgImgBtn.src = '../img/bgBtnImg.PNG';
 inputbackgroundElement.addEventListener('change', (e) => {
     backgroundImgElement.src = URL.createObjectURL(e.target.files[0]);
+    bgImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 
 // 背景画像が読み込めたら処理開始
