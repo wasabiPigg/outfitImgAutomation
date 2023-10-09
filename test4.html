@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html.is-dragging .upload{
+  pointer-events: none;
+}
+
+body{
+  font-family:'Noto Sans JP', MyYuGothicM, YuGothic, 'Helvetica Neue',
+  'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+}
+
+.wraper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+}
+
+.canvas{
+  width: 100%;
+  height: calc(100% - 90px);
+  touch-action: none;
+  user-select: none;
+}
+
+.upload{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 100%;
+  height: 90px;
+  background: #eee;
+  transition: .2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.upload-item{
+  display: none;
+}
+
+.upload-text{
+  font-size: 18px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.upload:focus{
+  color: #fff;
+  background: #81cf7a;
+}
+
+@media screen and (min-width:768px){
+  .upload:hover{
+    color: #fff;
+    background: #81cf7a;
+  }
+}
+        </style>
+    </head>
+    <body>
+    <canvas class="canvas" id="previewArea"></canvas>
+    <label class="upload" for="file">
+      <input
+      class="upload-item"
+      type="file"
+      name="image"
+      id="file"
+      accept="image/*"
+      >
+      <span class="upload-text">画像をアップロード</span>
+    </label>
+    <!-- /.upload -->
+    <script src="//cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script src="js/test4.js"></script>
+</body>
+</html>

@@ -27,7 +27,8 @@ class DrawImageInfo {
             this.dy,
             this.dw,
             this.dh
-            );
+        );
+        this.applyInteractJs();
     }
     // 影付きでメインキャンバスに描画
     drawShadowImage() {
@@ -38,6 +39,7 @@ class DrawImageInfo {
         c.shadowBlur = 5;
         this.drawImage();
         c.restore();
+        this.applyInteractJs();
     }
 
     setDrawImageInfo(img, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -52,11 +54,100 @@ class DrawImageInfo {
         this.dh = dh;
     }
 
-    setMovedDrawImageInfo(dx, dy, dw, dh) {
+    movedDrawImageInfo(dx, dy, dw, dh) {
         this.dx = dx;
         this.dy = dy;
         this.dw = dw;
         this.dh = dh;
+    }
+    //interact.jsを適用
+    applyInteractJs() {
+        this.cursor = null;
+        this.addDraggingEvent();
+        console.log("applyInteractJS");
+    }
+    //ドラッグイベントを適用
+    addDraggingEvent() {
+        if (this.interact) {
+            this.interact.unset();
+            this.interact = null;
+        console.log("unset");
+
+        }
+
+        this.interact = interact('canvas')
+            .draggable({
+                inertia: true,
+                onstart: (e) => {
+                    this.dragStartListener(e);
+                    console.log("dragstart");
+
+                },
+                onmove: (e) => {
+                    this.dragMoveListener(e);
+                    console.log("onmove");
+
+                },
+                onend: (e) => {
+                    this.dragEndListener(e);
+                    console.log("dragend", this.dx, this.dy);
+                }
+            });
+    }
+
+    /*
+    * dragstartイベントを取得
+    * @param {Object} e
+    */
+    dragStartListener(e) {
+        this.isDrag = false;
+    }
+
+    /*
+    * dragmoveイベントを取得
+    * @param {Object} e
+    */
+    dragMoveListener(e) {
+
+        // if (!this.isDrag) {
+        //     if (this.img.classList.contains('is-dragging')) {
+        //         this.img.classList.remove('is-dragging');
+        //     }
+        //     console.log("ahoge")
+        //     return;
+        // }
+        // if (!this.img.classList.contains('is-dragging')) {
+        //     this.img.classList.add('is-dragging');
+        // }
+
+        //位置情報を計算
+        const dx = this.dx + (e.dx * window.devicePixelRatio);
+        const dy = this.dy + (e.dy * window.devicePixelRatio);
+
+        // 値を移動
+        this.movedDrawImageInfo(
+            dx,
+            dy,
+            this.dw,
+            this.dh
+        );
+        bgInfo.changeBackground();
+        if (shadowElement.checked) {
+            this.drawShadowImage();
+        } else {
+            this.drawImage();
+        }
+        showItemList();
+    }
+
+    /*
+    * dragendイベントを取得
+    * @param {Object} e
+    */
+    dragEndListener(e) {
+        if (this.img.classList.contains('is-dragging')) {
+            this.img.classList.remove('is-dragging');
+        }
     }
 }
 
@@ -70,11 +161,11 @@ class BgInfo {
     // 選択中の一つのボタンだけ丸くする
     round(index) {
         // 一旦全部四角くする
-        for ( var j = 0; j < this.elm.length; j++ ) {
-            this.elm[j].classList.replace('rounded-circle','rounded-square');
+        for (var j = 0; j < this.elm.length; j++) {
+            this.elm[j].classList.replace('rounded-circle', 'rounded-square');
         }
         // 選択中の背景は形を丸くする
-        this.elm[index].classList.replace('rounded-square','rounded-circle');
+        this.elm[index].classList.replace('rounded-square', 'rounded-circle');
     }
 
     changeIndex(newIndex) {
@@ -93,7 +184,7 @@ class BgInfo {
                 break;
             case 5:
                 // 背景色なし
-                
+
                 break;
             default:
                 // 配列内の背景色
@@ -241,34 +332,34 @@ function pickColors() {
 
     // ボタンの背景色に設定する
     const $getListAItems = document.getElementById("colorButtons").children;
-    for( var $i = 0; $i < $getListAItems.length; $i++ ){
+    for (var $i = 0; $i < $getListAItems.length; $i++) {
         $getListAItems[$i].style.backgroundColor = pickedColorList[$i];
 
         $getListAItems[$i].onclick =
-        function(){
-            bgIndex = colorButtonElements.indexOf(this);
-            bgInfo.changeIndex(bgIndex);
-            console.log(bgIndex);
-            redrawCanvas();
-        };
+            function () {
+                bgIndex = colorButtonElements.indexOf(this);
+                bgInfo.changeIndex(bgIndex);
+                console.log(bgIndex);
+                redrawCanvas();
+            };
     }
 }
 
 // RGBをHEXに変換する
-function rgb2hex ( rgb ) {
-	return "#" + rgb.map( function ( value ) {
-		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
-	} ).join( "" ) ;
+function rgb2hex(rgb) {
+    return "#" + rgb.map(function (value) {
+        return ("0" + value.toString(16)).slice(-2);
+    }).join("");
 }
 
 /// 背景画像計算
 function calcBackground() {
-    
+
     chb.drawImage(backgroundImgElement, 0, 0, 900, 900);
 
     // 背景色ボタンの背景に画像を設定する
     const $image = backgroundImgElement.src;
-    const $elementReference = document.getElementById( "colorBtn5" );
+    const $elementReference = document.getElementById("colorBtn5");
     $elementReference.style.backgroundImage = "url( " + $image + " )";
     // 背景アイコンが邪魔なので消す
     document.getElementById("backgroundIc").style.display = "none";
@@ -294,7 +385,7 @@ function calcAvatorArea() {
     let avatorTmpRect = {
         x1: [], y1: [], x2: [], y2: []
     }
-    for (let i=0; i<avatorContours.size(); i++){
+    for (let i = 0; i < avatorContours.size(); i++) {
         const ret = cv.boundingRect(avatorContours.get(i));
         avatorTmpRect.x1.push(ret.x);
         avatorTmpRect.y1.push(ret.y);
@@ -310,7 +401,7 @@ function calcAvatorArea() {
     // アバターの表示領域
 
     let avatorRect = {
-        x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2-avatorTmpRect.x1, h: avatorTmpRect.y2-avatorTmpRect.y1
+        x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2 - avatorTmpRect.x1, h: avatorTmpRect.y2 - avatorTmpRect.y1
     };
     // アバターを900x900内に収めた時のサイズ
     let avatorResized = {
@@ -321,14 +412,14 @@ function calcAvatorArea() {
         avatorResized.w *= 510 / avatorRect.h;
         avatorResized.h *= 510 / avatorRect.h;
     }
-    console.log("アバターの表示領域：",avatorRect);
+    console.log("アバターの表示領域：", avatorRect);
     avatorDrawImageInfo.setDrawImageInfo(
         avatorImgElement,
         avatorRect.x,
         avatorRect.y,
         avatorRect.w,
         avatorRect.h,
-        (long-avatorResized.w)/2,
+        (long - avatorResized.w) / 2,
         10,
         avatorResized.w,
         avatorResized.h
@@ -366,10 +457,10 @@ function calcItemListArea() {
         return
     }
 
-    console.log("見つかった矩形の数: ",contours.size());
+    console.log("見つかった矩形の数: ", contours.size());
 
     // 矩形判定
-    for (let i=0; i<contours.size(); i++) {
+    for (let i = 0; i < contours.size(); i++) {
         const rect = cv.boundingRect(contours.get(i));
         const x = rect.x;
         const y = rect.y;
@@ -380,9 +471,9 @@ function calcItemListArea() {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.996<val && val<0.999 && Math.abs(w-h)<2){
+        if (0.996 < val && val < 0.999 && Math.abs(w - h) < 2) {
             itemNum++;
-            items.unshift([x,y,w,h]);
+            items.unshift([x, y, w, h]);
         }
     }
     if (itemNum == 0) {
@@ -417,7 +508,7 @@ function rectangularity(contour) {
 }
 
 function itemSquareTileHorizontally(items, itemNum) {
-    for (let i=0; i<itemNum; i++) {
+    for (let i = 0; i < itemNum; i++) {
         // アイテムの座標
         const x = items[i][0];
         const y = items[i][1];
@@ -426,20 +517,20 @@ function itemSquareTileHorizontally(items, itemNum) {
 
         // 角丸矩形でクリッピング
         chs.save();
-        drawsq(chs, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172, 12);
+        drawsq(chs, 180 * (i % 5) + 4, 180 * Math.floor(i / 5) + 4, 172, 172, 12);
         chs.clip();
-        chs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172);
+        chs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i % 5) + 4, 180 * Math.floor(i / 5) + 4, 172, 172);
         // 所持数隠し
         chs.beginPath();
         chs.fillStyle = "white";
-        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
+        chs.fillRect(180 * (i % 5) + 58, 180 * Math.floor(i / 5) + 138, 111, 32);
 
         chs.restore(); // クリッピング領域の設定を破棄
     }
 }
 
 function itemCircleTileHorizontally(items, itemNum) {
-    for (let i=0; i<itemNum; i++) {
+    for (let i = 0; i < itemNum; i++) {
         // アイテムの座標
         const x = items[i][0];
         const y = items[i][1];
@@ -448,21 +539,21 @@ function itemCircleTileHorizontally(items, itemNum) {
 
         // 円でクリッピング
         chc.save();
-        drawCircle(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
+        drawCircle(chc, 180 * (i % 5) + 90, 180 * Math.floor(i / 5) + 90, 86);
         chc.clip();
-        chc.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172);
+        chc.drawImage(screenShotImgElement, x + 3, y + 3, w - 6, h - 6, 180 * (i % 5) + 4, 180 * Math.floor(i / 5) + 4, 172, 172);
         // 所持数隠し
         chc.beginPath();
         chc.fillStyle = "white";
-        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
+        chc.fillRect(180 * (i % 5) + 58, 180 * Math.floor(i / 5) + 138, 111, 32);
 
         chc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
+        drawCircleEdge(chc, 180 * (i % 5) + 90, 180 * Math.floor(i / 5) + 90, 86);
     }
 }
 
 function itemSquareTileVertically(items, itemNum) {
-    for (let i=0; i<itemNum; i++) {
+    for (let i = 0; i < itemNum; i++) {
         // アイテムの座標
         const x = items[i][0];
         const y = items[i][1];
@@ -472,23 +563,23 @@ function itemSquareTileVertically(items, itemNum) {
         // 角丸矩形でクリッピング
         cvs.save();
         // drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
-        drawsq(cvs, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172, 12);
+        drawsq(cvs, 180 * Math.floor(i / 5) + 4, 180 * (i % 5) + 4, 172, 172, 12);
 
         cvs.clip();
         // cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
-        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
+        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i / 5) + 4, 180 * (i % 5) + 4, 172, 172);
 
         // 所持数隠し
         cvs.beginPath();
         cvs.fillStyle = "white";
-        cvs.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
+        cvs.fillRect(180 * Math.floor(i / 5) + 58, 180 * (i % 5) + 138, 111, 32);
 
         cvs.restore(); // クリッピング領域の設定を破棄
     }
 }
 
 function itemCircleTileVertically(items, itemNum) {
-    for (let i=0; i<itemNum; i++) {
+    for (let i = 0; i < itemNum; i++) {
         // アイテムの座標
         const x = items[i][0];
         const y = items[i][1];
@@ -497,16 +588,16 @@ function itemCircleTileVertically(items, itemNum) {
 
         // 円でクリッピング
         cvc.save();
-        drawCircle(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
+        drawCircle(cvc, 180 * Math.floor(i / 5) + 90, 180 * (i % 5) + 90, 86);
         cvc.clip();
-        cvc.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
+        cvc.drawImage(screenShotImgElement, x + 3, y + 3, w - 6, h - 6, 180 * Math.floor(i / 5) + 4, 180 * (i % 5) + 4, 172, 172);
         // 所持数隠し
         cvc.beginPath();
         cvc.fillStyle = "white";
-        cvc.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
+        cvc.fillRect(180 * Math.floor(i / 5) + 58, 180 * (i % 5) + 138, 111, 32);
 
         cvc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
+        drawCircleEdge(cvc, 180 * Math.floor(i / 5) + 90, 180 * (i % 5) + 90, 86);
     }
 }
 
@@ -561,4 +652,5 @@ function redrawCanvas() {
         avatorDrawImageInfo.drawImage();
     }
     showItemList();
+    console.log("redraw");
 }
