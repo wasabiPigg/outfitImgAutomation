@@ -76,6 +76,9 @@ label {
     width: 2rem;
 }
 
+.nav-item .active {
+    font-weight: bold;
+}
 .toolForm {
     width: 80%;
     margin: auto;

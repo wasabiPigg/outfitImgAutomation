@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="G0L1Yn6YTFQkna9_bexSQ68SBO-oHZqe5jarh3NTYGM" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/i18n/jquery.spectrum-ja.min.js"></script>
     <meta property="og:title" content="ピグパーティコーデ加工自動化ツール">
@@ -101,20 +101,20 @@
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">背景</a>
+                            <a class="nav-link active" id="bg-tab" data-toggle="tab" href="#bg" role="tab"
+                                aria-controls="bg" aria-selected="true">背景</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                aria-controls="profile" aria-selected="false">かげ・ふち</a>
+                            <a class="nav-link" id="shadow-tab" data-toggle="tab" href="#shadow" role="tab"
+                                aria-controls="shadow" aria-selected="false">かげ・ふち</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                                aria-controls="contact" aria-selected="false">テンプレ</a>
+                            <a class="nav-link" id="template-tab" data-toggle="tab" href="#template" role="tab"
+                                aria-controls="template" aria-selected="false">テンプレ</a>
                         </li>
                     </ul>
                     <div class="tab-content border-left border-right border-bottom rounded-bottom" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="bg" role="tabpanel" aria-labelledby="bg-tab">
                             <div class="text-center">
                             <span id="colorButtons">
                                 <button id="colorBtn0" type="button" class="btn rounded-square"
@@ -134,7 +134,7 @@
                             </span>
                         </div>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" id="shadow" role="tabpanel" aria-labelledby="shadow-tab">
                             <div class="text-center form-group">
                                 <label for="shadowControl">かげ</label>
                                 <input type="range" class="custom-range" min="0" max="10" step="0.5" id="shadowControl">
@@ -146,7 +146,7 @@
                                 <label for="fuchiControl" id="fuchiValue">5</label>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="tab-pane fade" id="template" role="tabpanel" aria-labelledby="template-tab">
                             準備中
                         </div>
                     </div>
