@@ -18,7 +18,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@wasabiPigg" />
     <meta name="twitter:description" content="ピグパーティのコーデ加工を自動でするツールです。" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <!-- <link rel="icon" href="img/favicon.ico"> -->
     <link rel="stylesheet" href="css/style.css">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
@@ -42,36 +43,42 @@
 <body>
     <!-- ローディング画面 -->
     <div id="loading" style="display: none;">
-        <div class="text-center"><p id="loadingMsg"></p>
-        <img src="img/loading.gif"></div>
+        <div class="text-center">
+            <p id="loadingMsg"></p>
+            <img src="img/loading.gif">
+        </div>
     </div>
     <!-- デバイスの選択 -->
     <section class="toolForm">
         <br>
-        <p class="text-center"><a href="https://wasabipigg.hatenablog.com/entry/2021/01/20/144242">ご利用前にお読みください</a></p>
+        <!-- <p class="text-center"><a href="https://wasabipigg.hatenablog.com/entry/2021/01/20/144242">ご利用前にお読みください</a></p>
         <p id="bug" style="display: none;"></p>
         <p id="news" style="display: none;"></p>
-        <p id="news"><a href="https://wasabipigg.github.io/outfitImgAutomation/itemList.html">アイテム切り抜きツール</a>が増えました！(2023/09/03)</p>
+        <p id="news"><a
+                href="https://wasabipigg.github.io/outfitImgAutomation/itemList.html">アイテム切り抜きツール</a>が増えました！(2023/09/03)
+        </p> -->
         <form name="modeEdit">
             <!-- 画像の設定と読み込み -->
             <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator">
-                <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
-                <img id="avatorSrc" alt="No Image" style="display: none;">
-            </div>
-            </div>
-            <div class="item">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="custom-file-2" name="screenshot" id="screenshot">
-                <label class="custom-file-label" for="custom-file-2">着用画面のスクショ</label>
-                <img id="screenshotSrc" alt="No Image" style="display: none;">
-            </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="custom-file-1" name="avator" id="avator">
+                    <label class="custom-file-label" for="custom-file-1">アバターの透過画像</label>
+                    <img id="avatorSrc" alt="No Image" style="display: none;">
+                </div>
             </div>
             <div class="item">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="custom-file-3" name="backgroundImg" id="backgroundImg">
-                    <label class="custom-file-label" for="custom-file-3">背景画像<span class="hosoku">(なくてもOK/正方形のみ)</span></label>
+                    <input type="file" class="custom-file-input" id="custom-file-2" name="screenshot" id="screenshot">
+                    <label class="custom-file-label" for="custom-file-2">着用画面のスクショ</label>
+                    <img id="screenshotSrc" alt="No Image" style="display: none;">
+                </div>
+            </div>
+            <div class="item">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="custom-file-3" name="backgroundImg"
+                        id="backgroundImg">
+                    <label class="custom-file-label" for="custom-file-3">背景画像<span
+                            class="hosoku">(なくてもOK/正方形のみ)</span></label>
                     <img id="backgroundSrc" alt="No Image" style="display: none;">
                 </div>
             </div>
@@ -92,17 +99,60 @@
             </div>
             <div id="editMenu" style="display: none;">
                 <div>
-                    <span class="text">背景</span>
-                    <span id="colorButtons">
-                        <button id="colorBtn0" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"></button>
-                        <button id="colorBtn1" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"></button>
-                        <button id="colorBtn2" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"></button>
-                        <button id="colorBtn3" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"></button>
-                        <button id="colorBtn5" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"><span id="backgroundIc" class="fas fa-image fa-xs"></span></button>
-                        <button id="colorBtn4" type="button" class="btn rounded-square" style="width: 40px;height: 40px;"><span class="fas fa-eye-slash fa-xs"></span></button>
-                    </span>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">背景</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                aria-controls="profile" aria-selected="false">かげ・ふち</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                                aria-controls="contact" aria-selected="false">テンプレ</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content border-left border-right border-bottom rounded-bottom" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="text-center">
+                            <span id="colorButtons">
+                                <button id="colorBtn0" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"></button>
+                                <button id="colorBtn1" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"></button>
+                                <button id="colorBtn2" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"></button>
+                                <button id="colorBtn3" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"></button>
+                                <button id="colorBtn5" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"><span id="backgroundIc"
+                                        class="fas fa-image fa-xs"></span></button>
+                                <button id="colorBtn4" type="button" class="btn rounded-square"
+                                    style="width: 40px;height: 40px;"><span
+                                        class="fas fa-eye-slash fa-xs"></span></button>
+                            </span>
+                        </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="text-center form-group">
+                                <label for="shadowControl">かげ</label>
+                                <input type="range" class="custom-range" min="0" max="10" step="0.5" id="shadowControl">
+                                <label for="shadowControl" id="shadowValue"></label>
+                            </div>
+                            <div class="text-center">
+                                <label for="fuchiControl">ふち</label>
+                                <input type="range" class="custom-range" min="0" max="10" step="0.5" id="fuchiControl">
+                                <label for="fuchiControl" id="fuchiValue">5</label>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            準備中
+                        </div>
+                    </div>
+
                 </div>
-                <div>
+                <!-- <div>
                     <span class="text">影</span>
                     <label class="switch">
                         <input id="shadow" type="checkbox">
@@ -123,7 +173,7 @@
                         <input type="checkbox">
                         <span class="slider"></span>
                     </label>
-                </div>
+                </div> -->
             </div>
         </form>
         <button class="btn btn-primary" id="chgImgBtn" onclick="createPng()" style="display: none;">

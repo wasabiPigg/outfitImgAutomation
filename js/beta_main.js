@@ -1,6 +1,18 @@
 // 代表色を取るための前準備
 const colorThief = new ColorThief();
 
+// 影の設定
+let shadowElm = document.getElementById('shadowControl');
+shadowElm.value = 6;
+document.getElementById('shadowValue').innerHTML = Number(shadowElm.value).toPrecision(2);
+shadowElm.addEventListener('input', changeShadowValue);
+
+// ふちの設定
+let fuchiElm = document.getElementById('fuchiControl');
+fuchiElm.value = 4;
+document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
+fuchiElm.addEventListener('input', changefuchiValue);
+
 // 描画に必要なデータ用
 class DrawImageInfo {
     constructor(img, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -13,10 +25,23 @@ class DrawImageInfo {
         this.dy = dy;
         this.dw = dw;
         this.dh = dh;
+        this.shadowValue = shadowElm.value;
+        this.fuchiValue = fuchiElm.value;
     }
 
     // メインキャンバスに描画
     drawImage() {
+        if (this.shadowValue == 0) {
+            this.drawNormalImage();
+        } else {
+            this.drawShadowImage();
+        }
+        if (this.fuchiValue != 0) {
+            this.drawFuchi();
+        }
+    }
+
+    drawNormalImage() {
         c.drawImage(
             this.img,
             this.sx,
@@ -27,19 +52,32 @@ class DrawImageInfo {
             this.dy,
             this.dw,
             this.dh
-            );
+        );
     }
     // 影付きでメインキャンバスに描画
     drawShadowImage() {
         c.save();
         c.shadowColor = "rgba(0,0,0,0.253)";
-        c.shadowOffsetX = 6;
-        c.shadowOffsetY = 6;
+        c.shadowOffsetX = this.shadowValue;
+        c.shadowOffsetY = this.shadowValue;
         c.shadowBlur = 5;
-        this.drawImage();
+        this.drawNormalImage();
         c.restore();
     }
 
+    // フチ部分の描画
+    drawFuchi() {
+        c.save();
+        c.shadowColor = "white";
+        c.shadowBlur = 2;
+
+        for (let i = 0; i < 360; i+=15) {
+            c.shadowOffsetX = Math.sin(i) * this.fuchiValue
+            c.shadowOffsetY = Math.cos(i) * this.fuchiValue
+            this.drawNormalImage();
+        }
+        c.restore();
+    }
     setDrawImageInfo(img, sx, sy, sw, sh, dx, dy, dw, dh) {
         this.img = img;
         this.sx = sx;
@@ -52,6 +90,13 @@ class DrawImageInfo {
         this.dh = dh;
     }
 
+    setShadowValue(n) {
+        this.shadowValue = n;
+    }
+
+    setFuchiValue(n) {
+        this.fuchiValue = n;
+    }
     setMovedDrawImageInfo(dx, dy) {
         this.dx = dx;
         this.dy = dy;
@@ -114,10 +159,6 @@ var avatorDrawImageInfo = new DrawImageInfo;
 // 背景色を変更するボタン用の処理
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
 var bgInfo = new BgInfo(colorButtonElements, 0);
-
-// 影ボタン切り替え
-let shadowElement = document.getElementById("shadow");
-shadowElement.addEventListener('change', redrawCanvas);
 
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
@@ -623,10 +664,18 @@ function redrawCanvas() {
     result.style.display = "none";
     c.clearRect(0, 0, canvas.width, canvas.height);
     bgInfo.changeBackground();
-    if (shadowElement.checked) {
-        avatorDrawImageInfo.drawShadowImage();
-    } else {
-        avatorDrawImageInfo.drawImage();
-    }
+    avatorDrawImageInfo.drawImage();
     showItemList();
+}
+
+function changeShadowValue(e){
+    avatorDrawImageInfo.setShadowValue(shadowElm.value);
+    document.getElementById('shadowValue').innerHTML = Number(shadowElm.value).toPrecision(2);
+    redrawCanvas();
+}
+
+function changefuchiValue(e) {
+    avatorDrawImageInfo.setFuchiValue(fuchiElm.value);
+    document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
+    redrawCanvas();
 }
