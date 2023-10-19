@@ -102,6 +102,10 @@ class DrawImageInfo {
         this.dy = dy;
         redrawCanvas();
     }
+    setScaledDrawImageInfo(dw, dh) {
+        this.dw = dw;
+        this.dh = dh;
+    }
 }
 
 // 背景に必要なデータ用
@@ -158,14 +162,21 @@ inputAvatorElement.addEventListener('change', (e) => {
     avImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 var avatorDrawImageInfo = new DrawImageInfo;
+var avatorRect = {x:0, y:0, w:0, h:0};
+var avatorResized = {x:0, y:0};
 
 // 背景色を変更するボタン用の処理
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
 var bgInfo = new BgInfo(colorButtonElements, 0);
 
+// テンプレ系
+var templateMode = 0;
+var templateButtonElements = Array.from(document.querySelectorAll(".templateBtn"));
+
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
     pickColors();
+    templateSet();
     calcAvatorArea();
     redrawCanvas();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
@@ -346,9 +357,21 @@ function clearAllCanvas() {
 
 /// アイテムを表示
 function showItemList() {
-    // どのデザインパターンかの引数を受け取りたいところ
-    c.drawImage(canvasItemHs, 0, 530);
     chgImgBtn.style.display = "block";
+    switch (templateMode) {
+        case 0:
+            c.drawImage(canvasItemHs, 0, 530);
+            break;
+        case 1:
+            c.drawImage(canvasItemHc, 0, 530);
+            break;
+        case 2:
+            c.drawImage(canvasItemVs, 530, 0);
+            break;
+        case 3:
+            c.drawImage(canvasItemVc, 530, 0);
+            break;
+    }
 }
 
 /// アバター画像から代表色を取得する
@@ -366,7 +389,6 @@ function pickColors() {
         function(){
             bgIndex = colorButtonElements.indexOf(this);
             bgInfo.changeIndex(bgIndex);
-            console.log(bgIndex);
             redrawCanvas();
         };
     }
@@ -427,18 +449,16 @@ function calcAvatorArea() {
 
     // アバターの表示領域
 
-    let avatorRect = {
+    avatorRect = {
         x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2-avatorTmpRect.x1, h: avatorTmpRect.y2-avatorTmpRect.y1
     };
     // アバターを900x900内に収めた時のサイズ
-    let avatorResized = {
+    avatorResized = {
         w: avatorRect.w, h: avatorRect.h
     };
-    if (avatorRect.h > 510) {
-        // 圧縮
-        avatorResized.w *= 510 / avatorRect.h;
-        avatorResized.h *= 510 / avatorRect.h;
-    }
+    // サイズ調整
+    avatorResized.w *= 510 / avatorRect.h;
+    avatorResized.h *= 510 / avatorRect.h;
     console.log("アバターの表示領域：",avatorRect);
     avatorDrawImageInfo.setDrawImageInfo(
         avatorImgElement,
@@ -686,4 +706,49 @@ function changefuchiValue(e) {
     avatorDrawImageInfo.setFuchiValue(fuchiElm.value);
     document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
     redrawCanvas();
+}
+
+function changeTemplate(n) {
+    // テンプレによって色々数値を変える
+    console.log(n);
+    templateMode = n;
+    switch (n) {
+        case 0:
+        case 1:
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w,
+                avatorResized.h
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                (long-avatorResized.w)/2,
+                10
+            );
+            break;
+        case 2:
+        case 3:
+            console.log(avatorResized.w)
+            console.log(avatorRect.w)
+            console.log(avatorResized.w * 510 / avatorRect.w)
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w * avatorRect.h / avatorRect.w,
+                avatorResized.h * avatorRect.h / avatorRect.w
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                10,
+                (long-(avatorResized.h * avatorRect.h / avatorRect.w))/2
+            );
+            break;
+    }
+}
+function templateSet() {
+    const $templateBtnElms = document.querySelectorAll(".templateBtn");
+    for (var $i = 0; $i < $templateBtnElms.length; $i++) {
+        $templateBtnElms[$i].onclick =
+        function() {
+            templateButtonElements.map( (e) => e.style.backgroundColor = 'white' );
+            this.style.backgroundColor = '#ddeeee';
+            changeTemplate(templateButtonElements.indexOf(this));
+            redrawCanvas();
+        }
+    }
 }

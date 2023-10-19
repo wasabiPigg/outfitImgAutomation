@@ -52,7 +52,10 @@ label {
     margin: 1rem !important;
     padding-bottom: 0.5rem;
 }
-
+.card-body {
+    padding: 0.3rem !important;
+}
+  
 #avImg, #bgImg, #clImg {
     background-color: rgb(214,215,218);
     background-size: contain;
@@ -118,6 +121,13 @@ label {
 #editMenu {
     display: grid;
     place-items: center;
+    /* min-width: 300px;
+    max-width: 400px;
+    margin: auto; */
+}
+
+#templateBtn0 {
+    background-color: #ddeeee;
 }
 
 .nav-tabs {
@@ -127,9 +137,36 @@ label {
     min-width: 300px;
 }
 .tab-content {
-    padding: 1em;
+    padding: 1em 0;
     background-color: white;
+    min-width: 300px;
+    max-width: 300px;
+    margin: auto;
 }
+.container {
+    margin-inline: auto;
+    overflow-x: auto; /* tableタグのはみ出た要素を隠す */
+    white-space: nowrap; /* テキストの折り返しなし */
+    /* width: 300px; */
+  }
+  table {
+    /* width: 500px; tableタグの親要素より広く */
+    border-spacing: 0.5rem;
+	border-collapse: separate !important;
+  }
+  th {
+    color: #333;
+    font-size: 16px;
+    width: 25%;
+  }
+  td {
+    border: 1px solid #ccc;
+    font-size: 16px;
+    padding: 20px;
+  }
+  .templateBtn {
+    background-color: white;
+  }
 
 #loading {
     position: absolute;
