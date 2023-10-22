@@ -518,7 +518,7 @@ function calcItemListArea() {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.996<val && val<0.999 && Math.abs(w-h)<2){
+        if (0.975<val && val<0.999 && Math.abs(w-h)<2){
             itemNum++;
             items.unshift([x,y,w,h]);
         }
