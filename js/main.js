@@ -518,6 +518,7 @@ function calcItemListArea() {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
+        // 0.996 -> 0.975に許容範囲を増やした　2023/10/22
         if (0.975<val && val<0.999 && Math.abs(w-h)<2){
             itemNum++;
             items.unshift([x,y,w,h]);
