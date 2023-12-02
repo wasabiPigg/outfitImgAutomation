@@ -102,6 +102,10 @@ class DrawImageInfo {
         this.dy = dy;
         redrawCanvas();
     }
+    setScaledDrawImageInfo(dw, dh) {
+        this.dw = dw;
+        this.dh = dh;
+    }
 }
 
 // 背景に必要なデータ用
@@ -116,9 +120,16 @@ class BgInfo {
         // 一旦全部四角くする
         for ( var j = 0; j < this.elm.length; j++ ) {
             this.elm[j].classList.replace('rounded-circle','rounded-square');
+            this.elm[j].classList.remove('border-5');
         }
         // 選択中の背景は形を丸くする
         this.elm[index].classList.replace('rounded-square','rounded-circle');
+        if (this.elm[index].type == "color") {
+            // 単色背景は縁取りをつける
+            this.elm[index].classList.add('border-5');
+            this.elm[index].style.borderColor = pickedColorList[index];
+        }
+        console.log(index)
     }
 
     changeIndex(newIndex) {
@@ -152,20 +163,27 @@ class BgInfo {
 let avatorImgElement = document.getElementById('avatorSrc');
 let inputAvatorElement = document.getElementById('custom-file-1');
 let avImgBtn = document.getElementById('avImg');
-avImgBtn.src = '../img/avBtnImg.PNG';
+avImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/avBtnImg.PNG?raw=true';
 inputAvatorElement.addEventListener('change', (e) => {
     avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
     avImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 var avatorDrawImageInfo = new DrawImageInfo;
+var avatorRect = {x:0, y:0, w:0, h:0};
+var avatorResized = {x:0, y:0};
 
 // 背景色を変更するボタン用の処理
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
 var bgInfo = new BgInfo(colorButtonElements, 0);
 
+// テンプレ系
+var templateMode = 0;
+var templateButtonElements = Array.from(document.querySelectorAll(".templateBtn"));
+
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
     pickColors();
+    templateSet();
     calcAvatorArea();
     redrawCanvas();
     // プレビュー用の画像を非表示にし、調整用のCanvasを表示する
@@ -180,7 +198,7 @@ avatorImgElement.addEventListener('load', (e) => {
 let screenShotImgElement = document.getElementById('screenshotSrc');
 let inputScreenShotElement = document.getElementById('custom-file-2');
 let clImgBtn = document.getElementById('clImg');
-clImgBtn.src = '../img/clBtnImg.PNG';
+clImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/clBtnImg.PNG?raw=true';
 inputScreenShotElement.addEventListener('change', (e) => {
     screenShotImgElement.src = URL.createObjectURL(e.target.files[0]);
     clImgBtn.src = URL.createObjectURL(e.target.files[0]);
@@ -196,11 +214,25 @@ screenShotImgElement.addEventListener('load', (e) => {
 let backgroundImgElement = document.getElementById('backgroundSrc');
 let inputbackgroundElement = document.getElementById('custom-file-3');
 let bgImgBtn = document.getElementById('bgImg');
-bgImgBtn.src = '../img/bgBtnImg.PNG';
+bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/bgBtnImg.PNG?raw=true';
 inputbackgroundElement.addEventListener('change', (e) => {
     backgroundImgElement.src = URL.createObjectURL(e.target.files[0]);
     bgImgBtn.src = URL.createObjectURL(e.target.files[0]);
 }, false);
+
+// カラーピッカーで背景色を変えたとき
+for (i=0; i<4; i++) {
+    var id = "colorBtn" + i; 
+    var colorBtn = document.getElementById(id);
+   colorBtn.addEventListener('change', function(){
+        console.log(this.value);
+        var id = $(this).attr('id').slice(-1);
+        pickedColorList[id] = this.value;
+        bgInfo.changeIndex(bgInfo.bgIndex);
+        redrawCanvas();
+    });
+}
+
 
 // 背景画像が読み込めたら処理開始
 backgroundImgElement.addEventListener('load', (e) => {
@@ -346,9 +378,21 @@ function clearAllCanvas() {
 
 /// アイテムを表示
 function showItemList() {
-    // どのデザインパターンかの引数を受け取りたいところ
-    c.drawImage(canvasItemHs, 0, 530);
     chgImgBtn.style.display = "block";
+    switch (templateMode) {
+        case 0:
+            c.drawImage(canvasItemHs, 0, 530);
+            break;
+        case 1:
+            c.drawImage(canvasItemHc, 0, 530);
+            break;
+        case 2:
+            c.drawImage(canvasItemVs, 530, 0);
+            break;
+        case 3:
+            c.drawImage(canvasItemVc, 530, 0);
+            break;
+    }
 }
 
 /// アバター画像から代表色を取得する
@@ -361,12 +405,28 @@ function pickColors() {
     const $getListAItems = document.getElementById("colorButtons").children;
     for( var $i = 0; $i < $getListAItems.length; $i++ ){
         $getListAItems[$i].style.backgroundColor = pickedColorList[$i];
-
+        console.log(pickedColorList[0]);
+        if ($getListAItems[$i].type == "color") {
+            $getListAItems[$i].value = pickedColorList[$i];
+        } else {
+            $getListAItems[$i].value = ""
+        }
         $getListAItems[$i].onclick =
         function(){
             bgIndex = colorButtonElements.indexOf(this);
+            console.log(bgInfo.bgIndex, bgIndex)
+            if(bgIndex < 4) {
+                if (bgInfo.bgIndex == bgIndex) {
+                    $getListAItems[bgIndex].type = "color"
+                    $getListAItems[bgIndex].value = pickedColorList[bgIndex];
+                } else {
+                    $getListAItems[bgInfo.bgIndex].type = "button";
+                    $getListAItems[bgInfo.bgIndex].value = ""
+                    $getListAItems[bgInfo.bgIndex].style.backgroundColor = pickedColorList[bgInfo.bgIndex];
+                 
+                }
+            }
             bgInfo.changeIndex(bgIndex);
-            console.log(bgIndex);
             redrawCanvas();
         };
     }
@@ -427,18 +487,16 @@ function calcAvatorArea() {
 
     // アバターの表示領域
 
-    let avatorRect = {
+    avatorRect = {
         x: avatorTmpRect.x1, y: avatorTmpRect.y1, w: avatorTmpRect.x2-avatorTmpRect.x1, h: avatorTmpRect.y2-avatorTmpRect.y1
     };
     // アバターを900x900内に収めた時のサイズ
-    let avatorResized = {
+    avatorResized = {
         w: avatorRect.w, h: avatorRect.h
     };
-    if (avatorRect.h > 510) {
-        // 圧縮
-        avatorResized.w *= 510 / avatorRect.h;
-        avatorResized.h *= 510 / avatorRect.h;
-    }
+    // サイズ調整
+    avatorResized.w *= 510 / avatorRect.h;
+    avatorResized.h *= 510 / avatorRect.h;
     console.log("アバターの表示領域：",avatorRect);
     avatorDrawImageInfo.setDrawImageInfo(
         avatorImgElement,
@@ -498,7 +556,8 @@ function calcItemListArea() {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.996<val && val<0.999 && Math.abs(w-h)<2){
+        // 0.996 -> 0.975に許容範囲を増やした　2023/10/22
+        if (0.975<val && val<0.999 && Math.abs(w-h)<2){
             itemNum++;
             items.unshift([x,y,w,h]);
         }
@@ -686,4 +745,64 @@ function changefuchiValue(e) {
     avatorDrawImageInfo.setFuchiValue(fuchiElm.value);
     document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
     redrawCanvas();
+}
+
+function changeTemplate(n) {
+    // テンプレによって色々数値を変える
+    console.log(n);
+    templateMode = n;
+    switch (n) {
+        case 0:
+        case 1:
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w,
+                avatorResized.h
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                (long-avatorResized.w)/2,
+                10
+            );
+            break;
+        case 2:
+        case 3:
+            console.log(avatorResized.w)
+            console.log(avatorRect.w)
+            console.log(avatorResized.w * 510 / avatorRect.w)
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w * avatorRect.h / avatorRect.w,
+                avatorResized.h * avatorRect.h / avatorRect.w
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                10,
+                (long-(avatorResized.h * avatorRect.h / avatorRect.w))/2
+            );
+            break;
+    }
+}
+function templateSet() {
+    const $templateBtnElms = document.querySelectorAll(".templateBtn");
+    for (var $i = 0; $i < $templateBtnElms.length; $i++) {
+        $templateBtnElms[$i].onclick =
+        function() {
+            let elmNum = templateButtonElements.indexOf(this);
+            if (elmNum != templateMode) {
+                // テンプレの切り替え
+                templateButtonElements.map( function(e) {
+                    e.style.backgroundColor = 'white';
+                    e.firstElementChild.classList.remove("selectedCard");
+                    e.children[1].style.display = "none";
+                });
+                // 選択中のテンプレボタンはデザインを変える
+                this.style.backgroundColor = '#ddeeee';
+                console.log(this.children[1].classList)
+                this.firstElementChild.classList.add("selectedCard");
+                this.children[1].style.display = "block";
+                changeTemplate(templateButtonElements.indexOf(this));
+                redrawCanvas();
+            } else {
+                // テンプレ内の詳細編集
+                openEditDetail(elmNum);                
+            }
+        }
+    }
 }
