@@ -1,16 +1,7 @@
-// 代表色を取るための前準備
-const colorThief = new ColorThief();
-
 // 影の設定
-let shadowElm = document.getElementById('shadowControl');
-shadowElm.value = 6;
-document.getElementById('shadowValue').innerHTML = Number(shadowElm.value).toPrecision(2);
 shadowElm.addEventListener('input', changeShadowValue);
 
 // ふちの設定
-let fuchiElm = document.getElementById('fuchiControl');
-fuchiElm.value = 4;
-document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
 fuchiElm.addEventListener('input', changefuchiValue);
 
 // 描画に必要なデータ用
@@ -156,18 +147,21 @@ class BgInfo {
                 c.fillRect(0, 0, canvas.width, canvas.height);
                 break;
         }
+        // テンプレートによって追加で背景を描く
+        switch (templateMode) {
+            case 1: // 黒猫さんデザイン
+                drawKuronekoBg(pickedColorList, 0);
+                break;
+            case 2: // みやさんデザイン
+                drawMiyaBg(pickedColorList);
+                break;
+            default:
+                break;
+        }
     }
 }
 
 // アバター透過画像
-let avatorImgElement = document.getElementById('avatorSrc');
-let inputAvatorElement = document.getElementById('custom-file-1');
-let avImgBtn = document.getElementById('avImg');
-avImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/avBtnImg.PNG?raw=true';
-inputAvatorElement.addEventListener('change', (e) => {
-    avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
-    avImgBtn.src = URL.createObjectURL(e.target.files[0]);
-}, false);
 var avatorDrawImageInfo = new DrawImageInfo;
 var avatorRect = {x:0, y:0, w:0, h:0};
 var avatorResized = {x:0, y:0};
@@ -176,9 +170,6 @@ var avatorResized = {x:0, y:0};
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
 var bgInfo = new BgInfo(colorButtonElements, 0);
 
-// テンプレ系
-var templateMode = 0;
-var templateButtonElements = Array.from(document.querySelectorAll(".templateBtn"));
 
 // アバター画像が読み込めたら処理開始
 avatorImgElement.addEventListener('load', (e) => {
@@ -194,16 +185,6 @@ avatorImgElement.addEventListener('load', (e) => {
     result.style.display = "none";
 });
 
-// スクショ
-let screenShotImgElement = document.getElementById('screenshotSrc');
-let inputScreenShotElement = document.getElementById('custom-file-2');
-let clImgBtn = document.getElementById('clImg');
-clImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/clBtnImg.PNG?raw=true';
-inputScreenShotElement.addEventListener('change', (e) => {
-    screenShotImgElement.src = URL.createObjectURL(e.target.files[0]);
-    clImgBtn.src = URL.createObjectURL(e.target.files[0]);
-}, false);
-
 // スクショ画像が読み込めたら処理開始
 screenShotImgElement.addEventListener('load', (e) => {
     calcItemListArea();
@@ -211,10 +192,6 @@ screenShotImgElement.addEventListener('load', (e) => {
 });
 
 // 背景画像
-let backgroundImgElement = document.getElementById('backgroundSrc');
-let inputbackgroundElement = document.getElementById('custom-file-3');
-let bgImgBtn = document.getElementById('bgImg');
-bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/bgBtnImg.PNG?raw=true';
 inputbackgroundElement.addEventListener('change', (e) => {
     backgroundImgElement.src = URL.createObjectURL(e.target.files[0]);
     bgImgBtn.src = URL.createObjectURL(e.target.files[0]);
@@ -241,60 +218,6 @@ backgroundImgElement.addEventListener('load', (e) => {
     redrawCanvas();
 });
 
-// 灰色はこれ
-let grayColor = "rgb(214,215,218)";
-// アバターから取った代表色
-var pickedColorList = [];
-// Canvasの準備
-var canvas = document.getElementById('canvas');
-var canvasItemHs = document.getElementById('canvasItemHs');
-var canvasItemHc = document.getElementById('canvasItemHc');
-var canvasItemVs = document.getElementById('canvasItemVs');
-var canvasItemVc = document.getElementById('canvasItemVc');
-var canvasAvator = document.getElementById('canvasAvator');
-var canvasBackground = document.getElementById('canvasBackgroundImg');
-var canvasShadow = document.getElementById('canvas_shadow');
-
-var long = 900;
-var short = 370;
-
-// アイテム用Canvas（横長）
-canvasItemHs.width = long;
-canvasItemHs.height = short;
-canvasItemHc.width = long;
-canvasItemHc.height = short;
-
-// アイテム用Canvas（縦長）
-canvasItemVs.width = short;
-canvasItemVs.height = long;
-canvasItemVc.width = short;
-canvasItemVc.height = long;
-
-// 調整時に使用するCanvas
-canvas.width = long;
-canvas.height = long;
-
-// アバター用Canvas
-canvasAvator.width = long;
-canvasAvator.height = long;
-
-// 背景画像用Canvas
-canvasBackground.width = long;
-canvasBackground.height = long;
-
-// 影付け用Canvas
-canvasShadow.width = long;
-canvasShadow.height = long;
-
-var c = canvas.getContext('2d');
-var chs = canvasItemHs.getContext('2d');
-var chc = canvasItemHc.getContext('2d');
-var cvs = canvasItemVs.getContext('2d');
-var cvc = canvasItemVc.getContext('2d');
-
-var cha = canvasAvator.getContext('2d');
-var chb = canvasBackground.getContext('2d');
-var csh = canvasShadow.getContext('2d');
 
 
 // 描画用の座標を覚えるためのクラス
@@ -384,7 +307,7 @@ function showItemList() {
             c.drawImage(canvasItemHs, 0, 530);
             break;
         case 1:
-            c.drawImage(canvasItemHc, 0, 530);
+            c.drawImage(canvasItemHs, 403.5, 706.5, 453, 185.5);
             break;
         case 2:
             c.drawImage(canvasItemVs, 530, 0);
@@ -753,7 +676,6 @@ function changeTemplate(n) {
     templateMode = n;
     switch (n) {
         case 0:
-        case 1:
             avatorDrawImageInfo.setScaledDrawImageInfo(
                 avatorResized.w,
                 avatorResized.h
@@ -763,7 +685,26 @@ function changeTemplate(n) {
                 10
             );
             break;
+        case 1:
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w / avatorResized.h * 640,
+                640
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                (long-(avatorResized.w / avatorResized.h * 640))/2,
+                40
+            );
+            break;
         case 2:
+            avatorDrawImageInfo.setScaledDrawImageInfo(
+                avatorResized.w / avatorResized.h * 605,
+                605
+            )
+            avatorDrawImageInfo.setMovedDrawImageInfo(
+                (long-(avatorResized.w / avatorResized.h * 605))/2,
+                30
+            );
+            break;
         case 3:
             console.log(avatorResized.w)
             console.log(avatorRect.w)
