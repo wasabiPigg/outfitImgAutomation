@@ -8,7 +8,7 @@ document.getElementById('shadowValue').innerHTML = Number(shadowElm.value).toPre
 
 // ふちの設定
 let fuchiElm = document.getElementById('fuchiControl');
-fuchiElm.value = 4;
+fuchiElm.value = 0;
 document.getElementById('fuchiValue').innerHTML = Number(fuchiElm.value).toPrecision(2);
 
 // テンプレ系
