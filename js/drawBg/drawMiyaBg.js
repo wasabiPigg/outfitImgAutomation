@@ -1,5 +1,6 @@
 function drawMiyaBg(pickedColorList = []) {
     createByColorBg();
+    createUsedColorTag([pickedColorList[0], pickedColorList[1], pickedColorList[2]]);
     c.drawImage(miyaBg, 0, 0);
 }
 
@@ -24,7 +25,14 @@ function createByColorBg(frameColors = ["#c2c2c2", "#f8f8f8"]) {
 
     miyaBgCtx.clearRect(155, 153, 589, 657);
 }
-
-function createAvBg(color) {
+function createUsedColorTag(colors) {
+    for (i=0; i<3; i++) {
+        miyaBgCtx.fillStyle = colors[i];
+        miyaBgCtx.fillRect(604+48*i, 85, 43, 43);
+        miyaBgCtx.fillStyle = "white";
+        miyaBgCtx.fillRect(604+48*i, 128, 43, 16);
+    }
+}
+function createAvGrad(color) {
 
 }
