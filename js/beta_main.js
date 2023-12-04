@@ -153,7 +153,7 @@ class BgInfo {
                 drawKuronekoBg(pickedColorList, 0);
                 break;
             case 2: // みやさんデザイン
-                drawMiyaBg(pickedColorList);
+                // drawMiyaBg(pickedColorList);
                 break;
             default:
                 break;
@@ -310,7 +310,7 @@ function showItemList() {
             c.drawImage(canvasItemHs, 403.5, 706.5, 453, 185.5);
             break;
         case 2:
-            c.drawImage(canvasItemVs, 530, 0);
+            c.drawImage(canvasItemMiya, 0, 0);
             break;
         case 3:
             c.drawImage(canvasItemVc, 530, 0);
@@ -441,6 +441,7 @@ function calcItemListArea() {
     chc.clearRect(0, 0, canvasItemHc.width, canvasItemHc.height);
     cvs.clearRect(0, 0, canvasItemVs.width, canvasItemVs.height);
     cvc.clearRect(0, 0, canvasItemVc.width, canvasItemVc.height);
+    cmiya.clearRect(0, 0, canvasItemMiya.width, canvasItemMiya.height);
 
     // グレースケール
     let mat = cv.imread(screenShotImgElement);
@@ -493,6 +494,7 @@ function calcItemListArea() {
     itemSquareTileVertically(items, itemNum);
     itemCircleTileHorizontally(items, itemNum);
     itemCircleTileVertically(items, itemNum);
+    itemCircleTileMiyaVertically(items, itemNum);
 }
 
 function createPng() {
@@ -606,6 +608,31 @@ function itemCircleTileVertically(items, itemNum) {
 
         cvc.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
+    }
+}
+
+function itemCircleTileMiyaVertically(items, itemNum) {
+    for (i=0; i<itemNum; i++) {
+        // アイテムの座標
+        const x = items[i][0];
+        const y = items[i][1];
+        const w = items[i][2];
+        const h = items[i][3];
+
+        // 円でクリッピング
+        cmiya.save();
+        drawCircle(cmiya, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5, 47.5);
+        console.log(i, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5)
+        cmiya.clip();
+        cmiya.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 716 * (i%2) + 44, 102 * Math.floor(i/2) + 318, 95, 95);
+
+        // 所持数隠し
+        cmiya.beginPath();
+        cmiya.fillStyle = "white";
+        cmiya.fillRect(716 * (i%2) + 29.8+44, 102 * Math.floor(i/2) + 76.2 + 318, 61.3, 17.7);
+
+        cmiya.restore(); // クリッピング領域の設定を破棄
+        drawCircleEdge(cmiya, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5, 47.5);
     }
 }
 

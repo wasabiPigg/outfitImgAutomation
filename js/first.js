@@ -52,6 +52,7 @@ var canvasItemHs = document.getElementById('canvasItemHs');
 var canvasItemHc = document.getElementById('canvasItemHc');
 var canvasItemVs = document.getElementById('canvasItemVs');
 var canvasItemVc = document.getElementById('canvasItemVc');
+var canvasItemMiya = document.getElementById('canvasItemMiya');
 var canvasAvator = document.getElementById('canvasAvator');
 var canvasBackground = document.getElementById('canvasBackgroundImg');
 var canvasShadow = document.getElementById('canvas_shadow');
@@ -70,6 +71,10 @@ canvasItemVs.width = short;
 canvasItemVs.height = long;
 canvasItemVc.width = short;
 canvasItemVc.height = long;
+
+// みやさんのテンプレ用Canvas
+canvasItemMiya.width = long;
+canvasItemMiya.height = long;
 
 // 調整時に使用するCanvas
 canvas.width = long;
@@ -92,6 +97,7 @@ var chs = canvasItemHs.getContext('2d');
 var chc = canvasItemHc.getContext('2d');
 var cvs = canvasItemVs.getContext('2d');
 var cvc = canvasItemVc.getContext('2d');
+var cmiya = canvasItemMiya.getContext('2d');
 
 var cha = canvasAvator.getContext('2d');
 var chb = canvasBackground.getContext('2d');
