@@ -59,6 +59,7 @@ var canvasShadow = document.getElementById('canvas_shadow');
 var cKuronekoBg = document.getElementById('kuronekoBg');
 var kuronekoNullItemImg = document.getElementById('kuronekoNullItemImg');
 var kuronekoItemList = document.getElementById('kuronekoItemList');
+var miyaBg = document.getElementById('miyaBg');
 
 var long = 900;
 var short = 370;
@@ -86,6 +87,8 @@ kuronekoItemList.height = 176;
 // みやさんのテンプレ用Canvas
 canvasItemMiya.width = long;
 canvasItemMiya.height = long;
+miyaBg.width = long;
+miyaBg.height = long;
 
 // 調整時に使用するCanvas
 canvas.width = long;
@@ -117,3 +120,5 @@ var csh = canvasShadow.getContext('2d');
 var cKuronekoBgCtx = cKuronekoBg.getContext('2d');
 var kuronekoNullItemImgCtx = kuronekoNullItemImg.getContext('2d');
 var kuronekoItemListCtx = kuronekoItemList.getContext('2d');
+
+var miyaBgCtx = miyaBg.getContext('2d');

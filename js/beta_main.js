@@ -1,4 +1,3 @@
-createNullItemImg();
 // 影の設定
 shadowElm.addEventListener('input', changeShadowValue);
 
@@ -154,7 +153,7 @@ class BgInfo {
                 // drawKuronekoBg(pickedColorList, 0);
                 break;
             case 2: // みやさんデザイン
-                // drawMiyaBg(pickedColorList);
+                drawMiyaBg(pickedColorList);
                 break;
             default:
                 break;
@@ -453,6 +452,7 @@ function calcItemListArea() {
     cvs.clearRect(0, 0, canvasItemVs.width, canvasItemVs.height);
     cvc.clearRect(0, 0, canvasItemVc.width, canvasItemVc.height);
     cmiya.clearRect(0, 0, canvasItemMiya.width, canvasItemMiya.height);
+    kuronekoItemListCtx.clearRect(0, 0, kuronekoItemList.width, kuronekoItemList.height);
 
     // グレースケール
     let mat = cv.imread(screenShotImgElement);
@@ -664,18 +664,18 @@ function itemCircleTileMiyaVertically(items, itemNum) {
 
         // 円でクリッピング
         cmiya.save();
-        drawCircle(cmiya, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5, 47.5);
-        console.log(i, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5)
+        drawCircle(cmiya, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5, 47.5);
+        console.log(i, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5)
         cmiya.clip();
-        cmiya.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 716 * (i%2) + 44, 102 * Math.floor(i/2) + 318, 95, 95);
+        cmiya.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 716 * (i%2) + 44, 108 * Math.floor(i/2) + 318, 95, 95);
 
         // 所持数隠し
         cmiya.beginPath();
         cmiya.fillStyle = "white";
-        cmiya.fillRect(716 * (i%2) + 29.8+44, 102 * Math.floor(i/2) + 76.2 + 318, 61.3, 17.7);
+        cmiya.fillRect(716 * (i%2) + 29.8+44, 108 * Math.floor(i/2) + 76.2 + 318, 61.3, 17.7);
 
         cmiya.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(cmiya, 716 * (i%2) + 91.5, 102 * Math.floor(i/2) + 365.5, 47.5);
+        drawCircleEdge(cmiya, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5, 47.5, 3, "white");
     }
 }
 
@@ -708,11 +708,11 @@ function drawCircle(ctx, dx, dy, r) {
 }
 
 // 円を描画する（縁取り用）
-function drawCircleEdge(ctx, dx, dy, r) {
+function drawCircleEdge(ctx, dx, dy, r, weight = 5, color = grayColor) {
     ctx.beginPath();
     ctx.arc(dx, dy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = grayColor;
-    ctx.lineWidth = 5;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = weight;
     ctx.stroke();
 }
 
@@ -773,7 +773,7 @@ function changeTemplate(n) {
             )
             avatorDrawImageInfo.setMovedDrawImageInfo(
                 (long-(avatorResized.w / avatorResized.h * 605))/2,
-                30
+                184
             );
             break;
         case 3:
