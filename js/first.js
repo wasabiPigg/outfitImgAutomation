@@ -56,6 +56,9 @@ var canvasItemMiya = document.getElementById('canvasItemMiya');
 var canvasAvator = document.getElementById('canvasAvator');
 var canvasBackground = document.getElementById('canvasBackgroundImg');
 var canvasShadow = document.getElementById('canvas_shadow');
+var cKuronekoBg = document.getElementById('kuronekoBg');
+var kuronekoNullItemImg = document.getElementById('kuronekoNullItemImg');
+var kuronekoItemList = document.getElementById('kuronekoItemList');
 
 var long = 900;
 var short = 370;
@@ -71,6 +74,14 @@ canvasItemVs.width = short;
 canvasItemVs.height = long;
 canvasItemVc.width = short;
 canvasItemVc.height = long;
+
+// 黒猫さんのテンプレ用Canvas
+cKuronekoBg.width = long;
+cKuronekoBg.height = long;
+kuronekoNullItemImg.width = 85;
+kuronekoNullItemImg.height = 85;
+kuronekoItemList.width = 449;
+kuronekoItemList.height = 176;
 
 // みやさんのテンプレ用Canvas
 canvasItemMiya.width = long;
@@ -102,3 +113,7 @@ var cmiya = canvasItemMiya.getContext('2d');
 var cha = canvasAvator.getContext('2d');
 var chb = canvasBackground.getContext('2d');
 var csh = canvasShadow.getContext('2d');
+
+var cKuronekoBgCtx = cKuronekoBg.getContext('2d');
+var kuronekoNullItemImgCtx = kuronekoNullItemImg.getContext('2d');
+var kuronekoItemListCtx = kuronekoItemList.getContext('2d');

@@ -1,3 +1,4 @@
+createNullItemImg();
 // 影の設定
 shadowElm.addEventListener('input', changeShadowValue);
 
@@ -150,10 +151,20 @@ class BgInfo {
         // テンプレートによって追加で背景を描く
         switch (templateMode) {
             case 1: // 黒猫さんデザイン
-                drawKuronekoBg(pickedColorList, 0);
+                // drawKuronekoBg(pickedColorList, 0);
                 break;
             case 2: // みやさんデザイン
                 // drawMiyaBg(pickedColorList);
+                break;
+            default:
+                break;
+        }
+    }
+    // 前景
+    changeForeground() {
+        switch (templateMode) {
+            case 1: // 黒猫さんデザイン
+                drawKuronekoBg(pickedColorList, 0);
                 break;
             default:
                 break;
@@ -307,7 +318,7 @@ function showItemList() {
             c.drawImage(canvasItemHs, 0, 530);
             break;
         case 1:
-            c.drawImage(canvasItemHs, 403.5, 706.5, 453, 185.5);
+            c.drawImage(kuronekoItemList, 407, 708);
             break;
         case 2:
             c.drawImage(canvasItemMiya, 0, 0);
@@ -495,6 +506,7 @@ function calcItemListArea() {
     itemCircleTileHorizontally(items, itemNum);
     itemCircleTileVertically(items, itemNum);
     itemCircleTileMiyaVertically(items, itemNum);
+    itemSqKuronekoHorizontally(items, itemNum);
 }
 
 function createPng() {
@@ -536,6 +548,37 @@ function itemSquareTileHorizontally(items, itemNum) {
         chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
 
         chs.restore(); // クリッピング領域の設定を破棄
+    }
+}
+
+function itemSqKuronekoHorizontally(items, itemNum) {
+    for (let i=0; i<itemNum; i++) {
+        // アイテムの座標
+        const x = items[i][0];
+        const y = items[i][1];
+        const w = items[i][2];
+        const h = items[i][3];
+
+        // 角丸矩形でクリッピング
+        kuronekoItemListCtx.save();
+        drawsq(kuronekoItemListCtx, 91 * (i%5), 91 * Math.floor(i/5), 85, 85, 5);
+        kuronekoItemListCtx.clip();
+        kuronekoItemListCtx.drawImage(screenShotImgElement, x, y, w, h, 91 * (i%5), 91 * Math.floor(i/5), 85, 85);
+        // 所持数隠し
+        kuronekoItemListCtx.beginPath();
+        kuronekoItemListCtx.fillStyle = "white";
+        kuronekoItemListCtx.fillRect(91 * (i%5) + 26.7, 91 * Math.floor(i/5) + 66.2, 54.85, 15.8);
+
+        kuronekoItemListCtx.restore(); // クリッピング領域の設定を破棄
+    }
+    for (let i=itemNum; i<10; i++) {
+        kuronekoItemListCtx.save();
+        drawsq(kuronekoItemListCtx, 91 * (i%5), 91 * Math.floor(i/5), 85, 85, 5);
+        kuronekoItemListCtx.clip();
+        let stroke = 3
+        drawsq(kuronekoItemListCtx, 91 * (i%5)+stroke, 91 * Math.floor(i/5)+stroke, 85-stroke*2, 85-stroke*2, 5, "white");
+        kuronekoItemListCtx.drawImage(kuronekoNullItemImg, 0, 0, 85, 85, 91 * (i%5), 91 * Math.floor(i/5), 85, 85);
+        kuronekoItemListCtx.restore(); // クリッピング領域の設定を破棄
     }
 }
 
@@ -637,11 +680,11 @@ function itemCircleTileMiyaVertically(items, itemNum) {
 }
 
 // 角丸の四角形を描画する(クリッピングのため)
-function drawsq(ctx, x, y, w, h, r) {
+function drawsq(ctx, x, y, w, h, r, color = grayColor) {
     ctx.beginPath();
     ctx.lineWidth = 1;
-    ctx.strokeStyle = grayColor;
-    ctx.fillStyle = grayColor;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
     ctx.moveTo(x, y + r);  //←①
     ctx.arc(x + r, y + h - r, r, Math.PI, Math.PI * 0.5, true);  //←②
     ctx.arc(x + w - r, y + h - r, r, Math.PI * 0.5, 0, 1);  //←③
@@ -682,6 +725,7 @@ function redrawCanvas() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     bgInfo.changeBackground();
     avatorDrawImageInfo.drawImage();
+    bgInfo.changeForeground()
     showItemList();
 }
 
