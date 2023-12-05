@@ -118,7 +118,7 @@ class BgInfo {
         if (this.elm[index].type == "color") {
             // 単色背景は縁取りをつける
             this.elm[index].classList.add('border-5');
-            this.elm[index].style.borderColor = pickedColorList[index];
+            this.elm[index].style.borderColor = bgColorList[index];
         }
         console.log(index)
     }
@@ -143,7 +143,7 @@ class BgInfo {
                 break;
             default:
                 // 配列内の背景色
-                c.fillStyle = pickedColorList[this.bgIndex];
+                c.fillStyle = bgColorList[this.bgIndex];
                 c.fillRect(0, 0, canvas.width, canvas.height);
                 break;
         }
@@ -214,7 +214,7 @@ for (i=0; i<4; i++) {
    colorBtn.addEventListener('change', function(){
         console.log(this.value);
         var id = $(this).attr('id').slice(-1);
-        pickedColorList[id] = this.value;
+        bgColorList[id] = this.value;
         bgInfo.changeIndex(bgInfo.bgIndex);
         redrawCanvas();
     });
@@ -332,15 +332,17 @@ function showItemList() {
 function pickColors() {
     // 代表色をRGBからHEXに変換する
     pickedColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
+    bgColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
+
     console.log(pickedColorList);
 
     // ボタンの背景色に設定する
     const $getListAItems = document.getElementById("colorButtons").children;
     for( var $i = 0; $i < $getListAItems.length; $i++ ){
-        $getListAItems[$i].style.backgroundColor = pickedColorList[$i];
-        console.log(pickedColorList[0]);
+        $getListAItems[$i].style.backgroundColor = bgColorList[$i];
+        console.log(bgColorList[0]);
         if ($getListAItems[$i].type == "color") {
-            $getListAItems[$i].value = pickedColorList[$i];
+            $getListAItems[$i].value = bgColorList[$i];
         } else {
             $getListAItems[$i].value = ""
         }
@@ -351,11 +353,11 @@ function pickColors() {
             if(bgIndex < 4) {
                 if (bgInfo.bgIndex == bgIndex) {
                     $getListAItems[bgIndex].type = "color"
-                    $getListAItems[bgIndex].value = pickedColorList[bgIndex];
+                    $getListAItems[bgIndex].value = bgColorList[bgIndex];
                 } else {
                     $getListAItems[bgInfo.bgIndex].type = "button";
                     $getListAItems[bgInfo.bgIndex].value = ""
-                    $getListAItems[bgInfo.bgIndex].style.backgroundColor = pickedColorList[bgInfo.bgIndex];
+                    $getListAItems[bgInfo.bgIndex].style.backgroundColor = bgColorList[bgInfo.bgIndex];
                  
                 }
             }

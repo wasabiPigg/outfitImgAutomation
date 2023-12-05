@@ -1,4 +1,6 @@
 // 背景描画用
+createNullItemImg();
+
 // 取得した色リスト、選択中のチェキフレームの種類
 function drawKuronekoBg(pickedColorList) {
     createFrame();

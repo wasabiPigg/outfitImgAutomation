@@ -46,6 +46,8 @@ bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/im
 let grayColor = "rgb(214,215,218)";
 // アバターから取った代表色
 var pickedColorList = [];
+// デフォルトテンプレの背景用の色リスト
+var bgColorList = [];
 // Canvasの準備
 var canvas = document.getElementById('canvas');
 var canvasItemHs = document.getElementById('canvasItemHs');
