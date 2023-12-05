@@ -2,17 +2,21 @@
 createNullItemImg();
 
 // 取得した色リスト、選択中のチェキフレームの種類
-function drawKuronekoBg(pickedColorList) {
-    createFrame();
+function drawKuronekoBg(pickedColorList, frameColor = "#f8f8f8", showImg = false) {
+    createFrame(frameColor);
+
+    // ユーザーの画像をフレームにしたい場合
+    if (showImg) {
+
+    }
     c.drawImage(cKuronekoBg, 0, 0);
-    // c.drawImage(nullItemImg, 405, 708, 450, 177);
     for (i=0; i<4; i++) {
         c.fillStyle = pickedColorList[i];
         c.fillRect(45+89*i, 758, 89, 9);
     }
 }
 
-function createFrame() {
+function createFrame(frameColor) {
     cKuronekoBgCtx.clearRect(0, 0, cKuronekoBg.width, cKuronekoBg.height);
     cKuronekoBgCtx.save();
     cKuronekoBgCtx.shadowColor = "rgba(0,0,0,0.253)";
@@ -32,7 +36,7 @@ function createFrame() {
     cKuronekoBgCtx.lineTo(0,900);
     cKuronekoBgCtx.closePath();
 
-    cKuronekoBgCtx.fillStyle = "#f8f8f8";
+    cKuronekoBgCtx.fillStyle = frameColor;
     cKuronekoBgCtx.fill();
 }
 

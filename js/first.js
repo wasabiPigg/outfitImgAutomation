@@ -41,6 +41,10 @@ let inputbackgroundElement = document.getElementById('custom-file-3');
 let bgImgBtn = document.getElementById('bgImg');
 bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/bgBtnImg.PNG?raw=true';
 
+// 黒猫さんのテンプレ用のフレーム画像（任意設定）
+let kuronekoFrameImgElement = document.getElementById('kuronekoFrameSrc');
+let inputKuronekoFrameImgElement = document.getElementById('kuronekoFrameImg');
+
 
 // 灰色はこれ
 let grayColor = "rgb(214,215,218)";

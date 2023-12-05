@@ -86,9 +86,10 @@ label {
     border-top-right-radius: 6px
   }
   
-#avImg, #bgImg, #clImg {
+#avImg, #bgImg, #clImg, #frameBtnKuroneko5 {
     background-color: rgb(214,215,218);
     background-size: contain;
+    background-repeat: no-repeat;
     object-fit: cover;
 }
 .rounded-circle{

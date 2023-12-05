@@ -380,11 +380,15 @@
                         <label>フレーム</label>
                         <div id="frameButtonsKuroneko" class="row row-cols-auto">
                             <button id="frameBtnKuroneko0" type="button" class="btn rounded-square col" style="width: 40px;height: 40px; background-color: #f8f8f8;"></button>
-                            <button id="frameBtnKuroneko1" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;  background-color: #707070"></button>
-                            <button id="frameBtnKuroneko2" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;  background-color: #707070"></button>
-                            <button id="frameBtnKuroneko3" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;  background-color: #707070"></button>
-                            <button id="frameBtnKuroneko4" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;  background-color: #707070"></button>
-                            <button id="frameBtnKuroneko5" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;  background-color: #707070"><span id="backgroundIc" class="fas fa-image fa-xs"></span></button>
+                            <button id="frameBtnKuroneko1" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;"></button>
+                            <button id="frameBtnKuroneko2" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;"></button>
+                            <button id="frameBtnKuroneko3" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;"></button>
+                            <button id="frameBtnKuroneko4" type="button" class="btn rounded-square col" style="width: 40px;height: 40px;"></button>
+                            <button id="frameBtnKuroneko5" type="button" class="btn rounded-square col btn-light" style="width: 40px;height: 40px;">
+                                <label><span id="frameBtnKuroneko5Ic"><span id="backgroundIc" class="fas fa-image fa-xs"></span></span>
+                                <input type="file" class="kuronekoFrame" id="kuronekoFrameImg" name="kuronekoFrameImg" style="display: none;">
+                                <img id="kuronekoFrameSrc" alt="No Image" style="display: none;"></label>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -410,6 +414,8 @@
     <script src="js/drawBg/drawKuronekoBg.js"></script>
     <script src="js/drawBg/drawMiyaBg.js"></script>
     <script src="js/beta_main.js"></script>
+    <script src="js/editDetail/kuroneko.js"></script>
+
 </body>
 
 </html>

@@ -163,7 +163,7 @@ class BgInfo {
     changeForeground() {
         switch (templateMode) {
             case 1: // 黒猫さんデザイン
-                drawKuronekoBg(pickedColorList, 0);
+                drawKuronekoBg(pickedColorList);
                 break;
             default:
                 break;
