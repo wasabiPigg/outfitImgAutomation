@@ -99,77 +99,7 @@ class DrawImageInfo {
     }
 }
 
-// 背景に必要なデータ用
-class BgInfo {
-    constructor(elm, bgIndex) {
-        this.elm = elm;
-        this.bgIndex = bgIndex;
-    }
 
-    // 選択中の一つのボタンだけ丸くする
-    round(index) {
-        // 一旦全部四角くする
-        for ( var j = 0; j < this.elm.length; j++ ) {
-            this.elm[j].classList.replace('rounded-circle','rounded-square');
-            this.elm[j].classList.remove('border-5');
-        }
-        // 選択中の背景は形を丸くする
-        this.elm[index].classList.replace('rounded-square','rounded-circle');
-        if (this.elm[index].type == "color") {
-            // 単色背景は縁取りをつける
-            this.elm[index].classList.add('border-5');
-            this.elm[index].style.borderColor = bgColorList[index];
-        }
-        console.log(index)
-    }
-
-    changeIndex(newIndex) {
-        this.bgIndex = newIndex;
-        this.round(this.bgIndex);
-    }
-
-    // canvasの背景を変更
-    changeBackground() {
-        this.round(this.bgIndex);
-        c.clearRect(0, 0, canvas.width, canvas.height);
-        switch (this.bgIndex) {
-            case 4:
-                // 任意の背景画像
-                c.drawImage(canvasBackground, 0, 0);
-                break;
-            case 5:
-                // 背景色なし
-                
-                break;
-            default:
-                // 配列内の背景色
-                c.fillStyle = bgColorList[this.bgIndex];
-                c.fillRect(0, 0, canvas.width, canvas.height);
-                break;
-        }
-        // テンプレートによって追加で背景を描く
-        switch (templateMode) {
-            case 1: // 黒猫さんデザイン
-                // drawKuronekoBg(pickedColorList, 0);
-                break;
-            case 2: // みやさんデザイン
-                drawMiyaBg(pickedColorList);
-                break;
-            default:
-                break;
-        }
-    }
-    // 前景
-    changeForeground() {
-        switch (templateMode) {
-            case 1: // 黒猫さんデザイン
-                drawKuronekoBg(pickedColorList);
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 // アバター透過画像
 var avatorDrawImageInfo = new DrawImageInfo;
@@ -179,6 +109,9 @@ var avatorResized = {x:0, y:0};
 // 背景色を変更するボタン用の処理
 var colorButtonElements = [].slice.call(document.getElementById("colorButtons").children);
 var bgInfo = new BgInfo(colorButtonElements, 0);
+// 黒猫さんのフレーム用
+const kuronekoFrameButtonElm = [].slice.call(document.getElementById("frameButtonsKuroneko").children);
+var kuronekoFrameInfo = new BgInfo(kuronekoFrameButtonElm, 0);
 
 
 // アバター画像が読み込めたら処理開始
@@ -209,14 +142,28 @@ inputbackgroundElement.addEventListener('change', (e) => {
 
 // カラーピッカーで背景色を変えたとき
 for (i=0; i<4; i++) {
-    var id = "colorBtn" + i; 
-    var colorBtn = document.getElementById(id);
-   colorBtn.addEventListener('change', function(){
+    const id = "colorBtn" + i; 
+    const colorBtn = document.getElementById(id);
+    colorBtn.addEventListener('change', function(){
         console.log(this.value);
-        var id = $(this).attr('id').slice(-1);
+        const id = $(this).attr('id').slice(-1);
         bgColorList[id] = this.value;
+        bgInfo.colorList=(bgColorList);
         bgInfo.changeIndex(bgInfo.bgIndex);
         redrawCanvas();
+    });
+}
+
+// カラーピッカーでフレーム色を変えたとき
+for (i=0; i<5; i++) {
+    const id = "frameBtnKuroneko" + i; 
+    const colorBtn = document.getElementById(id);
+    colorBtn.addEventListener('change', function(){
+        console.log(this.value);
+        const id = $(this).attr('id').slice(-1);
+        kuronekoFrameColorList[id] = this.value;
+        kuronekoFrameInfo.colorList=(kuronekoFrameColorList);
+        kuronekoFrameInfo.changeIndex(kuronekoFrameInfo.bgIndex);
     });
 }
 
@@ -333,6 +280,9 @@ function pickColors() {
     // 代表色をRGBからHEXに変換する
     pickedColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
     bgColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
+    kuronekoFrameColorList = colorThief.getPalette(avatorImgElement, 4).map((x) => rgb2hex(x));
+    // 初期色として白を加えておく
+    kuronekoFrameColorList.unshift("#f8f8f8");
 
     console.log(pickedColorList);
 
@@ -351,18 +301,48 @@ function pickColors() {
             bgIndex = colorButtonElements.indexOf(this);
             console.log(bgInfo.bgIndex, bgIndex)
             if(bgIndex < 4) {
-                if (bgInfo.bgIndex == bgIndex) {
+                // if (bgInfo.bgIndex == bgIndex) {
                     $getListAItems[bgIndex].type = "color"
                     $getListAItems[bgIndex].value = bgColorList[bgIndex];
-                } else {
+                // } else {
+                if (bgInfo.bgIndex != bgIndex) {
+
                     $getListAItems[bgInfo.bgIndex].type = "button";
                     $getListAItems[bgInfo.bgIndex].value = ""
                     $getListAItems[bgInfo.bgIndex].style.backgroundColor = bgColorList[bgInfo.bgIndex];
-                 
                 }
+                 
+                // }
             }
             bgInfo.changeIndex(bgIndex);
             redrawCanvas();
+        };
+    }
+    // 黒猫さんのフレーム用
+    const $kunonekoItems = document.getElementById("frameButtonsKuroneko").children;
+    for( var $i = 0; $i < $kunonekoItems.length; $i++ ){
+        $kunonekoItems[$i].style.backgroundColor = kuronekoFrameColorList[$i];
+        console.log(kuronekoFrameColorList[0]);
+        if ($kunonekoItems[$i].type == "color") {
+            $kunonekoItems[$i].value = kuronekoFrameColorList[$i];
+        } else {
+            $kunonekoItems[$i].value = ""
+        }
+        $kunonekoItems[$i].onclick =
+        function(){
+            bgIndex = kuronekoFrameButtonElm.indexOf(this);
+            console.log(kuronekoFrameInfo.bgIndex, bgIndex)
+            if(bgIndex < 5) {
+                $kunonekoItems[bgIndex].type = "color"
+                $kunonekoItems[bgIndex].value = kuronekoFrameColorList[bgIndex];
+                if (kuronekoFrameInfo.bgIndex != bgIndex) {
+                    $getListAItems[kuronekoFrameInfo.bgIndex].type = "button";
+                    $getListAItems[kuronekoFrameInfo.bgIndex].value = ""
+                    $getListAItems[kuronekoFrameInfo.bgIndex].style.backgroundColor = kuronekoFrameColorList[kuronekoFrameInfo.bgIndex];
+                }
+            }
+            kuronekoFrameInfo.changeIndex(bgIndex);
+            // redrawCanvas();
         };
     }
 }
@@ -727,7 +707,12 @@ function redrawCanvas() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     bgInfo.changeBackground();
     avatorDrawImageInfo.drawImage();
-    bgInfo.changeForeground()
+    if (templateMode == 1) {
+        bgInfo.changeForeground(kuronekoFrameInfo.bgIndex);
+
+    } else {
+        bgInfo.changeForeground()
+    }
     showItemList();
 }
 

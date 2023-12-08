@@ -1,6 +1,84 @@
 // 代表色を取るための前準備
 const colorThief = new ColorThief();
 
+// 背景に必要なデータ用
+class BgInfo {
+    constructor(elm, bgIndex) {
+        this.elm = elm;
+        this.bgIndex = bgIndex;
+        this.colorList = []
+    }
+
+    // 選択中の一つのボタンだけ丸くする
+    round(index) {
+        // 一旦全部四角くする
+        for ( var j = 0; j < this.elm.length; j++ ) {
+            this.elm[j].classList.replace('rounded-circle','rounded-square');
+            this.elm[j].classList.remove('border-5');
+        }
+        // 選択中の背景は形を丸くする
+        this.elm[index].classList.replace('rounded-square','rounded-circle');
+        if (this.elm[index].type == "color") {
+            // 単色背景は縁取りをつける
+            this.elm[index].classList.add('border-5');
+            if (this.colorList == []) {
+                this.elm[index].style.borderColor = bgColorList[index]
+            } else {
+                this.elm[index].style.borderColor = this.colorList[index];
+            }
+        }
+        console.log("選択中のボタンIndex",index);
+    }
+
+    changeIndex(newIndex) {
+        this.bgIndex = newIndex;
+        this.round(this.bgIndex);
+    }
+
+    // canvasの背景を変更
+    changeBackground() {
+        this.round(this.bgIndex);
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        switch (this.bgIndex) {
+            case 4:
+                // 任意の背景画像
+                c.drawImage(canvasBackground, 0, 0);
+                break;
+            case 5:
+                // 背景色なし
+                
+                break;
+            default:
+                // 配列内の背景色
+                c.fillStyle = bgColorList[this.bgIndex];
+                c.fillRect(0, 0, canvas.width, canvas.height);
+                break;
+        }
+        // テンプレートによって追加で背景を描く
+        switch (templateMode) {
+            case 1: // 黒猫さんデザイン
+                // drawKuronekoBg(pickedColorList, 0);
+                break;
+            case 2: // みやさんデザイン
+                drawMiyaBg(pickedColorList);
+                break;
+            default:
+                break;
+        }
+    }
+    // 前景
+    changeForeground(bgIndex=0) {
+        switch (templateMode) {
+            case 1: // 黒猫さんデザイン
+                drawKuronekoBg(pickedColorList, kuronekoFrameColorList[bgIndex], bgIndex==5);
+                // console.log("今のIndex",this.bgIndex, "今のカラーリスト",this.colorList)
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 // 影の設定
 let shadowElm = document.getElementById('shadowControl');
 shadowElm.value = 6;
@@ -45,13 +123,13 @@ bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/im
 let kuronekoFrameImgElement = document.getElementById('kuronekoFrameSrc');
 let inputKuronekoFrameImgElement = document.getElementById('kuronekoFrameImg');
 
-
 // 灰色はこれ
 let grayColor = "rgb(214,215,218)";
 // アバターから取った代表色
 var pickedColorList = [];
 // デフォルトテンプレの背景用の色リスト
 var bgColorList = [];
+var kuronekoFrameColorList = [];
 // Canvasの準備
 var canvas = document.getElementById('canvas');
 var canvasItemHs = document.getElementById('canvasItemHs');

@@ -11,5 +11,5 @@ inputKuronekoFrameImgElement.addEventListener('change', (e) => {
 }, false);
 
 function kuronekoEditDone() {
-    
+    redrawCanvas();
 }

@@ -3,11 +3,15 @@ createNullItemImg();
 
 // 取得した色リスト、選択中のチェキフレームの種類
 function drawKuronekoBg(pickedColorList, frameColor = "#f8f8f8", showImg = false) {
+    console.log(frameColor)
     createFrame(frameColor);
 
     // ユーザーの画像をフレームにしたい場合
     if (showImg) {
-
+        console.log("hoge")
+        cKuronekoBgCtx.clip();
+        cKuronekoBgCtx.drawImage(kuronekoFrameImgElement, 0, 0, cKuronekoBg.width, cKuronekoBg.height);
+        cKuronekoBgCtx.restore();
     }
     c.drawImage(cKuronekoBg, 0, 0);
     for (i=0; i<4; i++) {
