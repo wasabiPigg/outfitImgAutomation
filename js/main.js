@@ -519,7 +519,7 @@ function calcItemListArea() {
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
         // 0.996 -> 0.975に許容範囲を増やした　2023/10/22
-        if (0.975<val && val<0.999 && Math.abs(w-h)<2){
+        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.32 && w>30){
             itemNum++;
             items.unshift([x,y,w,h]);
         }
@@ -557,20 +557,24 @@ function rectangularity(contour) {
 function itemSquareTileHorizontally(items, itemNum) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
+        // 所持数隠しの円のサイズ
+        const r = screenShotImgElement.height/screenShotImgElement.width>2 ? 34 : 19;
 
         // 角丸矩形でクリッピング
         chs.save();
-        drawsq(chs, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172, 12);
+        // drawsq(chs, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172, 12);
+        drawsq(chs, 180 * (i%5) + 7, 180 * Math.floor(i/5) + 15, 165, 165, 12);
         chs.clip();
-        chs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172);
+        chs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 7, 180 * Math.floor(i/5) + 15, 165, 165);
         // 所持数隠し
         chs.beginPath();
+        chs.arc(180 * (i%5) + 166, 180 * Math.floor(i/5) + 15, r, 0, Math.PI * 2, true);
         chs.fillStyle = "white";
-        chs.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
+        chs.fill()
 
         chs.restore(); // クリッピング領域の設定を破棄
     }
@@ -579,47 +583,46 @@ function itemSquareTileHorizontally(items, itemNum) {
 function itemCircleTileHorizontally(items, itemNum) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
 
         // 円でクリッピング
         chc.save();
-        drawCircle(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
+        drawCircle(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 85);
         chc.clip();
-        chc.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 172, 172);
-        // 所持数隠し
-        chc.beginPath();
-        chc.fillStyle = "white";
-        chc.fillRect(180 * (i%5) + 58, 180 * Math.floor(i/5) + 138, 111, 32);
+        chc.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 170, 170);
 
         chc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 86);
+        drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 85);
     }
 }
 
 function itemSquareTileVertically(items, itemNum) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
+        // 所持数隠しの円のサイズ
+        const r = screenShotImgElement.height/screenShotImgElement.width>2 ? 34 : 19;
 
         // 角丸矩形でクリッピング
         cvs.save();
         // drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
-        drawsq(cvs, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172, 12);
+        drawsq(cvs, 180 * Math.floor(i/5) + 7, 180 *(i%5) + 15, 165, 165, 12);
 
         cvs.clip();
         // cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
-        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
+        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 7, 180 *(i%5) + 15, 165, 165);
 
         // 所持数隠し
         cvs.beginPath();
+        cvs.arc(180 * Math.floor(i/5) + 166, 180 * (i%5) + 15, r, 0, Math.PI * 2, true);
         cvs.fillStyle = "white";
-        cvs.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
+        cvs.fill()
 
         cvs.restore(); // クリッピング領域の設定を破棄
     }
@@ -628,20 +631,16 @@ function itemSquareTileVertically(items, itemNum) {
 function itemCircleTileVertically(items, itemNum) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
 
         // 円でクリッピング
         cvc.save();
         drawCircle(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
         cvc.clip();
         cvc.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
-        // 所持数隠し
-        cvc.beginPath();
-        cvc.fillStyle = "white";
-        cvc.fillRect(180 * Math.floor(i/5) + 58, 180 *(i%5) + 138, 111, 32);
 
         cvc.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
@@ -651,7 +650,7 @@ function itemCircleTileVertically(items, itemNum) {
 // 角丸の四角形を描画する(クリッピングのため)
 function drawsq(ctx, x, y, w, h, r) {
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 10;
     ctx.strokeStyle = grayColor;
     ctx.fillStyle = grayColor;
     ctx.moveTo(x, y + r);  //←①
