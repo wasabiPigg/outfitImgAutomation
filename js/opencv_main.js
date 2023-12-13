@@ -86,10 +86,16 @@ function rectangleArea(contours, hierarchy) {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.975<val && val<0.999 && Math.abs(w-h)<2){
+        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.32 && w>30){
+        // if (0.90<val && val<0.94 ) {
             // アイテムの枠を囲む
             cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
-            console.log(val);
+                
+            
+            console.log(w,h, val);
+            // 160 197 0.93 ipad 1.225
+            // 188-190 243-244 0.90-0.92 iphone? 1.297..1.278...
+            // 151-153 199 0.91 iphone11 1.31-1.32
             itemNum++;
             items.unshift([x,y,w,h]);
             // console.log(rect);
@@ -118,35 +124,50 @@ function rectangularity(contour) {
 function itemTileHorizontally(items, itemNum) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        // const h = items[i][3]*0.7;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
+        // 所持数隠しの円のサイズ
+        const r = imgElement.height/imgElement.width>2 ? 34 : 19;
 
         if (i<5) {
             // 角丸矩形でクリッピング
             ctx.save();
-            drawsq(180 * i + 4, 530, 172, 172, 12);
+            drawsq(180 * i + 7, 532, 165, 165, 12);
             ctx.clip();
-            ctx.drawImage(imgElement, x, y, w, h, 180 * i + 4, 530, 172, 172);
+            ctx.drawImage(imgElement, x, y, w, h, 180 * i + 7, 532, 165, 165);
+
             // 所持数隠し
             ctx.beginPath();
+
+            ctx.arc(180 * i + 166, 532, r, 0, Math.PI * 2, true);
             ctx.fillStyle = "white";
-            ctx.fillRect(180 * i + 58, 663, 109, 32);
+            ctx.fill()
+            // ctx.beginPath();
+            // ctx.fillStyle = "white";
+            // ctx.fillRect(180 * i + 58, 663, 109, 32);
 
             ctx.restore(); // クリッピング領域の設定を破棄
         } else {
             // 角丸矩形でクリッピング
             ctx.save();
-            drawsq(180 * (i - 5) + 4, 710, 172, 172, 12);
+            drawsq(180 * (i - 5) + 7, 712, 165, 165, 12);
             ctx.clip();
-            ctx.drawImage(imgElement, x, y, w, h, 180 * (i - 5) + 4, 710, 172, 172);
-            ctx.restore(); // クリッピング領域の設定を破棄
+            ctx.drawImage(imgElement, x, y, w, h, 180 * (i - 5) + 7, 712, 165, 165);
 
             // 所持数隠し
             ctx.beginPath();
+            ctx.arc(180 * (i-5) + 166, 712, r, 0, Math.PI * 2, true);
             ctx.fillStyle = "white";
-            ctx.fillRect(180 * (i - 5) + 58, 843, 109, 32);
+            ctx.fill()
+            ctx.restore(); // クリッピング領域の設定を破棄
+
+            // 所持数隠し
+            // ctx.beginPath();
+            // ctx.fillStyle = "white";
+            // ctx.fillRect(180 * (i - 5) + 58, 843, 109, 32);
         }
         var png = canvas.toDataURL();
         document.getElementById("result").src = png;
@@ -157,7 +178,7 @@ function itemTileHorizontally(items, itemNum) {
 function drawsq(x, y, w, h, r) {
     const color = "rgb(214,215,218)";
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 10;
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
     ctx.moveTo(x, y + r);  //←①
