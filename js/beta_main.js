@@ -603,11 +603,11 @@ function itemSquareTileVertically(items, itemNum) {
         // 角丸矩形でクリッピング
         cvs.save();
         // drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
-        drawsq(cvs, 180 * Math.floor(i/5) + 18, 180 *(i%5) + 4, 165, 165, 12);
+        drawsq(cvs, 180 * Math.floor(i/5) + 15, 180 *(i%5) + 7, 165, 165, 12);
 
         cvs.clip();
         // cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
-        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 18, 180 *(i%5) + 4, 165, 165);
+        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 15, 180 *(i%5) + 7, 165, 165);
 
         // 所持数隠し
         cvs.beginPath();
