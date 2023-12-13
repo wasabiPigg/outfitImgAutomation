@@ -86,7 +86,7 @@ function rectangleArea(contours, hierarchy) {
         const val = rectangularity(contours.get(i));
 
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.32 && w>30){
+        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.32 && w>100){
         // if (0.90<val && val<0.94 ) {
             // アイテムの枠を囲む
             cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
