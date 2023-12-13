@@ -590,12 +590,12 @@ function itemCircleTileHorizontally(items, itemNum) {
 
         // 円でクリッピング
         chc.save();
-        drawCircle(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 85);
+        drawCircle(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90+11, 85);
         chc.clip();
-        chc.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4, 170, 170);
+        chc.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%5) + 4, 180 * Math.floor(i/5) + 4+11, 170, 170);
 
         chc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90, 85);
+        drawCircleEdge(chc, 180 * (i%5) + 90, 180 * Math.floor(i/5) + 90+11, 85);
     }
 }
 
@@ -612,11 +612,11 @@ function itemSquareTileVertically(items, itemNum) {
         // 角丸矩形でクリッピング
         cvs.save();
         // drawsq(cvs, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172, 12);
-        drawsq(cvs, 180 * Math.floor(i/5) + 7, 180 *(i%5) + 15, 165, 165, 12);
+        drawsq(cvs, 180 * Math.floor(i/5) + 18, 180 *(i%5) + 4, 165, 165, 12);
 
         cvs.clip();
         // cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * (i%2) + 4, 180 * Math.floor(i/2) + 4, 172, 172);
-        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 7, 180 *(i%5) + 15, 165, 165);
+        cvs.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 18, 180 *(i%5) + 4, 165, 165);
 
         // 所持数隠し
         cvs.beginPath();
@@ -638,12 +638,12 @@ function itemCircleTileVertically(items, itemNum) {
 
         // 円でクリッピング
         cvc.save();
-        drawCircle(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
+        drawCircle(cvc, 180 * Math.floor(i/5) + 90+11, 180 *(i%5) + 90, 85);
         cvc.clip();
-        cvc.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 180 * Math.floor(i/5) + 4, 180 *(i%5) + 4, 172, 172);
+        cvc.drawImage(screenShotImgElement, x, y, w, h, 180 * Math.floor(i/5) + 4+11, 180 *(i%5) + 4, 170, 170);
 
         cvc.restore(); // クリッピング領域の設定を破棄
-        drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90, 180 *(i%5) + 90, 86);
+        drawCircleEdge(cvc, 180 * Math.floor(i/5) + 90+11, 180 *(i%5) + 90, 85);
     }
 }
 
