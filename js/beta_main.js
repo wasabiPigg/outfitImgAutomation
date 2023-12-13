@@ -641,22 +641,17 @@ function itemCircleTileVertically(items, itemNum) {
 function itemCircleTileMiyaVertically(items, itemNum) {
     for (i=0; i<itemNum; i++) {
         // アイテムの座標
-        const x = items[i][0];
-        const y = items[i][1];
-        const w = items[i][2];
-        const h = items[i][3];
+        const w = items[i][2]*0.845;
+        const h = w;
+        const x = items[i][0] +w*0.06;
+        const y = items[i][1] +w*0.13;
 
         // 円でクリッピング
         cmiya.save();
         drawCircle(cmiya, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5, 47.5);
         console.log(i, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5)
         cmiya.clip();
-        cmiya.drawImage(screenShotImgElement, x+3, y+3, w-6, h-6, 716 * (i%2) + 44, 108 * Math.floor(i/2) + 318, 95, 95);
-
-        // 所持数隠し
-        cmiya.beginPath();
-        cmiya.fillStyle = "white";
-        cmiya.fillRect(716 * (i%2) + 29.8+44, 108 * Math.floor(i/2) + 76.2 + 318, 61.3, 17.7);
+        cmiya.drawImage(screenShotImgElement, x, y, w, h, 716 * (i%2) + 44, 108 * Math.floor(i/2) + 318, 95, 95);
 
         cmiya.restore(); // クリッピング領域の設定を破棄
         drawCircleEdge(cmiya, 716 * (i%2) + 91.5, 108 * Math.floor(i/2) + 365.5, 47.5, 3, "white");
