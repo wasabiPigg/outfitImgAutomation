@@ -473,7 +473,7 @@ function calcItemListArea() {
         const val = rectangularity(contours.get(i));
 
         // アプデ後のアイテム枠の比率・矩形度に近いもの、着用中の「用」に引っかからないようサイズは100以上（暫定）
-        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.32 && w>100){
+        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.34 && w>100){
             itemNum++;
             items.unshift([x,y,w,h]);
         }
