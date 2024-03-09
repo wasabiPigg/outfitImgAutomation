@@ -26,7 +26,7 @@ function threshold() {
 
     let threshold = new cv.Mat();
     // 白黒反転して2値化する
-    cv.threshold(dst, threshold, 230, 255, cv.THRESH_BINARY_INV);
+    cv.threshold(dst, threshold, 155, 255, cv.THRESH_BINARY_INV);
     cv.imshow('canvasOutputThreshold', threshold);
 
     findContours(threshold);

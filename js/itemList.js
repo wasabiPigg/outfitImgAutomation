@@ -52,7 +52,7 @@ function showResult() {
 
     // 白黒反転して2値化
     let threshold = new cv.Mat();
-    cv.threshold(dst, threshold, 230, 255, cv.THRESH_BINARY_INV);
+    cv.threshold(dst, threshold, 155, 255, cv.THRESH_BINARY_INV);
 
     // 輪郭抽出
     let contours = new cv.MatVector();
