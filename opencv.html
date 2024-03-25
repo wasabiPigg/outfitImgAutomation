@@ -18,15 +18,19 @@
   </div>
   <br>
   <form name="test">
-    <input type="button" value="2値化する" onClick="threshold()">
+    <input type="button" value="2値化する" onClick="main()">
     <br>
   </form>
   <br>
   <div class="inputoutput">
     <label>↓グレスケ後</label><br>
     <canvas id="canvasOutputGrayScale" ></canvas><br>
-    <label>↓2値化（色反転）</label><br>
+    <label>↓2値化（色反転1）</label><br>
     <canvas id="canvasOutputThreshold" ></canvas><br>
+    <label>↓VIP枠を消す</label><br>
+    <canvas id="canvasOutputHideVip" ></canvas><br>
+    <label>↓2値化（色反転2）</label><br>
+    <canvas id="canvasOutputThreshold2" ></canvas><br>
     <label>↓輪郭にドット打つ</label><br>
     <canvas id="canvasOutputFindContours" ></canvas><br>
     <label>↓最終的な出力</label><br>

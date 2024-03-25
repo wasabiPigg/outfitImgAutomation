@@ -1,3 +1,4 @@
+// 事前準備
 let imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');
 inputElement.addEventListener('change', (e) => {
@@ -13,50 +14,91 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
 var ctx = canvas.getContext('2d');
-
-
-/// 2値化する
-function threshold() {
-    // グレースケール化
-    let mat = cv.imread(imgElement);
-    var dst = new cv.Mat();
-    cv.cvtColor(mat, dst, cv.COLOR_RGBA2GRAY, 0);
-    cv.imshow('canvasOutputGrayScale', dst);
-
-
-    let threshold = new cv.Mat();
-    // 白黒反転して2値化する
-    cv.threshold(dst, threshold, 155, 255, cv.THRESH_BINARY_INV);
-    cv.imshow('canvasOutputThreshold', threshold);
-
-    findContours(threshold);
-    mat.delete();
-    dst.delete();
-}
-
-/// 輪郭を抽出する
-function findContours(threshold) {
-    let contours = new cv.MatVector();
-    let hierarchy = new cv.Mat();
-    cv.findContours(threshold, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+function main(){
+    // グレスケ
+    let grayImg = gray(imgElement);
+    // 2値化(閾値144)
+    let thresholdImg = threshold(grayImg, 144);
+    // VIP枠を隠す
+    let hideVipImg = hideVip(thresholdImg, grayImg);
+    // もう一度2値化(閾値155)
+    let thresholdImg2 = threshold(hideVipImg, 155);
+    // アイテム用枠を探し出す
+    let [contours, hierarchy] = findContours(thresholdImg2);
+    let items = rectangleArea(1.2, 1.34, contours, hierarchy);
+    itemTileHorizontally(ctx, items, items.length, imgElement);
     
-    rectangleArea(contours, hierarchy);
-    threshold.delete();
-    hierarchy.delete();
-    contours.delete();
-}
-
-/// 輪郭の矩形領域
-function rectangleArea(contours, hierarchy) {
-    // 画像の読み込み
-    console.log(typeof imgElement);
+    // 作業過程の表示
+    cv.imshow('canvasOutputGrayScale', grayImg);
+    cv.imshow('canvasOutputThreshold', thresholdImg);
+    cv.imshow('canvasOutputHideVip', hideVipImg);
+    cv.imshow('canvasOutputThreshold2', thresholdImg2);
+    // 輪郭点の描画
     let readImg = cv.imread(imgElement);
     let readImg2 = cv.imread(imgElement);
-
     // 矩形と輪郭点描画用の色の指定
     let contoursColor = new cv.Scalar(0, 255, 0, 255);
     let rectangleColor = new cv.Scalar(255, 0, 0, 255);
+    cv.drawContours(readImg, contours, -1, contoursColor, 5, 8, hierarchy, 100);
+    cv.drawContours(readImg2, contours, -1, contoursColor, 5, 8, hierarchy, 100);
+    items.forEach(function(item) {
+        const point1 = new cv.Point(item[0], item[1]);
+        const point2 = new cv.Point(item[0] + item[2], item[1] + item[3]);
+        cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
+    });
+    cv.imshow('canvasOutputFindContours', readImg);
+    cv.imshow('canvasOutput', readImg2);
+    var png = canvas.toDataURL();
+    document.getElementById("result").src = png;
 
+}
+
+// グレースケール化
+// imgElementを渡されると、グレスケ化して返却
+function gray(imgElement){
+    let mat = cv.imread(imgElement);
+    var dst = new cv.Mat();
+    cv.cvtColor(mat, dst, cv.COLOR_RGBA2GRAY, 0);
+
+    return dst;
+}
+
+// 2値化
+// グレスケ画像と閾値を渡されると、閾値で2値化したものを返却
+function threshold(grayImg, thresholdValue) {
+    let thresholdImg = new cv.Mat();
+    cv.threshold(grayImg, thresholdImg, thresholdValue, 255, cv.THRESH_BINARY_INV);
+
+    return thresholdImg;
+}
+
+// VIP枠判定
+// VIP用に2値化された画像とグレスケ画像を渡されると、VIP枠を白い矩形で隠したグレスケ画像を返却
+function hideVip(thresholdImg, grayImg) {
+    let [contours, hierarchy] = findContours(thresholdImg);
+    let items = rectangleArea(0.53, undefined, contours, hierarchy);
+    let rectangleColor = new cv.Scalar(255, 255, 255, 255);
+    console.log(items)
+    items.forEach(function(item){
+        const point1 = new cv.Point(item[0], item[1]);
+        const point2 = new cv.Point(item[0] + item[2], item[1] + item[3]);
+        cv.rectangle(grayImg, point1, point2, rectangleColor, cv.FILLED);
+    });
+    return grayImg;
+}
+
+// 輪郭を抽出する
+// 2値化された画像を渡されると、輪郭点とヒエラルキーを返却
+function findContours(thresholdImg) {
+    let contours = new cv.MatVector();
+    let hierarchy = new cv.Mat();
+    cv.findContours(thresholdImg, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    return [contours, hierarchy];
+}
+
+// 矩形判定
+// 縦横比(h/w)と輪郭点とヒエラルキーを渡されると、矩形判定されたものの位置と数を返却
+function rectangleArea(minAspectRatio=0, maxAspectRatio=2, contours, hierarchy) {
     var itemNum = 0;
     var items = [[]];
 
@@ -66,11 +108,10 @@ function rectangleArea(contours, hierarchy) {
     }
 
     // 輪郭点の描画
-    cv.drawContours(readImg, contours, -1, contoursColor, 5, 8, hierarchy, 100);
-    cv.drawContours(readImg2, contours, -1, contoursColor, 5, 8, hierarchy, 100);
+    // cv.drawContours(readImg, contours, -1, contoursColor, 5, 8, hierarchy, 100);
+    // cv.drawContours(readImg2, contours, -1, contoursColor, 5, 8, hierarchy, 100);
 
     console.log("見つかった矩形の数: ",contours.size());
-
     // 矩形判定
     for (let i=0; i<contours.size(); i++) {
         const rect = cv.boundingRect(contours.get(i));
@@ -84,26 +125,21 @@ function rectangleArea(contours, hierarchy) {
 
         // 矩形度合いの計測
         const val = rectangularity(contours.get(i));
-
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.34 && w>100){
-        // if (0.90<val && val<0.94 ) {
+        if (0.90<val && val<0.94 && minAspectRatio < h/w && h/w <maxAspectRatio){
+            // if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.34 && w>100){
             // アイテムの枠を囲む
-            cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
-                
+            // cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
             
-            console.log(w,h, val);
-            // 160 197 0.93 ipad 1.225
-            // 188-190 243-244 0.90-0.92 iphone? 1.297..1.278...
-            // 151-153 199 0.91 iphone11 1.31-1.32
+            // console.log(x,y,w,h, val);
             itemNum++;
             items.unshift([x,y,w,h]);
-            // console.log(rect);
         }
     }
-    itemTileHorizontally(items, itemNum);
-    cv.imshow('canvasOutputFindContours', readImg);
-    cv.imshow('canvasOutput', readImg2);   
+    // itemsのいちばんうしろには不要な配列があるので消す
+    items.pop();
+
+    return items;
 }
 
 /// 矩形度合いの計測
@@ -121,7 +157,8 @@ function rectangularity(contour) {
 }
 
 /// アイテムを切り取って並べる
-function itemTileHorizontally(items, itemNum) {
+/// ctxとアイテムの座標情報とアイテム数とimgElementを渡されると、アイテムの画像たちを返す
+function itemTileHorizontally(ctx, items, itemNum, imgElement) {
     for (let i=0; i<itemNum; i++) {
         // アイテムの座標
         const w = items[i][2]*0.845;
@@ -145,9 +182,6 @@ function itemTileHorizontally(items, itemNum) {
             ctx.arc(180 * i + 166, 532, r, 0, Math.PI * 2, true);
             ctx.fillStyle = "white";
             ctx.fill()
-            // ctx.beginPath();
-            // ctx.fillStyle = "white";
-            // ctx.fillRect(180 * i + 58, 663, 109, 32);
 
             ctx.restore(); // クリッピング領域の設定を破棄
         } else {
@@ -163,17 +197,9 @@ function itemTileHorizontally(items, itemNum) {
             ctx.fillStyle = "white";
             ctx.fill()
             ctx.restore(); // クリッピング領域の設定を破棄
-
-            // 所持数隠し
-            // ctx.beginPath();
-            // ctx.fillStyle = "white";
-            // ctx.fillRect(180 * (i - 5) + 58, 843, 109, 32);
         }
-        var png = canvas.toDataURL();
-        document.getElementById("result").src = png;
     }
 }
-
 // 角丸の四角形を描画する(クリッピングのため)
 function drawsq(x, y, w, h, r) {
     const color = "rgb(214,215,218)";
@@ -193,5 +219,5 @@ function drawsq(x, y, w, h, r) {
 
 /// OpenCVが読み込めたよの合図
 function onOpenCvReady() {
-  document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-}
+    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+  }
