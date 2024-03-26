@@ -17,22 +17,30 @@ var ctx = canvas.getContext('2d');
 function main(){
     // グレスケ
     let grayImg = gray(imgElement);
+    cv.imshow('canvasOutputGrayScale', grayImg);
+
     // 2値化(閾値144)
     let thresholdImg = threshold(grayImg, 144);
+    cv.imshow('canvasOutputThreshold', thresholdImg);
+
     // VIP枠を隠す
     let hideVipImg = hideVip(thresholdImg, grayImg);
+    cv.imshow('canvasOutputHideVip', hideVipImg);
+
     // もう一度2値化(閾値155)
     let thresholdImg2 = threshold(hideVipImg, 155);
+    cv.imshow('canvasOutputThreshold2', thresholdImg2);
+
     // アイテム用枠を探し出す
     let [contours, hierarchy] = findContours(thresholdImg2);
     let items = rectangleArea(1.2, 1.34, contours, hierarchy);
     itemTileHorizontally(ctx, items, items.length, imgElement);
     
     // 作業過程の表示
-    cv.imshow('canvasOutputGrayScale', grayImg);
-    cv.imshow('canvasOutputThreshold', thresholdImg);
-    cv.imshow('canvasOutputHideVip', hideVipImg);
-    cv.imshow('canvasOutputThreshold2', thresholdImg2);
+    // cv.imshow('canvasOutputGrayScale', grayImg);
+    // cv.imshow('canvasOutputThreshold', thresholdImg);
+    // cv.imshow('canvasOutputHideVip', hideVipImg);
+    // cv.imshow('canvasOutputThreshold2', thresholdImg2);
     // 輪郭点の描画
     let readImg = cv.imread(imgElement);
     let readImg2 = cv.imread(imgElement);
@@ -76,7 +84,7 @@ function threshold(grayImg, thresholdValue) {
 // VIP用に2値化された画像とグレスケ画像を渡されると、VIP枠を白い矩形で隠したグレスケ画像を返却
 function hideVip(thresholdImg, grayImg) {
     let [contours, hierarchy] = findContours(thresholdImg);
-    let items = rectangleArea(0.53, undefined, contours, hierarchy);
+    let items = rectangleArea(0.53, 1.1, contours, hierarchy);
     let rectangleColor = new cv.Scalar(255, 255, 255, 255);
     console.log(items)
     items.forEach(function(item){
@@ -126,7 +134,7 @@ function rectangleArea(minAspectRatio=0, maxAspectRatio=2, contours, hierarchy) 
         // 矩形度合いの計測
         const val = rectangularity(contours.get(i));
         // 矩形度合いが高いもの、かつ正方形に近いものをアイテムとして認識する
-        if (0.90<val && val<0.94 && minAspectRatio < h/w && h/w <maxAspectRatio){
+        if (0.90<val && val<0.94 && minAspectRatio < h/w && h/w <maxAspectRatio && 50<w){
             // if (0.90<val && val<0.94 && 1.2<h/w && h/w<1.34 && w>100){
             // アイテムの枠を囲む
             // cv.rectangle(readImg2, point1, point2, rectangleColor, 5, cv.LINE_AA);
