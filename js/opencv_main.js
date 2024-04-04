@@ -89,7 +89,7 @@ function hideVip(thresholdImg, grayImg) {
     console.log(items)
     items.forEach(function(item){
         const point1 = new cv.Point(item[0], item[1]);
-        const point2 = new cv.Point(item[0] + item[2], item[1] + item[3]);
+        const point2 = new cv.Point(item[0] + item[2]*2, item[1] + item[3]*2);
         cv.rectangle(grayImg, point1, point2, rectangleColor, cv.FILLED);
     });
     return grayImg;
@@ -228,4 +228,4 @@ function drawsq(x, y, w, h, r) {
 /// OpenCVが読み込めたよの合図
 function onOpenCvReady() {
     document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-  }
+}
