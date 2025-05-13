@@ -156,7 +156,7 @@ class BgInfo {
 let avatorImgElement = document.getElementById('avatorSrc');
 let inputAvatorElement = document.getElementById('custom-file-1');
 let avImgBtn = document.getElementById('avImg');
-avImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/avBtnImg.PNG?raw=true';
+avImgBtn.src = 'https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/refs/heads/master/img/avBtnImg.PNG';
 inputAvatorElement.addEventListener('change', (e) => {
     avatorImgElement.src = URL.createObjectURL(e.target.files[0]);
     avImgBtn.src = URL.createObjectURL(e.target.files[0]);
@@ -191,7 +191,7 @@ avatorImgElement.addEventListener('load', (e) => {
 let screenShotImgElement = document.getElementById('screenshotSrc');
 let inputScreenShotElement = document.getElementById('custom-file-2');
 let clImgBtn = document.getElementById('clImg');
-clImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/clBtnImg.PNG?raw=true';
+clImgBtn.src = 'https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/refs/heads/master/img/clBtnImg.PNG';
 inputScreenShotElement.addEventListener('change', (e) => {
     screenShotImgElement.src = URL.createObjectURL(e.target.files[0]);
     clImgBtn.src = URL.createObjectURL(e.target.files[0]);
@@ -207,7 +207,7 @@ screenShotImgElement.addEventListener('load', (e) => {
 let backgroundImgElement = document.getElementById('backgroundSrc');
 let inputbackgroundElement = document.getElementById('custom-file-3');
 let bgImgBtn = document.getElementById('bgImg');
-bgImgBtn.src = 'https://github.com/wasabiPigg/outfitImgAutomation/blob/master/img/bgBtnImg.PNG?raw=true';
+bgImgBtn.src = 'https://raw.githubusercontent.com/wasabiPigg/outfitImgAutomation/refs/heads/master/img/bgBtnImg.PNG';
 inputbackgroundElement.addEventListener('change', (e) => {
     backgroundImgElement.src = URL.createObjectURL(e.target.files[0]);
     bgImgBtn.src = URL.createObjectURL(e.target.files[0]);
